@@ -7,6 +7,8 @@
     <%- include('./partials/nav') %>
     <main>
       <div class="feeds">
+        <input type='button', onclick="location.href='matstagram/auth/google'", value='구글로 로그인'>
+        <input type='button', onclick="location.href='matstagram/logout'", value='로그아웃'>
           <article>
               <div class="top">
                   <div class="topProfile">
@@ -21,6 +23,14 @@
                   <div class="topMore"></div>
               </div>
               <div class="articleImg"></div>
+              <div class="comment">
+                <div class="location">
+                  <a href="/matstagram">
+                    <div class="location-name">우리동네 맛있는 고깃집</div>
+                    <div class="location-detail">서울시 도봉구 방학동 888-22</div>
+                  </a>
+                  </div>
+                </div>
               <div class="articleLove">
                   <div class="loveIcons">
                       <div class="loveIcons-left">

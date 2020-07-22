@@ -301,6 +301,39 @@ article {
   word-wrap:break-word;
 }
 
+.location a {
+  text-decoration:none;
+  padding: 2.5px 16px;
+  display: flex;
+  font-size: 14px;
+  color: #262626;
+}
+
+.location a:hover {
+  text-decoration:none;
+  padding: 2.5px 16px;
+  display: flex;
+  font-size: 14px;
+  color: #0095f6;
+  
+}
+
+a .location-name {
+  font-weight: 600;
+  margin-right: 10px;
+  min-width: 200px;
+  white-space: nowrap; 
+  overflow: hidden;
+}
+
+a .location-detail {
+  word-wrap:break-word;
+  width: 1200px;
+  white-space: nowrap; 
+  overflow: hidden;
+}
+
+
 .articleTime {
   font-size: 10px;
   padding: 16px;
