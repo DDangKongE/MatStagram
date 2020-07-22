@@ -1,5 +1,6 @@
-var passport = require('passport');
-var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+var passport = require('passport'),
+    KakaoStrategy = require('passport-kakao').Strategy;
+const Users = require('../models/users');
 
 module.exports = () => {
   passport.serializeUser(function(user, done){
@@ -10,15 +11,32 @@ module.exports = () => {
     done(null, obj);
   });
   
-  passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_PW,
-    callbackURL: "/auth/google/callback"
+  passport.use("kakao", new KakaoStrategy({
+    clientID: process.env.KAKAO_CLIENT_ID,
+    clientSecret: process.env.KAKAO_CLIENT_PW,
+    callbackURL: "http://localhost:3000/matstagram/oauth"
     },
     function(accessToken, refreshToken, profile, done){
-      process.nextTick(function(){
-        return done(null, profile);
-      });
+      console.log(profile);
+      Users.findOne({
+        'id' : profile.id
+      }, function(err, user){
+        if(err) return done(err);
+        if(!user){
+          Users.create({ 
+            id:profile.id,
+            userNickname: profile.username,
+            username:profile.displayName,
+            provider: 'kakao',
+            kakao: profile._json
+            }, function(err, post){
+            if(err) return console.log(err);
+            return done(err, user);
+          });
+        }else{
+            return done(err, user);
+        }
+      })
     }
   ));
 };

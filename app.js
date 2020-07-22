@@ -9,7 +9,6 @@ const passportConfig = require('./config/passport');
 var session = require('express-session');
 var cookieSession = require('cookie-session');
 
-
 var indexRouter = require('./routes/index');
 
 var app = express();
