@@ -7,7 +7,7 @@ var userSchema = mongoose.Schema({
     userNickname:{type:String, require:[true, 'UserNickname is required']},
     username:{type:String, require:[true, 'UserSubname is required']},
     provider:{type:String, require:[true]},
-    kakao:{}
+    json:{}
 })
 
 userSchema.plugin(AutoIncrement, {inc_field: 'userNum'});

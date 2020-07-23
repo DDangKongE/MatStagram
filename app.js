@@ -8,8 +8,10 @@ var passport = require('passport');
 const passportConfig = require('./config/passport');
 var session = require('express-session');
 var cookieSession = require('cookie-session');
+require('dotenv').config();
 
 var indexRouter = require('./routes/index');
+var loginRouter = require('./routes/login');
 
 var app = express();
 
@@ -49,6 +51,7 @@ passportConfig();
 
 // Route Setup
 app.use('/matstagram', indexRouter);
+app.use('/matstagram/login', loginRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
