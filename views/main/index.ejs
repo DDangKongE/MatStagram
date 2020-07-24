@@ -2,160 +2,213 @@
 <html>
   <head>
     <%- include('../partials/head') %>
-    <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" >
   </head>
   <body>
     <%- include('../partials/nav') %>
-    <main>
-      <div class="feeds">
-          <article>
-              <div class="top">
-                  <div class="topProfile">
-                      <div class="topProfile-img">
-                        <svg viewBox="0 0 16 16" class="bi bi-person-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                          <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-                          <path fill-rule="evenodd" d="M2 15v-1c0-1 1-4 6-4s6 3 6 4v1H2zm6-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                        </svg>
+    <section id="main_container">
+      <div class="inner">
+
+          <div class="contents_box">
+            <% for(var i=0; i<4; i++){ %>
+              <article class="contents">
+                  <header class="top">
+                      <div class="user_container">
+                          <div class="profile_img">
+                              <img src="/images/thumb.jpeg" alt="프로필이미지">
+                          </div>
+                          <div class="user_name">
+                              <div class="nick_name f_name">Feeds User Nickname </div>
+                          </div>
                       </div>
-                      <div class="topProfile-name">Feeds User Nickname</div>
-                  </div>
-                  <div class="topMore"></div>
-              </div>
-              <div class="articleImg"></div>
-              <div>
-                <div class="location">
-                  <a href="/matstagram">
-                    <div class="location-name">우리동네 맛있는 고깃집</div>
-                    <div class="location-detail">서울시 도봉구 방학동 888-22</div>
-                  </a>
-                  </div>
-                </div>
-              <div class="articleLove">
-                  <div class="loveIcons">
-                      <div class="loveIcons-left">
-                        <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/bearu/heart.png">
-                        <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/bearu/comment.png">
-                        <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/bearu/share.png">  
+                      <div class="sprite_more_icon" data-name="more">
+                        <ul id="toggle" class="toggle_box">
+                          <li><input type="submit" class="follow" value="팔로우" data-name="follow"></li>
+                          <li>수정</li>
+                          <li>삭제</li>
+                        </ul>
                       </div>
-                      <div class="loveIcons-right">
-                          <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/bearu/bookmark.png">
+                  </header>
+
+                  <div class="img_section">
+                      <div class="trans_inner">
+                          <div><img src="/images/img_section/img01.jpg" alt="visual01"></div>
                       </div>
                   </div>
-                  <div class="loveCount">UserName님 외 n명이 좋아합니다.</div>
-              </div>
-              <div class="comment">
-                  <div class="commented">
-                      <div class="commentedProfile">Feeds User Nickname</div>
-                      <div class="commentedText">Feeds Contents Detail</div>
+
+                  <div class="bottom_icons">
+                      <div class="left_icons">
+                          <div class="heart_btn">
+                              <div class="sprite_heart_icon_outline" name="39" data-name="heartbeat"></div>
+                          </div>
+                          <div class="sprite_bubble_icon"></div>
+                          <div class="sprite_share_icon" data-name="share"></div>
+                      </div>
+                      <div class="right_icon">
+                          <div class="sprite_bookmark_outline" data-name="bookmark"></div>
+                      </div>
                   </div>
-                  <div class="moreComment">댓글 n개 모두 보기</div>
-                  <div id="commentedWrap">
-                      <!-- 여기 추가 -->
+
+                  <div class="likes m_text">
+                      좋아요
+                      <span id="like-count-39">2,346</span>
+                      <span id="bookmark-count-39"></span>
+                      개
+                  </div>
+
+                  <div class="comment_container">
+                      <div class="comment" id="comment-list-ajax-post37">
+                          <div class="comment-detail">
+                              <div class="nick_name m_text">dongdong2</div>
+                              <div>강아지가 너무 귀여워요~!</div>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="timer">1시간 전</div>
+
+                  <div class="comment_field" id="add-comment-post37">
+                      <input type="text" placeholder="댓글달기...">
+                      <div class="upload_btn m_text" data-name="comment">게시</div>
+                  </div>
+              </article>
+              
+            <% } %>
+              
+            <article class="contents">
+              <header class="top">
+                  <div class="user_container">
+                      <div class="profile_img">
+                          <img src="/images/thumb.jpeg" alt="프로필이미지">
+                      </div>
+                      <div class="user_name">
+                          <div class="nick_name f_name">Feeds User Nickname </div>
+                      </div>
+                  </div>
+                  <div class="sprite_more_icon" data-name="more">
+                    <ul id="toggle" class="toggle_box">
+                      <li><input type="submit" class="follow" value="팔로우" data-name="follow"></li>
+                      <li>수정</li>
+                      <li>삭제</li>
+                    </ul>
+                  </div>
+              </header>
+
+              <div class="img_section">
+                  <div class="trans_inner">
+                      <div><img src="/images/img_section/img01.jpg" alt="visual01"></div>
                   </div>
               </div>
-              <div class="articleTime">n분 전</div>
-              <div class="pushComment">
-                  <input type="text" id="inputComment" placeholder="댓글 달기...">
-                  <span id="inputBtn">등록</span>
+
+              <div class="bottom_icons">
+                  <div class="left_icons">
+                      <div class="heart_btn">
+                          <div class="sprite_heart_icon_outline" name="39" data-name="heartbeat"></div>
+                      </div>
+                      <div class="sprite_bubble_icon"></div>
+                      <div class="sprite_share_icon" data-name="share"></div>
+                  </div>
+                  <div class="right_icon">
+                      <div class="sprite_bookmark_outline" data-name="bookmark"></div>
+                  </div>
+              </div>
+
+              <div class="likes m_text">
+                  좋아요
+                  <span id="like-count-39">2,346</span>
+                  <span id="bookmark-count-39"></span>
+                  개
+              </div>
+
+              <div class="comment_container">
+                  <div class="comment" id="comment-list-ajax-post37">
+                      <div class="comment-detail">
+                          <div class="nick_name m_text">dongdong2</div>
+                          <div>강아지가 너무 귀여워요~!</div>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="timer">1시간 전</div>
+
+              <div class="comment_field" id="add-comment-post37">
+                  <input type="text" placeholder="댓글달기...">
+                  <div class="upload_btn m_text" data-name="comment">게시</div>
               </div>
           </article>
-          <article>
-            <div class="top">
-                <div class="topProfile">
-                    <div class="topProfile-img">
-                      <svg viewBox="0 0 16 16" class="bi bi-person-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-                        <path fill-rule="evenodd" d="M2 15v-1c0-1 1-4 6-4s6 3 6 4v1H2zm6-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                      </svg>
-                    </div>
-                    <div class="topProfile-name">Feeds User Nickname</div>
-                </div>
-                <div class="topMore"></div>
-            </div>
-            <div class="articleImg"></div>
-            <div class="articleLove">
-                <div class="loveIcons">
-                    <div class="loveIcons-left">
-                      <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/bearu/heart.png">
-                      <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/bearu/comment.png">
-                      <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/bearu/share.png">  
-                    </div>
-                    <div class="loveIcons-right">
-                        <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/bearu/bookmark.png">
-                    </div>
-                </div>
-                <div class="loveCount">UserName님 외 n명이 좋아합니다.</div>
-            </div>
-            <div class="comment">
-                <div class="commented">
-                    <div class="commentedProfile">Feeds User Nickname</div>
-                    <div class="commentedText">Feeds Contents Detail</div>
-                </div>
-                <div class="moreComment">댓글 n개 모두 보기</div>
-                <div id="commentedWrap">
-                    <!-- 여기 추가 -->
-                </div>
-            </div>
-            <div class="articleTime">n분 전</div>
-            <div class="pushComment">
-                <input type="text" id="inputComment" placeholder="댓글 달기...">
-                <span id="inputBtn">등록</span>
-            </div>
-        </article>
-      </div>
-      <div class="main-right" id="mainRight">
-        <div class="myProfile">
-            <div class="profileImg">
-              <svg viewBox="0 0 16 16" class="bi bi-person-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-                <path fill-rule="evenodd" d="M2 15v-1c0-1 1-4 6-4s6 3 6 4v1H2zm6-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-              </svg>
-            </div>
-            <div class="names">
-              <% if(UserInfo == null) { %>
-                <div class="profileName">로그인이 필요합니다.</div>
-                <div class="profileSubname">Require Login</div>
-              <% } else {%>
-                <div class="profileName"><%=UserInfo.userNickname%></div>
-                <div class="profileSubname"><%=UserInfo.username%></div>
-              <% } %>
-            </div>
-        </div>
-        <% if(UserInfo != null) { %>
-          <div class="recommend">
-            <div class="rightTitle">
-                <div class="rightTitle-title">회원님을 위한 추천</div>
-                <div class="rightTitle-more">모두 보기</div>
-            </div>
-                <div class="userInfo">
-                    <div class="userInfo-profile">
-                      <svg viewBox="0 0 16 16" class="bi bi-person-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-                        <path fill-rule="evenodd" d="M2 15v-1c0-1 1-4 6-4s6 3 6 4v1H2zm6-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                      </svg>
-                    </div>
-                      <div class="userInfo-profile-side">
-                          <div class="userInfo-profile-name">Recommend User NickName</div>
-                          <div class="user-profile-time">회원님을 팔로우합니다</div>
+
+
+          </div>
+          <input type="hidden" id="page" value="1">
+
+          <div class="side_box">
+              <div class="user_profile">
+                <% if(UserInfo == null) { %>
+                  <div class="profile_thumb">
+                      <img src="/images/thumb.jpeg" alt="프로필사진">
+                  </div>
+                  <div class="detail">
+                    <a onclick="location.href='/matstagram/login'" title="로그인 하러가기!" style="cursor: pointer;">
+                      <div class="id m_text">로그인이 필요합니다.</div>
+                      <div class="ko_name">Require Login</div></a>
+                  </div>
+                <% } else {%>
+                    <div class="profile_thumb">
+                      <img src="/images/thumb.jpeg">
+                  </div>
+                  <div class="detail">
+                      <div class="id m_text"><%=UserInfo.userNickname%></div>
+                      <div class="ko_name"><%=UserInfo.username%></div>
+                  </div>
+                <% } %>
+              </div>
+
+             <!-- 로그인 여부 확인 후 우측 영역 내용 조절 -->
+             <% if(UserInfo != null) { %>      
+              <article class="recommend">
+                  <header class="reco_header">
+                      <div>회원님을 위한 추천</div>
+                      <div class="more">모두 보기</div>
+                  </header>
+
+                  <div class="thumb_user">
+                      <div class="profile_thumb">
+                          <img src="/images/thumb02.jpg" alt="프로필사진">
                       </div>
-                    <div class="follow">팔로우</div>
+                      <div class="detail">
+                          <div class="id">kind_tigerrrr</div>
+                          <div class="time">1시간 전</div>
+                      </div>
+                  </div>
+                  <div class="thumb_user">
+                      <div class="profile_thumb">
+                          <img src="/images/thumb02.jpg" alt="프로필사진">
+                      </div>
+                      <div class="detail">
+                          <div class="id">kind_tigerrrr</div>
+                          <div class="time">1시간 전</div>
+                      </div>
+                  </div>
+              </article>
+              <% } %>
+              <div class="copyright">
+                <div class="copyrightNav">
+                    <ul>
+                        <li>소개</li>
+                        <li>도움말</li>
+                        <li>개인정보처리방침</li>
+                        <li>약관</li>
+                    </ul>
                 </div>
-            
+                <div class="copyrightInside">© 2020 INSTAGRAM COPY WEB APPLICATION</div>
+                <div class="copyrightInside">Look at the awesome logo I made at: <a href='https://onlinelogomaker.com' title='Online Logo Maker'>onlinelogomaker.com</a></div>
+              </div>
           </div>
-          <% } %>
-          <div class="copyright">
-            <div class="copyrightNav">
-                <ul>
-                    <li>소개</li>
-                    <li>도움말</li>
-                    <li>개인정보처리방침</li>
-                    <li>약관</li>
-                </ul>
-            </div>
-            <div class="copyrightInside">© 2020 INSTAGRAM COPY WEB APPLICATION</div>
-            <div class="copyrightInside">Look at the awesome logo I made at: <a href='https://onlinelogomaker.com' title='Online Logo Maker'>onlinelogomaker.com</a></div>
-          </div>
+
+
       </div>
-    </main>
+  </section>
+
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <script src="/javascripts/index.js"></script>
   </body>
 </html>

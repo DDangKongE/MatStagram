@@ -21,7 +21,6 @@ module.exports = () => {
     callbackURL: "http://localhost:3000/matstagram/login/oauth/kakao"
     },
     function(accessToken, refreshToken, profile, done){
-      console.log(profile);
       Users.findOne({
         'id' : profile.id
       }, function(err, user){
@@ -29,7 +28,7 @@ module.exports = () => {
         if(!user){
           Users.create({ 
             id:profile.id,
-            userNickname: profile.displayName,
+            userNickname: "User" + Math.floor(Math.random() * (9999999999 - 1) + 1),
             username:profile.displayName,
             provider: 'kakao',
             data: profile._json
@@ -51,7 +50,6 @@ module.exports = () => {
     callbackURL: "http://localhost:3000/matstagram/login/oauth/facebook"
     },
     function(req, accessToken, refreshToken, profile, done){
-      console.log(profile);
       Users.findOne({
         'id' : profile.id
       }, function(err, user){
@@ -59,7 +57,7 @@ module.exports = () => {
         if(!user){
           Users.create({ 
             id:profile.id,
-            userNickname: profile.displayName,
+            userNickname: "User" + Math.floor(Math.random() * (9999999999 - 1) + 1),
             username:profile.displayName,
             provider: 'facebook',
             data: profile._json
@@ -80,7 +78,6 @@ module.exports = () => {
     callbackURL: "http://localhost:3000/matstagram/login/oauth/google"
     },
     function(accessToken, refreshToken, profile, done){
-      console.log(profile);
       Users.findOne({
         'id' : profile.id
       }, function(err, user){
@@ -88,7 +85,7 @@ module.exports = () => {
         if(!user){
           Users.create({ 
             id:profile.id,
-            userNickname: profile.displayName,
+            userNickname: "User" + Math.floor(Math.random() * (9999999999 - 1) + 1),
             username:profile.displayName,
             provider: 'google',
             data: profile._json
@@ -109,7 +106,6 @@ module.exports = () => {
     callbackURL: "http://localhost:3000/matstagram/login/oauth/naver"
     },
     function(accessToken, refreshToken, profile, done){
-      console.log(profile);
       Users.findOne({
         'id' : profile.id
       }, function(err, user){
@@ -117,7 +113,7 @@ module.exports = () => {
         if(!user){
           Users.create({ 
             id:profile.id,
-            userNickname: profile.displayName,
+            userNickname: "User" + Math.floor(Math.random() * (9999999999 - 1) + 1),
             username:profile.displayName,
             provider: 'naver',
             data: profile._json

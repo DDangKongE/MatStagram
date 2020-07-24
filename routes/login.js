@@ -8,7 +8,7 @@ router.get('/', function(req, res, next){
     res.render('main/login');
   })
 
-// Login
+// Login Logic
 // KAKAO 
 router.get('/auth/kakao', passport.authenticate('kakao'));
 
