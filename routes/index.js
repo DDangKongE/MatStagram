@@ -20,18 +20,19 @@ router.get('/my/profile', function(req, res, next) {
 });
 
 router.get('/profile/:id', function(req, res, next) {
-  if (req.isAuthenticated()) {
     res.render('main/profile', {UserInfo: req.user});
-  } else {
-    res.render('main/profile', {UserInfo: null});
-  }
 });
 
 router.get('/profile/:id/edit', function(req, res, next) {
-  if (req.isAuthenticated()) {
-    res.render('main/profile_edit', {UserInfo: req.user});
+  console.log(req.user);
+  if(req.user){
+    if(req.params.id == req.user.userNickname){
+      res.render('main/profile_edit', {UserInfo: req.user});
+    } else {
+      res.redirect('/matstagram');
+    }
   } else {
-    res.redirect('/matstagram/login');
+    res.redirect('/matstagram');
   }
 });
 
@@ -46,6 +47,10 @@ router.get('/post/new', function(req, res, next) {
 router.post('/post/create', function(req, res, next) {
     res.redirect('/matstagram');
 });
+
+router.get('/explore', function(req, res, next){
+  res.render('main/explore', {UserInfo: req.user});
+})
 
 router.get('/logout', function(req, res){
   req.logout();
