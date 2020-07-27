@@ -1,11 +1,14 @@
 var express = require('express');
 var router = express.Router();
+const Users = require('../models/users');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   if (req.isAuthenticated()) {
     console.log("Login now!")
-    res.render('main/index', {UserInfo: req.user});
+    Users.aggregate([{$sample: {size:6}}], function(err, result){
+      res.render('main/index', {UserInfo: req.user, Recommend: result});
+    })
   } else {
     res.render('main/index', {UserInfo: null});
   }
