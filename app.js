@@ -7,6 +7,7 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 const passportConfig = require('./config/passport');
 var session = require('express-session');
+var fileupload = require('express-fileupload');
 var cookieSession = require('cookie-session');
 require('dotenv').config();
 
@@ -48,6 +49,7 @@ app.use(session({ secret: 'secretcode', resave: true, saveUninitialized: false }
 app.use(passport.initialize());
 app.use(passport.session());
 passportConfig();
+app.use(fileupload());
 
 // Route Setup
 app.use('/matstagram', indexRouter);

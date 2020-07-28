@@ -2,100 +2,155 @@
 <html>
     <head>
         <%- include('../partials/head') %>
+        <link rel="stylesheet" href="/stylesheets/profile_edit.css">
     </head>
     <body>
         <%- include('../partials/nav') %>
         <section id="container">
             <div id="main_container" style="border:2px;">
-                <div class="col-md-8 order-md-1">
-                    <h4 class="mb-3">Billing address</h4>
-                    <form action="/matstagram" class="needs-validation" novalidate="">
-                      <div class="row">
-                        <div class="col-md-6 mb-3">
-                          <label for="firstName">First name</label>
-                          <input type="text" class="form-control" id="firstName" placeholder="" value="" required="">
-                          <div class="invalid-feedback">
-                            Valid first name is required.
+                <div class="col-md-4 order-md-1">
+
+                      <form action="/matstagram/profile/<%=UserInfo.usernickname%>/edit/img", encType="multipart/form-data", method="post" >
+                        <div class="mb-3">
+                          <div class="preview">
+                            <div class="upload">
+                              <div class="post_btn">
+                                <p>프로필 이미지 변경</p>
+                                <hr class="mb-4">
+                                <canvas id="imageCanvas"></canvas>
+                                <!--<p><img id="img_id" src="#" style="width: 300px; height: 300px; object-fit: cover" alt="thumbnail"></p>-->
+                              </div>
+                            </div>
+                          </div>
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text" id="inputimgadd">Upload</span>
+                            </div>
+                            <div class="custom-file">
+                              <input type="file" class="custom-file-input" id="inputimg" name="inputimg" aria-describedby="inputimgadd">
+                              <label class="custom-file-label" for="inputimg">Choose file</label>
+                            </div>
+                            <button class="btn btn-primary btn-lg btn-block" type="submit" id="img_submit" disabled=true style="margin-top: 15px;">이미지 수정</button>
                           </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                          <label for="lastName">Last name</label>
-                          <input type="text" class="form-control" id="lastName" placeholder="" value="" required="">
-                          <div class="invalid-feedback">
-                            Valid last name is required.
-                          </div>
-                        </div>
-                      </div>
-              
-                      <div class="mb-3">
-                        <label for="username">Username</label>
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text">@</span>
-                          </div>
-                          <input type="text" class="form-control" id="username" placeholder="Username" required="">
-                          <div class="invalid-feedback" style="width: 100%;">
-                            Your username is required.
-                          </div>
-                        </div>
-                      </div>
-              
-                      <div class="mb-3">
-                        <label for="email">Email <span class="text-muted">(Optional)</span></label>
-                        <input type="email" class="form-control" id="email" placeholder="you@example.com">
-                        <div class="invalid-feedback">
-                          Please enter a valid email address for shipping updates.
-                        </div>
-                      </div>
-              
-                      <div class="mb-3">
-                        <label for="address">Address</label>
-                        <input type="text" class="form-control" id="address" placeholder="1234 Main St" required="">
-                        <div class="invalid-feedback">
-                          Please enter your shipping address.
-                        </div>
-                      </div>
-              
-                      <div class="mb-3">
-                        <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
-                        <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
-                      </div>
-              
-                      <div class="row">
-                        <div class="col-md-5 mb-3">
-                          <label for="country">Country</label>
-                          <select class="custom-select d-block w-100" id="country" required="">
-                            <option value="">Choose...</option>
-                            <option>United States</option>
-                          </select>
-                          <div class="invalid-feedback">
-                            Please select a valid country.
-                          </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                          <label for="state">State</label>
-                          <select class="custom-select d-block w-100" id="state" required="">
-                            <option value="">Choose...</option>
-                            <option>California</option>
-                          </select>
-                          <div class="invalid-feedback">
-                            Please provide a valid state.
-                          </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                          <label for="zip">Zip</label>
-                          <input type="text" class="form-control" id="zip" placeholder="" required="">
-                          <div class="invalid-feedback">
-                            Zip code required.
-                          </div>
-                        </div>
-                      </div>
+                      </form>
+
                       <hr class="mb-4">
-                      <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+                      프로필 수정
+                      <form action="/matstagram/profile/<%=UserInfo.usernickname%>/edit" method="post" class="needs-validation" novalidate="">
+                      <hr class="mb-4">
+                      <div class="row">
+                        <div class="col-md-12 mb-3">
+                          <label for="usernickname">닉네임</label>
+                          <% if (UserInfo.changenickname=='N') { %>
+                            <input type="text" class="form-control" id="usernickname" name="usernickname" placeholder="닉네임을 입력해주세요." value="<%=UserInfo.usernickname%>" required="">
+                          <% } else { %>
+                            <input type="text" class="form-control" id="usernickname" name="usernickname" placeholder="닉네임을 입력해주세요." value="<%=UserInfo.usernickname%>" required="" readonly>
+                          <% } %>
+                          <label for="usernickname" style="font-size: 5px;">닉네임은 가입 후 1회에 한하여 수정이 가능합니다.</label>
+                          <div id='id_check'></div>
+                        </div>
+                      </div>
+                      
+                      <div class="row">
+                        <div class="col-md-12 mb-3">
+                          <label for="username">이름</label>
+                          <input type="text" class="form-control" id="username" name="username" placeholder="이름을 입력해주세요." value="<%=UserInfo.username%>" required="">
+                        </div>
+                      </div>
+
+              
+                      <div class="mb-3">
+                        <label for="email">소셜 연동</label>
+                        <input type="email" class="form-control" id="email" value="<%=UserInfo.provider%>" readonly>
+                      </div>
+              
+                      <button class="btn btn-primary btn-lg btn-block" type="submit" id="reg_submit" disabled="true">수정하기</button>
                     </form>
                     <div style="padding-bottom: 60px;"></div>
                   </div>
             </div>
         </section>
+        <script type="text/javascript">
+          $(document).ready(function() {
+            $("#usernickname").blur(function() {
+            // id = "id_reg" / name = "userId"
+            var usernickname = $('#usernickname').val();						
+            $.ajax({
+              url : 'http://localhost:3000/matstagram/idCheck/' + usernickname,
+              type : 'get',
+              success : function(data) {                
+                if (data == 1) {
+                  // 1 : 아이디가 중복되는 문구
+                  $("#id_check").text("사용중인 아이디입니다 :p");
+                  $("#id_check").css("color", "red");
+                  $("#reg_submit").attr("disabled", true);
+                } else {
+                  
+                  if(usernickname.length < 4){
+                    $('#id_check').text("닉네임 소문자와 숫자 4~16자리만 가능합니다");
+                    $('#id_check').css('color', 'red');
+                    $("#reg_submit").attr("disabled", true);
+                  } else if( usernickname.length > 14){
+                    $('#id_check').text("닉네임 소문자와 숫자 4~16자리만 가능합니다");
+                    $('#id_check').css('color', 'red');
+                    $("#reg_submit").attr("disabled", true);
+                  } else {
+                    $('#id_check').text("");
+                    $('#id_check').css('color', 'red');
+                    $("#reg_submit").attr("disabled", false);
+                  }
+                }
+                }, error : function() {
+                    console.log("실패");
+                }
+              });
+            });
+
+            $("#username").blur(function() {
+              var username = $('#username').val();
+              if(username.length < 1){
+                $("#reg_submit").attr("disabled", true);
+              } else if( username.length > 10){
+                $("#reg_submit").attr("disabled", true);
+              } else {
+                $("#reg_submit").attr("disabled", false);
+              }
+            });
+          });
+        </script>
+        <script>
+          var fileInput  = document.querySelector( "#inputimg" ),
+              button     = document.querySelector( ".input-file-trigger" ),
+              the_return = document.querySelector(".file-return");
+
+          // Show image
+          fileInput.addEventListener('change', handleImage, false);
+          var canvas = document.getElementById('imageCanvas');
+          var ctx = canvas.getContext('2d');
+              function handleImage(e){
+              var reader = new FileReader();
+              reader.onload = function(event){
+                  var img = new Image();
+                  // var imgWidth =
+                  img.onload = function(){
+                      canvas.width = 300;
+                      canvas.height = 300;
+                      ctx.drawImage(img,0,0,300,300);
+                  };
+                  img.src = event.target.result;
+                  // img.width = img.width*0.5
+                  // canvas.height = img.height;
+              };
+              reader.readAsDataURL(e.target.files[0]);
+          }
+      </script>
+      <script type="text/javascript">
+        $(".custom-file-input").on("change", function() {
+          var fileName = $(this).val().split("\\").pop();
+          $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+          $("#img_submit").attr("disabled", false);
+        });
+      </script>
     </body>
 </html>

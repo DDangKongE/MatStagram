@@ -4,10 +4,15 @@ const AutoIncrement = require('mongoose-sequence')(mongoose);
 //Schema
 var userSchema = mongoose.Schema({
     id:{type:String, unique : true , require:[true]},
-    userNickname:{type:String, require:[true, 'UserNickname is required']},
+    usernickname:{type:String, require:[true, 'Usernickname is required']},
     username:{type:String, require:[true, 'UserSubname is required']},
     provider:{type:String, require:[true]},
-    json:{}
+    posts:{type:Number},
+    follow:{type:Number},
+    follower:{type:Number},
+    profileimg:{type:String},
+    json:{},
+    changenickname:{type:String}
 })
 
 userSchema.plugin(AutoIncrement, {inc_field: 'userNum'});

@@ -1,39 +1,110 @@
 var express = require('express');
 var router = express.Router();
+var fs = require('fs');
 const Users = require('../models/users');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   if (req.isAuthenticated()) {
-    console.log("Login now!")
     Users.aggregate([{$sample: {size:6}}], function(err, result){
-      res.render('main/index', {UserInfo: req.user, Recommend: result});
+      console.log(result);
+      Users.findOne({id: req.user.id}, function(err, userdata){
+        res.render('main/index', {UserInfo: userdata, Recommend: result});
+      })
     })
   } else {
     res.render('main/index', {UserInfo: null});
   }
 });
 
+router.get('/idCheck/', function(req, res, next) {
+  res.send({result:false});
+});
+
+router.get('/idCheck/:name', function(req, res, next) {
+  console.log(req.params.name);
+  Users.findOne({usernickname : req.params.name}, function(err, data){
+    if(data){
+      res.send({result:true});
+    } else {
+      res.send({result:false});
+    }
+  })
+});
+
 router.get('/my/profile', function(req, res, next) {
   if (req.isAuthenticated()) {
-    res.redirect('/matstagram/profile/' + req.user.userNickname);
+    Users.findOne({id:req.user.id}, function(err, result){
+      res.redirect('/matstagram/profile/' + result.usernickname);
+    })
   } else {
     res.redirect('/matstagram/login');
   }
 });
 
 router.get('/profile/:id', function(req, res, next) {
-    res.render('main/profile', {UserInfo: req.user});
+  Users.findOne({id:req.user.id}, function(err, result){
+    if (err) {
+      redirect('/matstagram'); // 회원정보가 없습니다 페이지 만들어서 or 알럿창
+    }
+    res.render('main/profile', {UserInfo: result});
+  })
 });
 
-router.get('/profile/:id/edit', function(req, res, next) {
-  console.log(req.user);
+router.get('/profile/:nickname/edit', function(req, res, next) {
   if(req.user){
-    if(req.params.id == req.user.userNickname){
-      res.render('main/profile_edit', {UserInfo: req.user});
-    } else {
-      res.redirect('/matstagram');
-    }
+    Users.findOne({usernickname:req.params.nickname}, function(err, result){
+      if(result.id == req.user.id){
+        res.render('main/profile_edit', {UserInfo: result});
+      } else {
+        res.redirect('/matstagram');
+      }
+    });
+  } else {
+    res.redirect('/matstagram');
+  }
+});
+
+router.post('/profile/:nickname/edit', function(req, res, next) {
+  if(req.user){
+    Users.findOne({id:req.user.id}, function(err, result){
+      if(req.params.nickname == result.usernickname){
+        if(req.params.nickname == req.body.usernickname){
+          Users.updateOne({usernickname : result.usernickname}, {usernickname : req.body.usernickname, username : req.body.username}, function(err, result){
+            res.redirect('/matstagram/profile/' + req.body.usernickname);
+          })
+        } else {
+          Users.updateOne({usernickname : result.usernickname}, {usernickname : req.body.usernickname, username : req.body.username, changenickname:'Y'}, function(err, result){
+            res.redirect('/matstagram/profile/' + req.body.usernickname);
+          })
+        }
+      } else {
+        res.redirect('/matstagram');
+      }
+    });
+  } else {
+    res.redirect('/matstagram');
+  }
+});
+
+router.post('/profile/:nickname/edit/img', function(req, res, next) {
+  if(req.user){
+    let samplefile = req.files.inputimg;
+    console.log(req.files.inputimg);
+    Users.findOne({id:req.user.id}, function(err, result){
+      if(req.params.nickname == result.usernickname){
+        if(req.files===undefined){
+          res.redirect('/matstagram/profile/' + req.params.nickname + '/edit');
+        } else {
+          samplefile.mv('./public/userdata/profile/' + result.id + '.png'), function(err){
+            if(err) return res.status(500).send(err);
+          }
+          res.redirect('/matstagram/profile/' + req.params.nickname + '/edit');
+        }
+      } else {
+        res.redirect('/matstagram');
+      }
+    });
   } else {
     res.redirect('/matstagram');
   }
@@ -41,7 +112,9 @@ router.get('/profile/:id/edit', function(req, res, next) {
 
 router.get('/post/new', function(req, res, next) {
   if (req.isAuthenticated()) {
-    res.render('main/post_new', {UserInfo: req.user});
+    Users.findOne({id:req.user.id}, function(err, result){
+      res.render('main/post_new', {UserInfo: result});
+    });
   } else {
     res.redirect('/matstagram/login');
   }
@@ -52,7 +125,10 @@ router.post('/post/create', function(req, res, next) {
 });
 
 router.get('/explore', function(req, res, next){
-  res.render('main/explore', {UserInfo: req.user});
+  Users.findOne({id:req.user.id}, function(err, result){
+    res.render('main/explore', {UserInfo: result});
+  });
+  
 })
 
 router.get('/logout', function(req, res){

@@ -28,10 +28,15 @@ module.exports = () => {
         if(!user){
           Users.create({ 
             id:profile.id,
-            userNickname: "User" + Math.floor(Math.random() * (9999999999 - 1) + 1),
+            usernickname: "User" + Math.floor(Math.random() * (9999999999 - 1) + 1),
             username:profile.displayName,
             provider: 'kakao',
-            data: profile._json
+            posts : '0',
+            follow : '0',
+            follower : '0',
+            profileimg : '',
+            json: profile._json,
+            changenickname: 'N'
             }, function(err, post){
             if(err) return console.log(err);
             return done(err, user);
@@ -57,10 +62,15 @@ module.exports = () => {
         if(!user){
           Users.create({ 
             id:profile.id,
-            userNickname: "User" + Math.floor(Math.random() * (9999999999 - 1) + 1),
+            usernickname: "User" + Math.floor(Math.random() * (9999999999 - 1) + 1),
             username:profile.displayName,
             provider: 'facebook',
-            data: profile._json
+            posts : '0',
+            follow : '0',
+            follower : '0',
+            profileimg : '',
+            json: profile._json,
+            changenickname: 'N'
             }, function(err, post){
             if(err) return console.log(err);
             return done(err, user);
@@ -85,10 +95,15 @@ module.exports = () => {
         if(!user){
           Users.create({ 
             id:profile.id,
-            userNickname: "User" + Math.floor(Math.random() * (9999999999 - 1) + 1),
+            usernickname: "User" + Math.floor(Math.random() * (9999999999 - 1) + 1),
             username:profile.displayName,
             provider: 'google',
-            data: profile._json
+            posts : '0',
+            follow : '0',
+            follower : '0',
+            profileimg : '',
+            json: profile._json,
+            changenickname: 'N'
             }, function(err, post){
             if(err) return console.log(err);
             return done(err, user);
@@ -113,10 +128,15 @@ module.exports = () => {
         if(!user){
           Users.create({ 
             id:profile.id,
-            userNickname: "User" + Math.floor(Math.random() * (9999999999 - 1) + 1),
+            usernickname: "User" + Math.floor(Math.random() * (9999999999 - 1) + 1),
             username:profile.displayName,
             provider: 'naver',
-            data: profile._json
+            posts : '0',
+            follow : '0',
+            follower : '0',
+            profileimg : '',
+            json: profile._json,
+            changenickname: 'N'
             }, function(err, post){
             if(err) return console.log(err);
             return done(err, user);

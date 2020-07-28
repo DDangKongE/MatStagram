@@ -17,10 +17,10 @@
                         </div>
                         <div class="detail">
                             <div class="top">
-                                <div class="user_name">KindTiger</div>
+                                <div class="user_name"><%=UserInfo.usernickname%></div>
                                 <% if(UserInfo != null) { %>
-                                    <% if(UserInfo.userNickname) { %> 
-                                        <a href="<%=UserInfo.userNickname%>/edit" style="padding-left: 30%;"><img src="/images/icon/setting_button.png" width="45px" height="45px"></a>
+                                    <% if(UserInfo.usernickname) { %> 
+                                        <a href="<%=UserInfo.usernickname%>/edit" style="padding-left: 30%;"><img src="/images/icon/setting_button.png" width="45px" height="45px"></a>
                                         <a href="/matstagram/logout"><img src="/images/icon/logout_button.png" width="45px" height="45px"></a>
                                     <% } %> 
                                 <% } %>
@@ -28,15 +28,15 @@
                             <ul class="middle">
                                 <li>
                                     <span>게시물</span>
-                                    3
+                                    <%= UserInfo.posts %>
                                 </li>
                                 <li>
                                     <span>팔로워</span>
-                                    3
+                                    <%= UserInfo.follower %>
                                 </li>
                                 <li>
                                     <span>팔로우</span>
-                                    3
+                                    <%= UserInfo.follow %>
                                 </li>
                             </ul>
                         </div>
