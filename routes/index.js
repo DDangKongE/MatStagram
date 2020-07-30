@@ -90,16 +90,18 @@ router.post('/profile/:nickname/edit', function(req, res, next) {
 router.post('/profile/:nickname/edit/img', function(req, res, next) {
   if(req.user){
     let samplefile = req.files.inputimg;
-    console.log(req.files.inputimg);
     Users.findOne({id:req.user.id}, function(err, result){
       if(req.params.nickname == result.usernickname){
         if(req.files===undefined){
           res.redirect('/matstagram/profile/' + req.params.nickname + '/edit');
         } else {
           samplefile.mv('./public/userdata/profile/' + result.id + '.png'), function(err){
+            console.log(req.files.inputimg);
             if(err) return res.status(500).send(err);
           }
-          res.redirect('/matstagram/profile/' + req.params.nickname + '/edit');
+          Users.updateOne({id: result.id}, {profileimg: result.id+'.png'}, function(err, resultUpdate){
+            res.redirect('/matstagram/profile/' + req.params.nickname + '/edit');
+          })
         }
       } else {
         res.redirect('/matstagram');
