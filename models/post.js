@@ -5,8 +5,11 @@ const AutoIncrement = require('mongoose-sequence')(mongoose);
 var postSchema = mongoose.Schema({
     posttitle:{type:String, require:[true, 'Postnickname is required']},
     postname:{type:String, require:[true, 'PostSubname is required']},
-    provider:{type:String, require:[true]},
-    json:{}
+    writer:{type:String, require:[true]},
+    locationname:{type:String, require:[true]},
+    locationdetail:{type:String, require:[true]},
+    like:{type:Number, default:'0'},
+    comment:{}
 })
 
 postSchema.plugin(AutoIncrement, {inc_field: 'postNum'});
