@@ -1,7 +1,9 @@
 var express = require('express');
 var router = express.Router();
+var request = require('request');
 var fs = require('fs');
 const Users = require('../models/users');
+const Posts = require('../models/posts');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -123,7 +125,27 @@ router.get('/post/new', function(req, res, next) {
 });
 
 router.post('/post/create', function(req, res, next) {
-    res.redirect('/matstagram');
+  if (req.isAuthenticated()) {
+    let samplefile = req.files.photo;
+    Users.findOne({id:req.user.id}, function(err, result){
+      Posts.create({
+        contents: req.body.content,
+        writerid: req.user.id,
+        placename: req.body.place_name,
+        addressname: req.body.address_name,
+        placeid: req.body.place_id
+      }, function(err, post){
+        if(err) return console.log(err);
+        samplefile.mv('./public/userdata/posts/' + post.postNum + '.png'), function(err){
+          console.log(samplefile);
+          if(err) return res.status(500).send(err);
+        }
+      })
+      res.redirect('/matstagram');
+    });
+  } else {
+    res.redirect('/matstagram/login');
+  }
 });
 
 router.get('/explore', function(req, res, next){

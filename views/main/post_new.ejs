@@ -9,7 +9,7 @@
         <section id="container">
             <div id="main_container">
                 <div class="post_form_container">
-                    <form action="/matstagram/post/create" class="post_form" method="post">
+                    <form action="/matstagram/post/create" class="post_form" method="post" encType="multipart/form-data"> 
                         <div class="title">
                             맛집 등록
                         </div>
@@ -30,11 +30,12 @@
                             <input type="file" name="photo" id="id_photo" required="required">
                         </p>
                         <p>
-                            <input type="text" name="location_name" placeholder="맛집명" style="width:80%;">
-                            <button id="LSearch" class="btn btn-info" onclick="">검색</button>
+                            <input type="text" id="place_name" name="place_name" placeholder="맛집명" style="width:80%;">
+                            <span id="LSearch" class="btn btn-info" onclick="">검색</span>
                         </p>
                         <p>
-                            <input type="text" name="location_detail" placeholder="맛집 주소" readonly>
+                            <input type="text" name="address_name" placeholder="맛집 주소" readonly>
+                            <input type="hidden" id="place_id" name="place_id" value="">
                         </p>
                         <p>
                             <textarea name="content" id="text_field" cols="50" rows="5" placeholder="
@@ -47,9 +48,8 @@
                     <!-- The Modal -->
                     <div id="myModal" class="modal">
                         <!-- Modal content -->
-                        <div class="modal-content">
-                            <span class="close">&times;</span>                                                               
-                            <p>Some text in the Modal..</p>
+                        <div id="modal-content" class="modal-content">                                                            
+                            <p>검색 결과가 없습니다.</p>
                         </div>
                     </div>
                 </div>

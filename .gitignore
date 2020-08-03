@@ -1,3 +1,4 @@
 node_modules
 .env
-public/userdata/
+public/userdata/posts
+public/userdata/profile
