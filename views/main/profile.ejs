@@ -3,6 +3,7 @@
     <head>
         <%- include('../partials/head') %>
         <link type="text/css" rel="stylesheet" href="/stylesheets/profile.css" >
+        <link type="text/css" rel="stylesheet" href="/stylesheets/detail-page.css" >
     </head>
     <body>
         <%- include('../partials/nav') %>
@@ -50,7 +51,7 @@
                     <div class="mylist_contents contents_container active">
                         <% for(var prop in PostData) { %>
                             <div class="pic">
-                                <a href="#"><img src="/userdata/posts/<%=PostData[prop].postNum%>.png" alt=""></a>
+                                <a href="#"><img id="detail-page" data="<%=PostData[prop]%>" src="/userdata/posts/<%=PostData[prop].postNum%>.png" alt=""></a>
                             </div>
                         <% } %>
                     </div>
@@ -116,7 +117,16 @@
                     </div>
                 </section>
             </div>
+            
+            <div id="myModal" class="modal">
+                <!-- Modal content -->
+                <div id="modal-content" class="modal-content">                                                            
+                    <p>검색 결과가 없습니다.</p>
+                </div>
+            </div>
+            
         </section>
         <script src="/javascripts/profile.js"></script>
+        <script src="/javascripts/detail-page.js"></script>
     </body>
 </html>
