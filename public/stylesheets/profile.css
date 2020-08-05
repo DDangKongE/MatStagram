@@ -113,8 +113,8 @@
 }
 
 .contents_container .pic{
-    max-width:300px;
-    max-height:300px;
+    width:300px;
+    height:300px;
     overflow:hidden;
     margin-bottom: 18px;
 

@@ -14,6 +14,24 @@ module.exports = () => {
     done(null, obj);
   });
 
+  function createUser(profile, done, user, provider){
+    Users.create({ 
+      id:profile.id,
+      usernickname: "User" + Math.floor(Math.random() * (9999999999 - 1) + 1),
+      username:profile.displayName,
+      provider: provider,
+      posts : '0',
+      follow : '0',
+      follower : '0',
+      profileimg : '0.png',
+      json: profile._json,
+      changenickname: 'N'
+    }, function(err, post){
+      if(err) return console.log(err);
+      return done(err, user);
+    });
+  }
+      
   // KAKAO
   passport.use("kakao", new KakaoStrategy({
     clientID: process.env.KAKAO_CLIENT_ID,
@@ -26,21 +44,7 @@ module.exports = () => {
       }, function(err, user){
         if(err) return done(err);
         if(!user){
-          Users.create({ 
-            id:profile.id,
-            usernickname: "User" + Math.floor(Math.random() * (9999999999 - 1) + 1),
-            username:profile.displayName,
-            provider: 'kakao',
-            posts : '0',
-            follow : '0',
-            follower : '0',
-            profileimg : '',
-            json: profile._json,
-            changenickname: 'N'
-            }, function(err, post){
-            if(err) return console.log(err);
-            return done(err, user);
-          });
+          createUser(profile, done, user, profile.provider);
         }else{
             return done(err, user);
         }
@@ -60,21 +64,7 @@ module.exports = () => {
       }, function(err, user){
         if(err) return done(err);
         if(!user){
-          Users.create({ 
-            id:profile.id,
-            usernickname: "User" + Math.floor(Math.random() * (9999999999 - 1) + 1),
-            username:profile.displayName,
-            provider: 'facebook',
-            posts : '0',
-            follow : '0',
-            follower : '0',
-            profileimg : '',
-            json: profile._json,
-            changenickname: 'N'
-            }, function(err, post){
-            if(err) return console.log(err);
-            return done(err, user);
-          });
+          createUser(profile, done, user, profile.provider);
         }else{
             return done(err, user);
         }
@@ -93,21 +83,7 @@ module.exports = () => {
       }, function(err, user){
         if(err) return done(err);
         if(!user){
-          Users.create({ 
-            id:profile.id,
-            usernickname: "User" + Math.floor(Math.random() * (9999999999 - 1) + 1),
-            username:profile.displayName,
-            provider: 'google',
-            posts : '0',
-            follow : '0',
-            follower : '0',
-            profileimg : '',
-            json: profile._json,
-            changenickname: 'N'
-            }, function(err, post){
-            if(err) return console.log(err);
-            return done(err, user);
-          });
+          createUser(profile, done, user, profile.provider);
         }else{
             return done(err, user);
         }
@@ -126,21 +102,7 @@ module.exports = () => {
       }, function(err, user){
         if(err) return done(err);
         if(!user){
-          Users.create({ 
-            id:profile.id,
-            usernickname: "User" + Math.floor(Math.random() * (9999999999 - 1) + 1),
-            username:profile.displayName,
-            provider: 'naver',
-            posts : '0',
-            follow : '0',
-            follower : '0',
-            profileimg : '',
-            json: profile._json,
-            changenickname: 'N'
-            }, function(err, post){
-            if(err) return console.log(err);
-            return done(err, user);
-          });
+          createUser(profile, done, user, profile.provider);
         }else{
             return done(err, user);
         }

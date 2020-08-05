@@ -47,9 +47,12 @@ router.get('/my/profile', function(req, res, next) {
 router.get('/profile/:id', function(req, res, next) {
   Users.findOne({id:req.user.id}, function(err, result){
     if (err) {
-      redirect('/matstagram'); // 회원정보가 없습니다 페이지 만들어서 or 알럿창
+      redirect('/matstagram'); // 회원정보가 없습니다 페이지 만들자
     }
-    res.render('main/profile', {UserInfo: result});
+    Posts.find({writerid:result.id}).sort('-postNum').exec(function(err, posts){
+      console.log(posts);
+      res.render('main/profile', {UserInfo: result, PostData: posts});
+    });
   })
 });
 
@@ -97,11 +100,11 @@ router.post('/profile/:nickname/edit/img', function(req, res, next) {
         if(req.files===undefined){
           res.redirect('/matstagram/profile/' + req.params.nickname + '/edit');
         } else {
-          samplefile.mv('./public/userdata/profile/' + result.id + '.png'), function(err){
+          samplefile.mv('./public/userdata/profile/' + result.userNum + '.png'), function(err){
             console.log(req.files.inputimg);
             if(err) return res.status(500).send(err);
           }
-          Users.updateOne({id: result.id}, {profileimg: result.id+'.png'}, function(err, resultUpdate){
+          Users.updateOne({id: result.id}, {profileimg: result.userNum+'.png'}, function(err, resultUpdate){
             res.redirect('/matstagram/profile/' + req.params.nickname + '/edit');
           })
         }
@@ -140,6 +143,7 @@ router.post('/post/create', function(req, res, next) {
           console.log(samplefile);
           if(err) return res.status(500).send(err);
         }
+        Users.updateOne({id:result.id},{posts:result.posts+1}, function(err){if(err) console.log(err)})
       })
       res.redirect('/matstagram');
     });
