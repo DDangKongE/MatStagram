@@ -51,7 +51,7 @@
                     <div class="mylist_contents contents_container active">
                         <% for(var prop in PostData) { %>
                             <div class="pic">
-                                <a href="#"><img id="detail-page" data="<%=PostData[prop]%>" src="/userdata/posts/<%=PostData[prop].postNum%>.png" alt=""></a>
+                                <a><img id="detail-page" nickname="<%=UserInfo.usernickname%>" postnum="<%=PostData[prop].postNum%>" src="/userdata/posts/<%=PostData[prop].postNum%>.png" alt=""></a>
                             </div>
                         <% } %>
                     </div>
@@ -118,15 +118,15 @@
                 </section>
             </div>
             
-            <div id="myModal" class="modal">
-                <!-- Modal content -->
-                <div id="modal-content" class="modal-content">                                                            
-                    <p>검색 결과가 없습니다.</p>
-                </div>
+            <div id="myModal" class="modal" style="top:-70px">
+                <article class="modal-content">
+                   <!-- 포스트 내용-->
+                </article>
             </div>
             
         </section>
         <script src="/javascripts/profile.js"></script>
         <script src="/javascripts/detail-page.js"></script>
+        <script src="/javascripts/dateformat.js"></script>
     </body>
 </html>

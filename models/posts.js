@@ -8,6 +8,7 @@ var postSchema = mongoose.Schema({
     placename:{type:String, require:[true]},
     addressname:{type:String, require:[true]},
     placeid:{type:String, require:[true]},
+    uploadtime:{type:Date, default:Date.now},
     // 임시
     like:[{
         username: {type:String} 
