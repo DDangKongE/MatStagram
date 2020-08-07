@@ -27,8 +27,14 @@ $(document).ready(function () {
             success: function(result) {
                 var post = result.result;
                 var user = result.user
+                if(user === "비로그인"){
+                    alert("로그인을 해주세요!");
+                    return 0;
+                } else {
                 var uploadtime = new Date(post.uploadtime).format("yyyy-MM-dd(KS) a/p hh:mm:ss");
+                // 모달창을 비워줌
                 $(".modal-content").empty();
+                // 이미지와 유저정보를 보여주는 부분
                 $(".modal-content").append(
                      '<div class="img_section">'
                         +'<div class="trans_inner">'
@@ -55,10 +61,10 @@ $(document).ready(function () {
                                     +'<li>삭제</li>'
                                 +'</ul>'
                             +'</div>'
+                        +'</header>')
 
-                        +'</header>'
-
-                        +'<section class="scroll_section">'
+                        // 포스트 내용과 댓글을 표시하는 영역
+                        $(".modal-content").append('<section class="scroll_section">'
                             +'<div class="admin_container">'
                                 +'<div class="admin">'+'<img src="/userdata/profile/' + user.profileimg + '" alt="user">'+'</div>'
                                 +'<div class="comment">'
@@ -112,6 +118,7 @@ $(document).ready(function () {
                         +'</div>'
                     +'</div>'
                     )
+                }
                 modal.style.display = "block";
            }, error: function(req, status, error){
                 console.log(error);

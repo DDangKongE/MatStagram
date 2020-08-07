@@ -127,8 +127,9 @@ router.post('/profile/:nickname/:postNum', function(req, res, next){
       })
     })
   } else {
-    console.log("로그인을 해주세요!");
-    res.send({result:'비로그인'});
+    Posts.findOne({postNum:req.params.postNum}, function(err, result){
+      res.send({result:result, user:'비로그인'});
+    })
   }
 })
 
