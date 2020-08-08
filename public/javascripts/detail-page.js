@@ -28,8 +28,10 @@ $(document).ready(function () {
                 var post = result.result;
                 var user = result.user
                 if(user === "비로그인"){
+                    $(".modal-content").empty();
                     alert("로그인을 해주세요!");
-                    return 0;
+                    modal.style.display = "none";
+                    return;
                 } else {
                 var uploadtime = new Date(post.uploadtime).format("yyyy-MM-dd(KS) a/p hh:mm:ss");
                 // 모달창을 비워줌
@@ -61,10 +63,8 @@ $(document).ready(function () {
                                     +'<li>삭제</li>'
                                 +'</ul>'
                             +'</div>'
-                        +'</header>')
-
-                        // 포스트 내용과 댓글을 표시하는 영역
-                        $(".modal-content").append('<section class="scroll_section">'
+                        +'</header>'
+                        +'<section class="scroll_section">'
                             +'<div class="admin_container">'
                                 +'<div class="admin">'+'<img src="/userdata/profile/' + user.profileimg + '" alt="user">'+'</div>'
                                 +'<div class="comment">'
