@@ -175,15 +175,17 @@
                         <div class="more">모두 보기</div>
                     </header>
                     <% for (var user in Recommend){ %> 
-                        <div class="thumb_user">
-                            <div class="profile_thumb">
-                                <img src="/userdata/profile/<%=Recommend[user].profileimg%>" alt="프로필사진">
+                        <% if(Recommend[user].id !== UserInfo.id) { %> 
+                            <div class="thumb_user">
+                                <div class="profile_thumb">
+                                    <img src="/userdata/profile/<%=Recommend[user].profileimg%>" alt="프로필사진">
+                                </div>
+                                <div class="detail">
+                                    <div class="id"><%=Recommend[user].usernickname%></div>
+                                    <div class="time"><%=Recommend[user].username%></div>
+                                </div>
                             </div>
-                            <div class="detail">
-                                <div class="id"><%=Recommend[user].usernickname%></div>
-                                <div class="time"><%=Recommend[user].username%></div>
-                            </div>
-                        </div>
+                            <% } %>
                     <% } %>
                 </article>
                 <% } %>

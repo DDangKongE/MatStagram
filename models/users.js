@@ -7,9 +7,15 @@ var userSchema = mongoose.Schema({
     usernickname:{type:String, require:[true, 'Usernickname is required']},
     username:{type:String, require:[true, 'UserSubname is required']},
     provider:{type:String, require:[true]},
-    posts:{type:Number},
-    follow:{type:Number},
-    follower:{type:Number},
+    posts:[{
+
+    }],
+    follow:[{
+
+    }],
+    follower:[{
+        
+    }],
     profileimg:{type:String},
     json:{},
     changenickname:{type:String}

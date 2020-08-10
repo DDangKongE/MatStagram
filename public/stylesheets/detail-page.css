@@ -60,21 +60,18 @@
 
 
 .modal-content .top{
-
+    z-index: 1;
 }
 .top .more_detail{
+    text-align: center;
     position: absolute;
-    right: -60px;
-    top: 40px;
-    background:white;
-    border: 1px solid rgba(0,0,0,.0975);
+    right: 0;
+    top: 20px;
+    background-color: #fefefe;
+    border: 1px solid rgba(0,0,0,0.09);
     border-radius: 3px;
-    z-index: 100;
-    box-shadow: 2px 2px 2px rgba(128, 128, 128, 0.34);
-    /*display: none;*/
-    transform-origin: left top;
-    transform:scale(0);
-    transition:all 0.3s ;
+    display: none;
+    z-index: 0;
 }
 
 .sprite_more_icon.on .more_detail{

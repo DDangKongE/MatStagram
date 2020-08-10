@@ -1,4 +1,26 @@
 $(document).ready(function () {    
+    $('html').on('click', function(e) { 
+        // 포스트 설정버튼
+        if($(e.target).hasClass("sprite_more_icon")) {
+            if($("#toggle").css("display") == "none"){   
+                jQuery('#toggle').css("display", "block");   
+            } else {  
+                jQuery('#toggle').css("display", "none");   
+            }
+        } else if(!$(e.target).hasClass("sprite_more_icon")){
+            jQuery('#toggle').css("display", "none");   
+        }
+        
+        if($(e.target).hasClass("sprite_heart_icon_outline")) {
+            var element_o = $(".hearton");
+            if(element_o.attr('class')==undefined){
+                $(e.target).attr('class','sprite_heart_icon_outline hearton');
+            } else {
+                $(e.target).attr('class','sprite_heart_icon_outline');
+            }
+        }
+    });
+
     // Get the modal
     var modal = document.getElementById('myModal');
      
@@ -57,7 +79,7 @@ $(document).ready(function () {
                                 +'</div>'
                             +'</div>'
                             +'<div class="sprite_more_icon" data-name="more">'
-                                +'<ul class="more_detail">'
+                                +'<ul id="toggle" class="more_detail">'
                                     +'<li>팔로우</li>'
                                     +'<li>수정</li>'
                                     +'<li>삭제</li>'
@@ -95,9 +117,10 @@ $(document).ready(function () {
                                 +'<div class="heart_btn">'
                                     +'<div class="sprite_heart_icon_outline" data-name="heartbeat">'+'</div>'
                                 +'</div>'
-                                +'<div>'
-                                    +'<div class="sprite_bubble_icon">'+'</div>'
-                                +'</div>'
+                                // 멘션 부분 일단 삭제
+                                // +'<div>'
+                                //     +'<div class="sprite_bubble_icon">'+'</div>'
+                                // +'</div>'
                                 +'<div>'
                                     +'<div class="sprite_share_icon" data-name="share">'+'</div>'
                                 +'</div>'
