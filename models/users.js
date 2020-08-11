@@ -8,7 +8,7 @@ var userSchema = mongoose.Schema({
     username:{type:String, require:[true, 'UserSubname is required']},
     provider:{type:String, require:[true]},
     posts:[{
-
+        
     }],
     follow:[{
 

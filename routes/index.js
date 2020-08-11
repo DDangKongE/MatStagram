@@ -159,7 +159,7 @@ router.post('/post/create', function(req, res, next) {
           console.log(samplefile);
           if(err) return res.status(500).send(err);
         }
-        Users.updateOne({id:result.id},{posts:result.posts+1}, function(err){if(err) console.log(err)})
+        Users.updateOne({id:result.id},{$push:{posts:post.postNum}}, function(err){if(err) console.log(err)})
       })
       res.redirect('/matstagram');
     });
@@ -167,6 +167,17 @@ router.post('/post/create', function(req, res, next) {
     res.redirect('/matstagram/login');
   }
 });
+
+router.post('/post/like', function(req, res, next){
+  if (req.isAuthenticated()) {
+      Users.findOne({posts:"32"}, function(err, result){
+        console.log(result);
+      })
+      res.redirect('/matstagram');
+  } else {
+    res.redirect('/matstagram/login');
+  }
+})
 
 router.get('/explore', function(req, res, next){
   Users.findOne({id:req.user.id}, function(err, result){

@@ -20,9 +20,6 @@ module.exports = () => {
       usernickname: "User" + Math.floor(Math.random() * (9999999999 - 1) + 1),
       username:profile.displayName,
       provider: provider,
-      posts : '0',
-      follow : '0',
-      follower : '0',
       profileimg : '0.png',
       json: profile._json,
       changenickname: 'N'
@@ -46,6 +43,7 @@ module.exports = () => {
         if(!user){
           createUser(profile, done, user, profile.provider);
         }else{
+          console.log(profile);
             return done(err, user);
         }
       })
