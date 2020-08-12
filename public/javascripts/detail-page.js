@@ -8,16 +8,26 @@ $(document).ready(function () {
                 jQuery('#toggle').css("display", "none");   
             }
         } else if(!$(e.target).hasClass("sprite_more_icon")){
-            jQuery('#toggle').css("display", "none");   
+            jQuery('#toggle').css("display", "none");
         }
         
         if($(e.target).hasClass("sprite_heart_icon_outline")) {
+            var postNum = $(e.target).attr('postNum');
             var element_o = $(".hearton");
-            if(element_o.attr('class')==undefined){
-                $(e.target).attr('class','sprite_heart_icon_outline hearton');
-            } else {
-                $(e.target).attr('class','sprite_heart_icon_outline');
-            }
+            $.ajax({
+                url: '/matstagram/post/like/' + postNum,
+                type: 'POST',
+                success: function(result) {
+                    if(element_o.attr('class')==undefined){
+                        $(e.target).attr('class','sprite_heart_icon_outline hearton');
+                    } else {
+                        $(e.target).attr('class','sprite_heart_icon_outline');
+                    }
+               }, error: function(req, status, error){
+                    console.log(error);
+                }
+            });
+            
         }
     });
 
@@ -115,7 +125,7 @@ $(document).ready(function () {
                         +'<div class="bottom_icons">'
                             +'<div class="left_icons">'
                                 +'<div class="heart_btn">'
-                                    +'<div class="sprite_heart_icon_outline" data-name="heartbeat">'+'</div>'
+                                    +'<div postNum="' +post.postNum + '" class="sprite_heart_icon_outline" data-name="heartbeat">'+'</div>'
                                 +'</div>'
                                 // 멘션 부분 일단 삭제
                                 // +'<div>'

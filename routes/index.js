@@ -168,14 +168,15 @@ router.post('/post/create', function(req, res, next) {
   }
 });
 
-router.post('/post/like', function(req, res, next){
+router.post('/post/like/:postnum', function(req, res, next){
   if (req.isAuthenticated()) {
       Users.findOne({posts:"32"}, function(err, result){
+        console.log(req.params.postnum);
         console.log(result);
       })
-      res.redirect('/matstagram');
+      res.send();
   } else {
-    res.redirect('/matstagram/login');
+    res.send();
   }
 })
 
