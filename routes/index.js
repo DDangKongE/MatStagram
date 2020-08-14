@@ -170,9 +170,10 @@ router.post('/post/create', function(req, res, next) {
 
 router.post('/post/like/:postnum', function(req, res, next){
   if (req.isAuthenticated()) {
-      Users.findOne({posts:"32"}, function(err, result){
-        console.log(req.params.postnum);
-        console.log(result);
+    Posts.findOne({"test.name":{$all:["dds64466a"]}}, function(err,result){
+      if(err) console.log(err);
+        console.log("작동");
+        console.log(result)
       })
       res.send();
   } else {
