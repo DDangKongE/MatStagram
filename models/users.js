@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 
+var likesSchema = mongoose.Schema({ postnum: 'string' });
+
 //Schema
 var userSchema = mongoose.Schema({
     id:{type:String, unique : true , require:[true]},
@@ -8,7 +10,7 @@ var userSchema = mongoose.Schema({
     username:{type:String, require:[true, 'UserSubname is required']},
     provider:{type:String, require:[true]},
     posts:[{
-        
+
     }],
     follow:[{
 
@@ -21,7 +23,7 @@ var userSchema = mongoose.Schema({
     changenickname:{type:String}
 })
 
-userSchema.plugin(AutoIncrement, {inc_field: 'userNum'});
+userSchema.plugin(AutoIncrement, {inc_field: 'usernum'});
 
 var Users = mongoose.model('users', userSchema);
 

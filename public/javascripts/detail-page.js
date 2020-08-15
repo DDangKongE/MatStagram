@@ -11,17 +11,21 @@ $(document).ready(function () {
             jQuery('#toggle').css("display", "none");
         }
         
+        // 좋아요
         if($(e.target).hasClass("sprite_heart_icon_outline")) {
-            var postNum = $(e.target).attr('postNum');
+            var postnum = $(e.target).attr('postnum');
             var element_o = $(".hearton");
             $.ajax({
-                url: '/matstagram/post/like/' + postNum,
+                url: '/matstagram/post/like/' + postnum,
                 type: 'POST',
                 success: function(result) {
+                    var count = $('.count').text();
                     if(element_o.attr('class')==undefined){
                         $(e.target).attr('class','sprite_heart_icon_outline hearton');
+                        $('.count').text(++count);
                     } else {
                         $(e.target).attr('class','sprite_heart_icon_outline');
+                        $('.count').text(--count);
                     }
                }, error: function(req, status, error){
                     console.log(error);
@@ -51,14 +55,14 @@ $(document).ready(function () {
 
     $(document).on('click', '.pic', function(e){
         console.log('눌러짐');
-        var nickname = $(e.target).attr('nickname');
-        var postNum = $(e.target).attr('postNum');
+        var postnum = $(e.target).attr('postnum');
         $.ajax({
-            url: '/matstagram/profile/' + nickname + '/' + postNum,
+            url: '/matstagram/post/read/' + postnum,
             type: 'POST',
             success: function(result) {
                 var post = result.result;
                 var user = result.user
+                var login = result.login;
                 if(user === "비로그인"){
                     $(".modal-content").empty();
                     alert("로그인을 해주세요!");
@@ -70,10 +74,10 @@ $(document).ready(function () {
                 $(".modal-content").empty();
                 // 이미지와 유저정보를 보여주는 부분
                 $(".modal-content").append(
-                     '<div class="img_section">'
+                    '<div class="img_section">'
                         +'<div class="trans_inner">'
                             +'<div>'
-                                +'<img src="/userdata/posts/' + post.postNum + '.png" alt="">'
+                                +'<img src="/userdata/posts/' + post.postnum + '.png" alt="">'
                             +'</div>'
                         +'</div>'
                     +'</div>'
@@ -90,9 +94,7 @@ $(document).ready(function () {
                             +'</div>'
                             +'<div class="sprite_more_icon" data-name="more">'
                                 +'<ul id="toggle" class="more_detail">'
-                                    +'<li>팔로우</li>'
-                                    +'<li>수정</li>'
-                                    +'<li>삭제</li>'
+                                // 작성자와 로그인유저에 따라 팔로우 / 수정,삭제 를 보여주도록 함
                                 +'</ul>'
                             +'</div>'
                         +'</header>'
@@ -121,36 +123,81 @@ $(document).ready(function () {
                                 +'</div>'
                             +'</div>'
                         +'</section>'
+                        // 좋아요 여부에 따라 하트 모양 변경 - 조건문
+                    +'</div>')
 
-                        +'<div class="bottom_icons">'
-                            +'<div class="left_icons">'
-                                +'<div class="heart_btn">'
-                                    +'<div postNum="' +post.postNum + '" class="sprite_heart_icon_outline" data-name="heartbeat">'+'</div>'
-                                +'</div>'
-                                // 멘션 부분 일단 삭제
-                                // +'<div>'
-                                //     +'<div class="sprite_bubble_icon">'+'</div>'
-                                // +'</div>'
-                                +'<div>'
-                                    +'<div class="sprite_share_icon" data-name="share">'+'</div>'
-                                +'</div>'
-                            +'</div>'
+                        
 
-                            +'<div class="right_icon">'
-                                +'<div class="sprite_bookmark_outline" data-name="book-mark">'+'</div>'
-                            +'</div>'
-                        +'</div>'
-
-                        +'<div class="count_likes">좋아요 <span class="count">'+'2,351'+'</span>개</div>'
-                        +'<div class="timer">'+'2시간'+'</div>'
+                    $(".detail--right_box").append(
+                         '<div class="count_likes">좋아요 <span class="count">'+ post.likes.length +'</span>개</div>'
+                        // +'<div class="timer">'+'2시간'+'</div>'
 
                         +'<div class="commit_field">'
                             +'<input type="text" placeholder="댓글달기..">'
 
                             +'<div class="upload_btn">게시</div>'
                         +'</div>'
-                    +'</div>'
+
                     )
+
+                    // 조건문들
+                    var chklikes = 'N';
+                    for(var prop in post.likes){
+                        if(post.likes[prop].usernum == login.usernum){
+                            chklikes = 'Y';
+                        }
+                    }
+                    
+                    if(chklikes == 'N'){
+                        $(".detail--right_box").append('<div class="bottom_icons">'
+                        +'<div class="left_icons">'
+                            +'<div class="heart_btn">'
+                                +'<div postnum="' +post.postnum + '" class="sprite_heart_icon_outline" data-name="heartbeat">'+'</div>'
+                            +'</div>'
+                            // 멘션/북마크 부분 일단 삭제
+                            // +'<div>'
+                            //     +'<div class="sprite_bubble_icon">'+'</div>'
+                            // +'</div>'
+                            +'<div>'
+                                +'<div class="sprite_share_icon" data-name="share">'+'</div>'
+                            +'</div>'
+                        +'</div>'
+
+                        // +'<div class="right_icon">'
+                        //     +'<div class="sprite_bookmark_outline" data-name="book-mark">'+'</div>'
+                        // +'</div>'
+                        +'</div>')
+                    } else {
+                        $(".detail--right_box").append('<div class="bottom_icons">'
+                        +'<div class="left_icons">'
+                            +'<div class="heart_btn">'
+                                +'<div postnum="' +post.postnum + '" class="sprite_heart_icon_outline hearton" data-name="heartbeat">'+'</div>'
+                            +'</div>'
+                            // 멘션/북마크 부분 일단 삭제
+                            // +'<div>'
+                            //     +'<div class="sprite_bubble_icon">'+'</div>'
+                            // +'</div>'
+                            +'<div>'
+                                +'<div class="sprite_share_icon" data-name="share">'+'</div>'
+                            +'</div>'
+                        +'</div>'
+
+                        // +'<div class="right_icon">'
+                        //     +'<div class="sprite_bookmark_outline" data-name="book-mark">'+'</div>'
+                        // +'</div>'
+                        +'</div>')
+                    }
+                    
+                    if(user.id == login.id){
+                        $(".more_detail").append(
+                            '<li>수정</li>'
+                            +'<li>삭제</li>'
+                        )
+                    } else {
+                        $(".more_detail").append(
+                            '<li>팔로우</li>'
+                        )
+                    }
                 }
                 modal.style.display = "block";
            }, error: function(req, status, error){

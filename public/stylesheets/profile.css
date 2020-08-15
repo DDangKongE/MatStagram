@@ -76,10 +76,11 @@
 }
 
 .about > span{
+    text-align: center;
     display:inline-block;
     cursor: pointer;
     position:relative;
-    width: 300px;
+    width: 455px;
     margin-right:7.93px;
     font-size: 20px;
     font-weight: bold ;

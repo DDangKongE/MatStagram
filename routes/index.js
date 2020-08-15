@@ -49,9 +49,11 @@ router.get('/profile/:ninkname', function(req, res, next) {
     if (err) {
       redirect('/matstagram'); // 회원정보가 없습니다 페이지 만들자
     } else {
-      Posts.find({writerid:result.id}).sort('-postNum').exec(function(err, posts){
-        console.log(posts);
-        res.render('main/profile', {UserInfo: result, PostData: posts});
+      Posts.find({writerid:result.id}).sort('-postnum').exec(function(err, posts){
+        Posts.find({'likes.usernum':{$all:[result.usernum]}}, function(err, likes){
+          console.log(likes);
+          res.render('main/profile', {UserInfo: result, PostData: posts, likeData: likes});
+        })
       });
     }
   })
@@ -101,11 +103,11 @@ router.post('/profile/:nickname/edit/img', function(req, res, next) {
         if(req.files===undefined){
           res.redirect('/matstagram/profile/' + req.params.nickname + '/edit');
         } else {
-          samplefile.mv('./public/userdata/profile/' + result.userNum + '.png'), function(err){
+          samplefile.mv('./public/userdata/profile/' + result.usernum + '.png'), function(err){
             console.log(req.files.inputimg);
             if(err) return res.status(500).send(err);
           }
-          Users.updateOne({id: result.id}, {profileimg: result.userNum+'.png'}, function(err, resultUpdate){
+          Users.updateOne({id: result.id}, {profileimg: result.usernum+'.png'}, function(err, resultUpdate){
             res.redirect('/matstagram/profile/' + req.params.nickname + '/edit');
           })
         }
@@ -118,16 +120,16 @@ router.post('/profile/:nickname/edit/img', function(req, res, next) {
   }
 });
 
-router.post('/profile/:nickname/:postNum', function(req, res, next){
+router.post('/post/read/:postnum', function(req, res, next){
   if(req.user){
     console.log("로그인되어있다!")
-    Posts.findOne({postNum:req.params.postNum}, function(err, result){
+    Posts.findOne({postnum:req.params.postnum}, function(err, result){
       Users.findOne({id:result.writerid}, function(err, user){
-        res.send({result:result, user:user});
+        res.send({result:result, user:user, login:req.user});
       })
     })
   } else {
-    Posts.findOne({postNum:req.params.postNum}, function(err, result){
+    Posts.findOne({postnum:req.params.postnum}, function(err, result){
       res.send({result:result, user:'비로그인'});
     })
   }
@@ -155,13 +157,15 @@ router.post('/post/create', function(req, res, next) {
         placeid: req.body.place_id
       }, function(err, post){
         if(err) return console.log(err);
-        samplefile.mv('./public/userdata/posts/' + post.postNum + '.png'), function(err){
+        samplefile.mv('./public/userdata/posts/' + post.postnum + '.png'), function(err){
           console.log(samplefile);
           if(err) return res.status(500).send(err);
         }
-        Users.updateOne({id:result.id},{$push:{posts:post.postNum}}, function(err){if(err) console.log(err)})
+        Users.updateOne({id:result.id},{$push:{posts:post.postnum}}, function(err){
+          if(err) console.log(err)
+          res.redirect('/matstagram/profile/'+result.usernickname);
+        })
       })
-      res.redirect('/matstagram');
     });
   } else {
     res.redirect('/matstagram/login');
@@ -170,12 +174,27 @@ router.post('/post/create', function(req, res, next) {
 
 router.post('/post/like/:postnum', function(req, res, next){
   if (req.isAuthenticated()) {
-    Posts.findOne({"test.name":{$all:["dds64466a"]}}, function(err,result){
+    Posts.findOne({postnum:req.params.postnum}, function(err,result){
       if(err) console.log(err);
-        console.log("작동");
-        console.log(result)
-      })
-      res.send();
+      var chklikes = 'N';
+      for(var prop in result.likes){
+        if(prop !== 0){
+          if(result.likes[prop].usernum == req.user.usernum){
+            chklikes = 'Y';
+          }
+        }
+      }
+      if(chklikes === 'Y'){
+        Posts.updateOne({postnum:req.params.postnum}, {$pull:{'likes' : {'usernum':req.user.usernum}}}, function(err){
+          if(err) console.log(err);
+        })
+      } else {
+        Posts.updateOne({postnum:req.params.postnum}, {$push:{'likes' : {'usernum':req.user.usernum}}}, function(err){
+          if(err) console.log(err);
+        })
+      }
+    })
+    res.send();
   } else {
     res.send();
   }

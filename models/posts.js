@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 
-var childSchema = mongoose.Schema({ name: 'string' });
+var likesSchema = mongoose.Schema({ usernum: 'string' });
+var hashsSchema = mongoose.Schema({ usernum: 'string' });
+var commentsSchema = mongoose.Schema({ usernum: 'string' });
 
 //Schema
 var postSchema = mongoose.Schema({
@@ -11,22 +13,12 @@ var postSchema = mongoose.Schema({
     addressname:{type:String, require:[true]},
     placeid:{type:String, require:[true]},
     uploadtime:{type:Date, default:Date.now},
-    // 임시
-    test:[
-        childSchema
-    ],
-    like:[{
-        usernum: {type:String} 
-    }],
-    hashtags:[{
-        username: {type:String}
-    }],
-    comments:[{
-        username: {type:String}
-    }]
+    likes:[likesSchema],
+    hashtags:[hashsSchema],
+    comments:[commentsSchema]
 })
 
-postSchema.plugin(AutoIncrement, {inc_field: 'postNum'});
+postSchema.plugin(AutoIncrement, {inc_field: 'postnum'});
 
 var Posts = mongoose.model('posts', postSchema);
 

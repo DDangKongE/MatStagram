@@ -45,76 +45,24 @@
                     <p class="about">
                         <span class="nick_name on">게시물</span>
                         <span class="like">좋아요</span>
-                        <span class="book_mark">북마크</span>
                     </p>
         
                     <div class="mylist_contents contents_container active">
                         <% for(var prop in PostData) { %>
                             <div class="pic">
-                                <a><img id="detail-page" nickname="<%=UserInfo.usernickname%>" postnum="<%=PostData[prop].postNum%>" src="/userdata/posts/<%=PostData[prop].postNum%>.png" alt=""></a>
+                                <a><img id="detail-page" nickname="<%=UserInfo.usernickname%>" postnum="<%=PostData[prop].postnum%>" src="/userdata/posts/<%=PostData[prop].postnum%>.png" alt=""></a>
                             </div>
                         <% } %>
                     </div>
         
                     <div class="like_contents contents_container">
-                        <div class="pic">
-                            <a href="#"><img src="/images/img_section/img03.jpg" alt=""></a>
-                        </div>
-                        <div class="pic">
-                            <a href="#"><img src="/images/img_section/img01.jpg" alt=""></a>
-                        </div>
-                        <div class="pic">
-                            <a href="#"> <img src="/images/img_section/img02.jpg" alt=""></a>
-                        </div>
-                        <div class="pic">
-                            <a href="#"> <img src="/images/img_section/img01.jpg" alt=""></a>
-                        </div>
-                        <div class="pic">
-                            <a href="#"> <img src="/images/img_section/img02.jpg" alt=""></a>
-                        </div>
-                        <div class="pic">
-                            <a href="#"> <img src="/images/img_section/img03.jpg" alt=""></a>
-                        </div>
-                        <div class="pic">
-                            <a href="#"> <img src="/images/img_section/img01.jpg" alt=""></a>
-                        </div>
-                        <div class="pic">
-                            <a href="#"> <img src="/images/img_section/img02.jpg" alt=""></a>
-                        </div>
-                        <div class="pic">
-                            <a href="#"> <img src="/images/img_section/img02.jpg" alt=""></a>
-                        </div>
+                        <% for(var prop in likeData) { %>
+                            <div class="pic">
+                                <a><img id="detail-page" nickname="<%=UserInfo.usernickname%>" postnum="<%=likeData[prop].postnum%>" src="/userdata/posts/<%=likeData[prop].postnum%>.png" alt=""></a>
+                            </div>
+                        <% } %>
                     </div>
-        
-                    <div class="bookmark_contents contents_container">
-                        <div class="pic">
-                            <a href="#"><img src="/images/img_section/img03.jpg" alt=""></a>
-                        </div>
-                        <div class="pic">
-                            <a href="#"><img src="/images/img_section/img01.jpg" alt=""></a>
-                        </div>
-                        <div class="pic">
-                            <a href="#"> <img src="/images/img_section/img02.jpg" alt=""></a>
-                        </div>
-                        <div class="pic">
-                            <a href="#"> <img src="/images/img_section/img01.jpg" alt=""></a>
-                        </div>
-                        <div class="pic">
-                            <a href="#"> <img src="/images/img_section/img02.jpg" alt=""></a>
-                        </div>
-                        <div class="pic">
-                            <a href="#"> <img src="/images/img_section/img03.jpg" alt=""></a>
-                        </div>
-                        <div class="pic">
-                            <a href="#"> <img src="/images/img_section/img01.jpg" alt=""></a>
-                        </div>
-                        <div class="pic">
-                            <a href="#"> <img src="/images/img_section/img02.jpg" alt=""></a>
-                        </div>
-                        <div class="pic">
-                            <a href="#"> <img src="/images/img_section/img02.jpg" alt=""></a>
-                        </div>
-                    </div>
+    
                 </section>
             </div>
             
