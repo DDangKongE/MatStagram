@@ -31,7 +31,6 @@ $(document).ready(function () {
                     console.log(error);
                 }
             });
-            
         }
     });
 
@@ -57,10 +56,10 @@ $(document).ready(function () {
         console.log('눌러짐');
         var postnum = $(e.target).attr('postnum');
         $.ajax({
-            url: '/matstagram/post/show/' + postnum,
-            type: 'POST',
+            url: '/matstagram/post/' + postnum,
+            type: 'GET',
             success: function(result) {
-                var post = result.result;
+                var post = result.post;
                 var user = result.user
                 var login = result.login;
                 if(user === "비로그인"){
@@ -190,8 +189,9 @@ $(document).ready(function () {
                     
                     if(user.id == login.id){
                         $(".more_detail").append(
-                            '<li onclick="location.href=`/matstagram/post/edit/'+post.postnum +'`">수정</li>'
-                            +'<li>삭제</li>'
+                            '<li onclick="location.href=`/matstagram/post/'+post.postnum +'/edit`">수정</li>'
+                            +'<li onclick="location.href=`/matstagram/post/'+post.postnum +'/delete`">삭제</li>'
+
                         )
                     } else {
                         $(".more_detail").append(

@@ -47,7 +47,7 @@
                             <input class="submit_btn" type="submit" value="저장">
                         </form>  
                     <% } else { %>
-                        <form action="/matstagram/post/update" class="post_form" method="post" encType="multipart/form-data"> 
+                        <form action="/matstagram/post/<%=PostInfo.postnum%>?_method=PUT" class="post_form" method="post" encType="multipart/form-data"> 
                             <div class="title">
                                 맛집 등록
                             </div>
@@ -74,7 +74,6 @@
                             <p>
                                 <input type="text" name="address_name" placeholder="맛집 주소" required="required" value="<%=PostInfo.addressname%>" onkeypress="return false;">
                                 <input type="hidden" id="place_id" name="place_id" value="<%=PostInfo.placeid%>">
-                                <input type="hidden" id="postnum" name="postnum" value="<%=PostInfo.postnum%>">
                             </p>
                             <p>
                                 <textarea name="content" id="text_field" cols="50" rows="5" required="required" placeholder="
@@ -121,8 +120,6 @@
                 };
                 reader.readAsDataURL(e.target.files[0]);
             }
-            
-            if(response=="unauthenticated") alert("You should login first!")
         </script>
         <script src="/javascripts/lsearch.js"></script>
     </body>

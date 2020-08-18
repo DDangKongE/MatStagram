@@ -144,21 +144,6 @@ router.post('/profile/:nickname/edit/img', function(req, res, next) {
 });
 
 // post(게시물) 관련 router
-router.post('/post/show/:postnum', function(req, res, next){
-  if(req.user){
-    console.log("로그인되어있다!")
-    Posts.findOne({postnum:req.params.postnum}, function(err, result){
-      Users.findOne({id:result.writerid}, function(err, user){
-        res.send({result:result, user:user, login:req.user});
-      })
-    })
-  } else {
-    Posts.findOne({postnum:req.params.postnum}, function(err, result){
-      res.send({result:result, user:'비로그인'});
-    })
-  }
-})
-
 router.get('/post/new', function(req, res, next) {
   if (req.isAuthenticated()) {
     Users.findOne({id:req.user.id}, function(err, result){
@@ -186,10 +171,10 @@ router.post('/post/create', function(req, res, next) {
           console.log(samplefile);
           if(err) return res.status(500).send(err);
         }
-        Users.updateOne({id:result.id},{$push:{posts:post.postnum}}, function(err){
+        Users.updateOne({id:result.id},{$push:{'posts':{'postnum' : post.postnum}}}, function(err){
           if(err) console.log(err)
           res.redirect('/matstagram/profile/'+result.usernickname);
-        })
+        });
       })
     });
   } else {
@@ -198,7 +183,7 @@ router.post('/post/create', function(req, res, next) {
   }
 });
 
-router.get('/post/edit/:postnum', function(req, res, next){
+router.get('/post/:postnum/edit', function(req, res, next){
   if (req.isAuthenticated()) {
     Posts.findOne({postnum:req.params.postnum}, function(error, postdata){
       if(postdata.writerid == req.user.id){
@@ -216,11 +201,11 @@ router.get('/post/edit/:postnum', function(req, res, next){
   }
 })
 
-router.post('/post/update', function(req, res, next){
+router.put('/post/:postnum', function(req, res, next){
   if (req.isAuthenticated()) {
-    Posts.findOne({postnum:req.body.postnum}, function(error, postdata){
+    Posts.findOne({postnum:req.params.postnum}, function(error, postdata){
       if(postdata.writerid == req.user.id){
-        Posts.updateOne({postnum:req.body.postnum}, {
+        Posts.updateOne({postnum:req.params.postnum}, {
           contents: req.body.content,
           writerid: req.user.id,
           placename: req.body.place_name,
@@ -249,6 +234,47 @@ router.post('/post/update', function(req, res, next){
     res.redirect('/matstagram/login');
   }
 })
+
+// 씹콜백지옥
+router.get('/post/:postnum/delete', function(req, res, next){
+  if (req.isAuthenticated()) {
+    Posts.findOne({postnum:req.params.postnum}, function(error, postdata){
+      if(error) console.log(err);
+      if(postdata.writerid == req.user.id){
+        Posts.deleteOne({postnum:req.params.postnum}, function(err){
+          if(err) console.log(err);
+          fs.unlinkSync('public/userdata/posts/'+ req.params.postnum +'.png');
+          Users.updateOne({id:req.user.id},{$pull:{'posts': {'postnum' : req.params.postnum}}}, function(err, result){
+            if(err) console.log(err)
+            res.redirect('/matstagram/my/profile');
+          })
+        });
+      } else {
+        alert('잘못된 접근입니다! \n다시한번 시도해주세요!');
+        res.redirect('/matstagram');
+      }
+    });
+  } else {
+    alert('로그인을 해주세요!');
+    res.redirect('/matstagram/login');
+  }
+})
+
+router.get('/post/:postnum', function(req, res, next){
+  if(req.user){
+    console.log("로그인되어있다!")
+    Posts.findOne({postnum:req.params.postnum}, function(err, post){
+      Users.findOne({id:post.writerid}, function(err, user){
+        res.send({post:post, user:user, login:req.user});
+      })
+    })
+  } else {
+    Posts.findOne({postnum:req.params.postnum}, function(err, result){
+      res.send({result:result, user:'비로그인'});
+    })
+  }
+})
+
 
 router.post('/post/like/:postnum', function(req, res, next){
   if (req.isAuthenticated()) {
