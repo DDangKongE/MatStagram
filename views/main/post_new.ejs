@@ -9,42 +9,83 @@
         <section id="container">
             <div id="main_container">
                 <div class="post_form_container">
-                    <form action="/matstagram/post/create" class="post_form" method="post" encType="multipart/form-data"> 
-                        <div class="title">
-                            맛집 등록
-                        </div>
-                        <div class="preview">
-                            <div class="upload">
-                                <div class="post_btn">
-                                    <div class="plus_icon">
-                                        <span></span>
-                                        <span></span>
+                    <% if(PostInfo == null){ %>
+                        <form action="/matstagram/post/create" class="post_form" method="post" encType="multipart/form-data"> 
+                            <div class="title">
+                                맛집 등록
+                            </div>
+                            <div class="preview">
+                                <div class="upload">
+                                    <div class="post_btn">
+                                        <div class="plus_icon">
+                                            <span></span>
+                                            <span></span>
+                                        </div>
+                                        <p>포스트 이미지 추가</p>
+                                        <canvas id="imageCanvas"></canvas>
+                                        <!--<p><img id="img_id" src="#" style="width: 300px; height: 300px; object-fit: cover" alt="thumbnail"></p>-->
                                     </div>
-                                    <p>포스트 이미지 추가</p>
-                                    <canvas id="imageCanvas"></canvas>
-                                    <!--<p><img id="img_id" src="#" style="width: 300px; height: 300px; object-fit: cover" alt="thumbnail"></p>-->
                                 </div>
                             </div>
-                        </div>
-                        <p>
-                            <input type="file" name="photo" id="id_photo" required="required">
-                        </p>
-                        <p>
-                            <input type="text" id="place_name" name="place_name" placeholder="맛집명" style="width:80%;">
-                            <span id="LSearch" class="btn btn-info" onclick="">검색</span>
-                        </p>
-                        <p>
-                            <input type="text" name="address_name" placeholder="맛집 주소" readonly>
-                            <input type="hidden" id="place_id" name="place_id" value="">
-                        </p>
-                        <p>
-                            <textarea name="content" id="text_field" cols="50" rows="5" placeholder="
-140자 까지 등록 가능합니다.
-#태그명 을 통해서 검색 태그를 등록할 수 있습니다.
-예시 : I #love #you !"></textarea>
-                        </p>
-                        <input class="submit_btn" type="submit" value="저장">
-                    </form>               
+                            <p>
+                                <input type="file" name="photo" id="id_photo" required="required">
+                            </p>
+                            <p>
+                                <input type="text" id="place_name" name="place_name" placeholder="맛집명" style="width:80%;" required="required">
+                                <span id="LSearch" class="btn btn-info" onclick="">검색</span>
+                            </p>
+                            <p>
+                                <input type="text" name="address_name" placeholder="맛집 주소" required="required" onkeypress="return false;">
+                                <input type="hidden" id="place_id" name="place_id" value="">
+                            </p>
+                            <p>
+                                <textarea name="content" id="text_field" cols="50" rows="5" required="required" placeholder="
+    140자 까지 등록 가능합니다.
+    #태그명 을 통해서 검색 태그를 등록할 수 있습니다.
+    예시 : I #love #you !"></textarea>
+                            </p>
+                            <input class="submit_btn" type="submit" value="저장">
+                        </form>  
+                    <% } else { %>
+                        <form action="/matstagram/post/update" class="post_form" method="post" encType="multipart/form-data"> 
+                            <div class="title">
+                                맛집 등록
+                            </div>
+                            <div class="preview">
+                                <div class="upload">
+                                    <div class="post_btn">
+                                        <div class="plus_icon">
+                                            <span></span>
+                                            <span></span>
+                                        </div>
+                                        <p>포스트 이미지 추가</p>
+                                        <canvas id="imageCanvas"></canvas>
+                                        <p><img id="img_id" src="/userdata/posts/<%=PostInfo.postnum%>.png" style="width: 300px; height: 300px; object-fit: cover" alt="image"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>
+                                <input type="file" name="photo" id="id_photo">
+                            </p>
+                            <p>
+                                <input type="text" id="place_name" name="place_name" placeholder="맛집명" style="width:80%;" required="required" value="<%=PostInfo.placename%>">
+                                <span id="LSearch" class="btn btn-info" onclick="">검색</span>
+                            </p>
+                            <p>
+                                <input type="text" name="address_name" placeholder="맛집 주소" required="required" value="<%=PostInfo.addressname%>" onkeypress="return false;">
+                                <input type="hidden" id="place_id" name="place_id" value="<%=PostInfo.placeid%>">
+                                <input type="hidden" id="postnum" name="postnum" value="<%=PostInfo.postnum%>">
+                            </p>
+                            <p>
+                                <textarea name="content" id="text_field" cols="50" rows="5" required="required" placeholder="
+    140자 까지 등록 가능합니다.
+    #태그명 을 통해서 검색 태그를 등록할 수 있습니다.
+    예시 : I #love #you !"><%=PostInfo.contents%></textarea>
+                            </p>
+                            <input class="submit_btn" type="submit" value="저장">
+                        </form>  
+                    <% } %>
+                                 
                     <!-- The Modal -->
                     <div id="myModal" class="modal">
                         <!-- Modal content -->
@@ -80,6 +121,8 @@
                 };
                 reader.readAsDataURL(e.target.files[0]);
             }
+            
+            if(response=="unauthenticated") alert("You should login first!")
         </script>
         <script src="/javascripts/lsearch.js"></script>
     </body>

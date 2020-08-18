@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var request = require('request');
 var fs = require('fs');
+var alert = require('alert');
 const Users = require('../models/users');
 const Posts = require('../models/posts');
 
@@ -40,58 +41,78 @@ router.get('/my/profile', function(req, res, next) {
       res.redirect('/matstagram/profile/' + result.usernickname);
     })
   } else {
+    alert('로그인을 해주세요!');
     res.redirect('/matstagram/login');
   }
 });
 
 router.get('/profile/:ninkname', function(req, res, next) {
-  Users.findOne({usernickname:req.params.ninkname}, function(err, result){
-    if (err) {
-      redirect('/matstagram'); // 회원정보가 없습니다 페이지 만들자
-    } else {
-      Posts.find({writerid:result.id}).sort('-postnum').exec(function(err, posts){
-        Posts.find({'likes.usernum':{$all:[result.usernum]}}, function(err, likes){
-          console.log(likes);
-          res.render('main/profile', {UserInfo: result, PostData: posts, likeData: likes});
-        })
-      });
-    }
-  })
+  if (req.isAuthenticated()) {
+    Users.findOne({usernickname:req.params.ninkname}, function(err, result){
+      if (err) {
+        redirect('/matstagram'); // 회원정보가 없습니다 페이지 만들자
+      } else {
+        Posts.find({writerid:result.id}).sort('-postnum').exec(function(err, posts){
+          Posts.find({'likes.usernum':{$all:[result.usernum]}}, function(err, likes){
+            console.log(likes);
+            res.render('main/profile', {UserInfo: result, PostData: posts, likeData: likes});
+          })
+        });
+      }
+    })
+  } else {
+    alert('로그인을 해주세요!');
+    res.redirect('/matstagram/login');
+  }
 });
 
 router.get('/profile/:nickname/edit', function(req, res, next) {
-  if(req.user){
-    Users.findOne({usernickname:req.params.nickname}, function(err, result){
-      if(result.id == req.user.id){
-        res.render('main/profile_edit', {UserInfo: result});
-      } else {
-        res.redirect('/matstagram');
-      }
-    });
+  if (req.isAuthenticated()) {
+    if(req.user){
+      Users.findOne({usernickname:req.params.nickname}, function(err, result){
+        if(result.id == req.user.id){
+          res.render('main/profile_edit', {UserInfo: result});
+        } else {
+          alert('잘못된 접근입니다! \n다시한번 시도해주세요!');
+          res.redirect('/matstagram');
+        }
+      });
+    } else {
+      alert('잘못된 접근입니다! \n다시한번 시도해주세요!');
+      res.redirect('/matstagram');
+    }
   } else {
-    res.redirect('/matstagram');
+    alert('로그인을 해주세요!');
+    res.redirect('/matstagram/login');
   }
 });
 
 router.post('/profile/:nickname/edit', function(req, res, next) {
-  if(req.user){
-    Users.findOne({id:req.user.id}, function(err, result){
-      if(req.params.nickname == result.usernickname){
-        if(req.params.nickname == req.body.usernickname){
-          Users.updateOne({usernickname : result.usernickname}, {usernickname : req.body.usernickname, username : req.body.username}, function(err, result){
-            res.redirect('/matstagram/profile/' + req.body.usernickname);
-          })
+  if (req.isAuthenticated()) {
+    if(req.user){
+      Users.findOne({id:req.user.id}, function(err, result){
+        if(req.params.nickname == result.usernickname){
+          if(req.params.nickname == req.body.usernickname){
+            Users.updateOne({usernickname : result.usernickname}, {usernickname : req.body.usernickname, username : req.body.username}, function(err, result){
+              res.redirect('/matstagram/profile/' + req.body.usernickname);
+            })
+          } else {
+            Users.updateOne({usernickname : result.usernickname}, {usernickname : req.body.usernickname, username : req.body.username, changenickname:'Y'}, function(err, result){
+              res.redirect('/matstagram/profile/' + req.body.usernickname);
+            })
+          }
         } else {
-          Users.updateOne({usernickname : result.usernickname}, {usernickname : req.body.usernickname, username : req.body.username, changenickname:'Y'}, function(err, result){
-            res.redirect('/matstagram/profile/' + req.body.usernickname);
-          })
+          alert('잘못된 접근입니다! \n다시한번 시도해주세요!');
+          res.redirect('/matstagram');
         }
-      } else {
-        res.redirect('/matstagram');
-      }
-    });
+      });
+    } else {
+      alert('잘못된 접근입니다! \n다시한번 시도해주세요!');
+      res.redirect('/matstagram');
+    }
   } else {
-    res.redirect('/matstagram');
+    alert('로그인을 해주세요!');
+    res.redirect('/matstagram/login');
   }
 });
 
@@ -112,15 +133,18 @@ router.post('/profile/:nickname/edit/img', function(req, res, next) {
           })
         }
       } else {
+        alert('잘못된 접근입니다! \n다시한번 시도해주세요!');
         res.redirect('/matstagram');
       }
     });
   } else {
+    alert('로그인을 해주세요!');
     res.redirect('/matstagram');
   }
 });
 
-router.post('/post/read/:postnum', function(req, res, next){
+// post(게시물) 관련 router
+router.post('/post/show/:postnum', function(req, res, next){
   if(req.user){
     console.log("로그인되어있다!")
     Posts.findOne({postnum:req.params.postnum}, function(err, result){
@@ -138,9 +162,10 @@ router.post('/post/read/:postnum', function(req, res, next){
 router.get('/post/new', function(req, res, next) {
   if (req.isAuthenticated()) {
     Users.findOne({id:req.user.id}, function(err, result){
-      res.render('main/post_new', {UserInfo: result});
+      res.render('main/post_new', {UserInfo: result, PostInfo: null});
     });
   } else {
+    alert('로그인을 해주세요!');
     res.redirect('/matstagram/login');
   }
 });
@@ -168,9 +193,62 @@ router.post('/post/create', function(req, res, next) {
       })
     });
   } else {
+    alert('로그인을 해주세요!');
     res.redirect('/matstagram/login');
   }
 });
+
+router.get('/post/edit/:postnum', function(req, res, next){
+  if (req.isAuthenticated()) {
+    Posts.findOne({postnum:req.params.postnum}, function(error, postdata){
+      if(postdata.writerid == req.user.id){
+        Users.findOne({id:req.user.id}, function(err, result){
+          res.render('main/post_new', {UserInfo: result, PostInfo: postdata});
+        });
+      } else {
+        alert('잘못된 접근입니다! \n다시한번 시도해주세요!');
+        res.redirect('/matstagram');
+      }
+    })
+  } else {
+    alert('로그인을 해주세요!');
+    res.redirect('/matstagram/login');
+  }
+})
+
+router.post('/post/update', function(req, res, next){
+  if (req.isAuthenticated()) {
+    Posts.findOne({postnum:req.body.postnum}, function(error, postdata){
+      if(postdata.writerid == req.user.id){
+        Posts.updateOne({postnum:req.body.postnum}, {
+          contents: req.body.content,
+          writerid: req.user.id,
+          placename: req.body.place_name,
+          addressname: req.body.address_name,
+          placeid: req.body.place_id
+        }, function(err){
+          if(err) return console.log(err);
+          if(req.files !== null){
+            let samplefile = req.files.photo;
+            samplefile.mv('./public/userdata/posts/' + postdata.postnum + '.png'), function(err){
+              console.log(samplefile);
+              if(err) return res.status(500).send(err);
+            }
+          }
+          Users.findOne({id:req.user.id}, function(err, userdata){
+            res.redirect('/matstagram/profile/' + userdata.usernickname);
+          })
+        })
+      } else {
+        alert('잘못된 접근입니다! \n다시한번 시도해주세요!');
+        res.redirect('/matstagram');
+      }
+    });
+  } else {
+    alert('로그인을 해주세요!');
+    res.redirect('/matstagram/login');
+  }
+})
 
 router.post('/post/like/:postnum', function(req, res, next){
   if (req.isAuthenticated()) {

@@ -57,7 +57,7 @@ $(document).ready(function () {
         console.log('눌러짐');
         var postnum = $(e.target).attr('postnum');
         $.ajax({
-            url: '/matstagram/post/read/' + postnum,
+            url: '/matstagram/post/show/' + postnum,
             type: 'POST',
             success: function(result) {
                 var post = result.result;
@@ -190,7 +190,7 @@ $(document).ready(function () {
                     
                     if(user.id == login.id){
                         $(".more_detail").append(
-                            '<li>수정</li>'
+                            '<li onclick="location.href=`/matstagram/post/edit/'+post.postnum +'`">수정</li>'
                             +'<li>삭제</li>'
                         )
                     } else {
