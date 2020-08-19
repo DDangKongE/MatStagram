@@ -10,13 +10,15 @@ const Posts = require('../models/posts');
 router.get('/', function(req, res, next) {
   if (req.isAuthenticated()) {
     Users.aggregate([{$sample: {size:6}}], function(err, result){
-      console.log(result);
       Users.findOne({id: req.user.id}, function(err, userdata){
         res.render('main/index', {UserInfo: userdata, Recommend: result});
       })
     })
   } else {
-    res.render('main/index', {UserInfo: null});
+    Posts.aggregate([{$sample: {size:10}}], function(err, result){
+      console.log(result);
+      res.render('main/index', {UserInfo: null, Posts: result});
+    });
   }
 });
 
@@ -25,7 +27,6 @@ router.get('/idCheck/', function(req, res, next) {
 });
 
 router.get('/idCheck/:name', function(req, res, next) {
-  console.log(req.params.name);
   Users.findOne({usernickname : req.params.name}, function(err, data){
     if(data){
       res.send({result:true});
@@ -47,23 +48,47 @@ router.get('/my/profile', function(req, res, next) {
 });
 
 router.get('/profile/:ninkname', function(req, res, next) {
-  if (req.isAuthenticated()) {
-    Users.findOne({usernickname:req.params.ninkname}, function(err, result){
-      if (err) {
-        redirect('/matstagram'); // 회원정보가 없습니다 페이지 만들자
-      } else {
-        Posts.find({writerid:result.id}).sort('-postnum').exec(function(err, posts){
-          Posts.find({'likes.usernum':{$all:[result.usernum]}}, function(err, likes){
-            console.log(likes);
-            res.render('main/profile', {UserInfo: result, PostData: posts, likeData: likes});
-          })
-        });
+  Users.findOne({usernickname:req.params.ninkname}, function(err, result){
+    if (err) {
+      alert("입력하신 주소는 없는 주소입니다!")
+      redirect('/matstagram'); // 회원정보가 없습니다 페이지 만들자
+    } else {
+      function postsfind(){
+        return new Promise(function(resolve, reject){
+          Posts.find({writerid:result.id})
+          .sort('-postnum')
+          .exec(function(err, postslist){
+            if(err) return res.json(err);
+            resolve(postslist);
+            });
+        })
       }
-    })
-  } else {
-    alert('로그인을 해주세요!');
-    res.redirect('/matstagram/login');
-  }
+
+      function likesfind(){
+        return new Promise(function(resolve, reject){
+          Posts.find({'likes.usernum':{$all:[result.usernum]}})
+          .exec(function(err, likeslist){
+            if(err) return res.json(err);
+            resolve(likeslist);
+            });
+        })
+      }
+
+      async function loadProfile(){
+        var posts = await postsfind();
+        var likes = await likesfind();
+
+        if (req.isAuthenticated()) {
+          res.render('main/profile', {UserInfo: result, PostData: posts, likeData: likes, loginid: req.user.id});
+        } else {
+          res.render('main/profile', {UserInfo: result, PostData: posts, likeData: likes, loginid: null});
+        }
+
+      }
+
+      loadProfile();
+    }
+  })
 });
 
 router.get('/profile/:nickname/edit', function(req, res, next) {
@@ -261,21 +286,18 @@ router.get('/post/:postnum/delete', function(req, res, next){
 })
 
 router.get('/post/:postnum', function(req, res, next){
-  if(req.user){
-    console.log("로그인되어있다!")
+  if(req.isAuthenticated()){
     Posts.findOne({postnum:req.params.postnum}, function(err, post){
       Users.findOne({id:post.writerid}, function(err, user){
         res.send({post:post, user:user, login:req.user});
       })
     })
   } else {
-    Posts.findOne({postnum:req.params.postnum}, function(err, result){
-      res.send({result:result, user:'비로그인'});
-    })
+      res.send({user:'비로그인'});
   }
 })
 
-
+// 좋아요-팔로우 기능
 router.post('/post/like/:postnum', function(req, res, next){
   if (req.isAuthenticated()) {
     Posts.findOne({postnum:req.params.postnum}, function(err,result){
@@ -298,6 +320,15 @@ router.post('/post/like/:postnum', function(req, res, next){
         })
       }
     })
+    res.send();
+  } else {
+    res.send();
+  }
+})
+
+router.post('/post/follow/:usernum', function(req, res, next){
+  if (req.isAuthenticated()) {
+    
     res.send();
   } else {
     res.send();

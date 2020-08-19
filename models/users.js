@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 var postsSchema = mongoose.Schema({ postnum: 'string' });
+var followsSchema = mongoose.Schema({ usernum: 'string' });
+var follwersSchema = mongoose.Schema({ usernum: 'string' });
 
 //Schema
 var userSchema = mongoose.Schema({
@@ -10,12 +12,8 @@ var userSchema = mongoose.Schema({
     username:{type:String, require:[true, 'UserSubname is required']},
     provider:{type:String, require:[true]},
     posts:[postsSchema],
-    follow:[{
-
-    }],
-    follower:[{
-        
-    }],
+    follow:[followsSchema],
+    follower:[follwersSchema],
     profileimg:{type:String},
     json:{},
     changenickname:{type:String}

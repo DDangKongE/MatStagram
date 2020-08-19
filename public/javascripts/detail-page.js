@@ -60,7 +60,7 @@ $(document).ready(function () {
             type: 'GET',
             success: function(result) {
                 var post = result.post;
-                var user = result.user
+                var user = result.user;
                 var login = result.login;
                 if(user === "비로그인"){
                     $(".modal-content").empty();
@@ -114,9 +114,6 @@ $(document).ready(function () {
                                     +'<div class="icon_wrap">'
                                         +'<div class="more_trigger">'
                                             +'<div class="sprite_more_icon">'+'</div>'
-                                        +'</div>'
-                                        +'<div>'
-                                            +'<div class="sprite_small_heart_icon_outline">'+'</div>'
                                         +'</div>'
                                     +'</div>'
                                 +'</div>'

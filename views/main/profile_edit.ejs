@@ -43,9 +43,9 @@
                         <div class="col-md-12 mb-3">
                           <label for="usernickname">닉네임</label>
                           <% if (UserInfo.changenickname=='N') { %>
-                            <input type="text" class="form-control" id="usernickname" name="usernickname" placeholder="닉네임을 입력해주세요." value="<%=UserInfo.usernickname%>" required="">
+                            <input type="text" class="form-control" id="usernickname" name="usernickname" placeholder="닉네임을 입력해주세요." value="<%=UserInfo.usernickname%>" required="required">
                           <% } else { %>
-                            <input type="text" class="form-control" id="usernickname" name="usernickname" placeholder="닉네임을 입력해주세요." value="<%=UserInfo.usernickname%>" required="" readonly>
+                            <input type="text" class="form-control" id="usernickname" name="usernickname" placeholder="닉네임을 입력해주세요." value="<%=UserInfo.usernickname%>" readonly>
                           <% } %>
                           <label for="usernickname" style="font-size: 5px;">닉네임은 가입 후 1회에 한하여 수정이 가능합니다.</label>
                           <div id='id_check'></div>
@@ -55,7 +55,7 @@
                       <div class="row">
                         <div class="col-md-12 mb-3">
                           <label for="username">이름</label>
-                          <input type="text" class="form-control" id="username" name="username" placeholder="이름을 입력해주세요." value="<%=UserInfo.username%>" required="">
+                          <input type="text" class="form-control" id="username" name="username" placeholder="이름을 입력해주세요." value="<%=UserInfo.username%>" required="required">
                         </div>
                       </div>
 
