@@ -32,6 +32,25 @@ $(document).ready(function () {
                 }
             });
         }
+
+        // 팔로우
+        if($(e.target).hasClass("follow")) {
+            var follower = $(e.target).attr('follower');
+            var chkfollow = $(".follow").text();
+            $.ajax({
+                url: '/matstagram/follow/' + follower,
+                type: 'POST',
+                success: function(result) {
+                    if(chkfollow == "팔로우"){
+                        $('.follow').text("언팔로우");
+                    } else if (chkfollow == "언팔로우"){
+                        $('.follow').text("팔로우");
+                    }
+               }, error: function(req, status, error){
+                    console.log(error);
+                }
+            });
+        }
     });
 
     // Get the modal
@@ -62,6 +81,7 @@ $(document).ready(function () {
                 var post = result.post;
                 var user = result.user;
                 var login = result.login;
+                var chkfollow = result.chkfollow
                 if(user === "비로그인"){
                     $(".modal-content").empty();
                     alert("로그인을 해주세요!");
@@ -134,6 +154,11 @@ $(document).ready(function () {
                             +'<div class="upload_btn">게시</div>'
                         +'</div>'
 
+
+                        // +'<form name="unfollow" action="/matstagram/follow/' + user.usernum + '" method="POST" style="display:none;">'
+                        // +'<input type="hidden" name="follower" value="' + login.usernum + '" />'
+                        // +'<input type="hidden" name="chk" value="' + chkfollow + '" />'
+                        // +'</form>'
                     )
 
                     // 조건문들
@@ -191,9 +216,16 @@ $(document).ready(function () {
 
                         )
                     } else {
-                        $(".more_detail").append(
-                            '<li>팔로우</li>'
-                        )
+                        if(chkfollow == "N"){
+                            $(".more_detail").append(
+                                '<li class="follow" follower="' + login.usernum + '">팔로우</li>'
+                            )
+                        } else {
+                            $(".more_detail").append(
+                                '<li class="follow" follower="' + login.usernum + '">언팔로우</li>'
+                                
+                            )
+                        }
                     }
                 }
                 modal.style.display = "block";

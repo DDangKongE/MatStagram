@@ -23,6 +23,14 @@
                                     <% if(UserInfo.id == loginid) { %> 
                                         <a href="<%=UserInfo.usernickname%>/edit" style="padding-left: 30%;"><img src="/images/icon/setting_button.png" width="45px" height="45px"></a>
                                         <a href="/matstagram/logout"><img src="/images/icon/logout_button.png" width="45px" height="45px"></a>
+                                    <% } else { %>
+                                        <% if(chkfollow == "N"){ %>
+                                            <button type="button" class="btn btn-secondary">팔로우</button>
+                                        <% } else if(chkfollow == "Y") { %>
+                                            <button type="button" class="btn btn-secondary">언팔로우</button>
+                                        <% } else { %>
+
+                                        <% } %> 
                                     <% } %> 
                                 <% } %>
                             </div>

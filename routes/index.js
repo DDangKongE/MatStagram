@@ -79,9 +79,15 @@ router.get('/profile/:ninkname', function(req, res, next) {
         var likes = await likesfind();
 
         if (req.isAuthenticated()) {
-          res.render('main/profile', {UserInfo: result, PostData: posts, likeData: likes, loginid: req.user.id});
+          var chkfollow = "N"
+          for(var prop in result.follower){
+            if(result.follower[prop].usernum == req.user.usernum){
+              chkfollow = "Y"
+            }
+          }
+          res.render('main/profile', {UserInfo: result, PostData: posts, likeData: likes, loginid: req.user.id, chkfollow: chkfollow});
         } else {
-          res.render('main/profile', {UserInfo: result, PostData: posts, likeData: likes, loginid: null});
+          res.render('main/profile', {UserInfo: result, PostData: posts, likeData: likes, loginid: null, chkfollow: null});
         }
 
       }
@@ -289,7 +295,13 @@ router.get('/post/:postnum', function(req, res, next){
   if(req.isAuthenticated()){
     Posts.findOne({postnum:req.params.postnum}, function(err, post){
       Users.findOne({id:post.writerid}, function(err, user){
-        res.send({post:post, user:user, login:req.user});
+        var chkfollow = "N"
+        for(var prop in user.follower){
+          if(user.follower[prop].usernum == req.user.usernum){
+            chkfollow = "Y"
+          }
+        }
+        res.send({post:post, user:user, login:req.user, chkfollow: chkfollow});
       })
     })
   } else {
@@ -326,9 +338,9 @@ router.post('/post/like/:postnum', function(req, res, next){
   }
 })
 
-router.post('/post/follow/:usernum', function(req, res, next){
+router.post('/follow/:usernum', function(req, res, next){
   if (req.isAuthenticated()) {
-    
+    console.log("도착")
     res.send();
   } else {
     res.send();
