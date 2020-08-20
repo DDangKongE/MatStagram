@@ -27,6 +27,8 @@ function openCity(e){
         
     }
     
+    
+
 }
 
 

@@ -85,9 +85,9 @@ router.get('/profile/:ninkname', function(req, res, next) {
               chkfollow = "Y"
             }
           }
-          res.render('main/profile', {UserInfo: result, PostData: posts, likeData: likes, loginid: req.user.id, chkfollow: chkfollow});
+          res.render('main/profile', {UserInfo: result, PostData: posts, likeData: likes, LoginData: req.user, chkfollow: chkfollow});
         } else {
-          res.render('main/profile', {UserInfo: result, PostData: posts, likeData: likes, loginid: null, chkfollow: null});
+          res.render('main/profile', {UserInfo: result, PostData: posts, likeData: likes, LoginData: null, chkfollow: null});
         }
 
       }
@@ -338,12 +338,78 @@ router.post('/post/like/:postnum', function(req, res, next){
   }
 })
 
-router.post('/follow/:usernum', function(req, res, next){
+router.post('/follow', function(req, res, next){
   if (req.isAuthenticated()) {
     console.log("도착")
-    res.send();
+    console.log(req.body.follower)
+    console.log(req.body.follow)
+
+    Users.findOne({usernum:req.body.follower, 'follow.usernum':{$all:[req.body.follow]}}, function(err, data){
+      if(data==null){
+        console.log(data);
+        function updatefollow(){
+          return new Promise(function(resolve, reject){
+            Users.updateOne({usernum:req.body.follower}, {$push:{'follow':{'usernum':req.body.follow}}})
+            .exec(function(err, updatefollow){
+              if(err) return res.json(err);
+              resolve(updatefollow);
+            });
+          })
+        }
+
+        function updatefollower(){
+          return new Promise(function(resolve, reject){
+            Users.updateOne({usernum:req.body.follow}, {$push:{'follower':{'usernum':req.body.follower}}})
+            .exec(function(err, updatefollow){
+              if(err) return res.json(err);
+              resolve(updatefollow);
+            });
+          })
+        }
+
+        async function execfollow(){
+          await updatefollow();
+          await updatefollower();
+
+          res.send();
+        }
+        execfollow();
+      } else {
+        console.log(data);
+        function updatefollow(){
+          return new Promise(function(resolve, reject){
+            Users.updateOne({usernum:req.body.follower}, {$pull:{'follow':{'usernum':req.body.follow}}})
+            .exec(function(err, updatefollow){
+              if(err) return res.json(err);
+              resolve(updatefollow);
+            });
+          })
+        }
+
+        function updatefollower(){
+          return new Promise(function(resolve, reject){
+            Users.updateOne({usernum:req.body.follow}, {$pull:{'follower':{'usernum':req.body.follower}}})
+            .exec(function(err, updatefollow){
+              if(err) return res.json(err);
+              resolve(updatefollow);
+            });
+          })
+        }
+
+        async function execfollow(){
+          await updatefollow();
+          await updatefollower();
+
+          res.send();
+        }
+
+        execfollow();
+      }
+    })
+    
   } else {
     res.send();
+    alert('로그인을 해주세요!');
   }
 })
 

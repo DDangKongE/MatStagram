@@ -20,14 +20,14 @@
                             <div class="top">
                                 <div class="user_name"><%=UserInfo.usernickname%></div>
                                 <% if(UserInfo != null) { %>
-                                    <% if(UserInfo.id == loginid) { %> 
+                                    <% if(UserInfo.id == LoginData.id) { %> 
                                         <a href="<%=UserInfo.usernickname%>/edit" style="padding-left: 30%;"><img src="/images/icon/setting_button.png" width="45px" height="45px"></a>
                                         <a href="/matstagram/logout"><img src="/images/icon/logout_button.png" width="45px" height="45px"></a>
                                     <% } else { %>
                                         <% if(chkfollow == "N"){ %>
-                                            <button type="button" class="btn btn-secondary">팔로우</button>
+                                            <button type="button" id="follow" class="btn btn-secondary follow" follow="<%=UserInfo.usernum%>" follower="<%=LoginData.usernum%>">팔로우</button>
                                         <% } else if(chkfollow == "Y") { %>
-                                            <button type="button" class="btn btn-secondary">언팔로우</button>
+                                            <button type="button" id="follow" class="btn btn-secondary follow" follow="<%=UserInfo.usernum%>" follower="<%=LoginData.usernum%>">언팔로우</button>
                                         <% } else { %>
 
                                         <% } %> 
@@ -37,15 +37,15 @@
                             <ul class="middle">
                                 <li>
                                     <span>게시물</span>
-                                    <%= UserInfo.posts.length %>
+                                    <span class="postcount"><%= UserInfo.posts.length %></span>
                                 </li>
                                 <li>
                                     <span>팔로워</span>
-                                    <%= UserInfo.follower.length %>
+                                    <span class="followercount"><%= UserInfo.follower.length %></span>
                                 </li>
                                 <li>
                                     <span>팔로우</span>
-                                    <%= UserInfo.follow.length %>
+                                    <span class="followcount"><%= UserInfo.follow.length %></span>
                                 </li>
                             </ul>
                         </div>

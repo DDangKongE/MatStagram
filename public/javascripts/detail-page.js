@@ -35,16 +35,22 @@ $(document).ready(function () {
 
         // 팔로우
         if($(e.target).hasClass("follow")) {
+            var follow = $(e.target).attr('follow');
             var follower = $(e.target).attr('follower');
-            var chkfollow = $(".follow").text();
+            var chkfollow = $("#follow").text();
+            var fdata = {"follow": follow, "follower": follower};
             $.ajax({
-                url: '/matstagram/follow/' + follower,
+                url: '/matstagram/follow',
                 type: 'POST',
+                data: fdata,
                 success: function(result) {
+                    var count = $('.followercount').text();
                     if(chkfollow == "팔로우"){
                         $('.follow').text("언팔로우");
+                        $('.followercount').text(++count);
                     } else if (chkfollow == "언팔로우"){
                         $('.follow').text("팔로우");
+                        $('.followercount').text(--count);
                     }
                }, error: function(req, status, error){
                     console.log(error);
@@ -81,7 +87,7 @@ $(document).ready(function () {
                 var post = result.post;
                 var user = result.user;
                 var login = result.login;
-                var chkfollow = result.chkfollow
+                var chkfollow = $("#follow").text();
                 if(user === "비로그인"){
                     $(".modal-content").empty();
                     alert("로그인을 해주세요!");
@@ -216,13 +222,13 @@ $(document).ready(function () {
 
                         )
                     } else {
-                        if(chkfollow == "N"){
+                        if(chkfollow == "팔로우"){
                             $(".more_detail").append(
-                                '<li class="follow" follower="' + login.usernum + '">팔로우</li>'
+                                '<li class="follow" follower="' + login.usernum + '" follow="' + user.usernum + '">팔로우</li>'
                             )
                         } else {
                             $(".more_detail").append(
-                                '<li class="follow" follower="' + login.usernum + '">언팔로우</li>'
+                                '<li class="follow" follower="' + login.usernum + '" follow="' + user.usernum + '">언팔로우</li>'
                                 
                             )
                         }
