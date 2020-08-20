@@ -338,6 +338,27 @@ router.post('/post/like/:postnum', function(req, res, next){
   }
 })
 
+router.get('/follow', function(req, res, next){
+  if (req.isAuthenticated()) {
+    Users.find({usernum:req.query.usernum}, function(err, data){
+      console.log(req.query.usernum);
+      console.log(data);
+      if(req.query.type == "follower"){
+        console.log("이건 팔로워를 찾는 것")
+      } else if (req.query.type == "follow"){
+        console.log("이건 팔로우를 찾는 것")
+      } else {
+        alert('잘못된 접근입니다! \n다시한번 시도해주세요!');
+        res.send();
+      }
+    })
+    res.send();
+  } else {
+    alert('로그인을 해주세요!');
+    res.send();
+  }
+})
+
 router.post('/follow', function(req, res, next){
   if (req.isAuthenticated()) {
     console.log("도착")

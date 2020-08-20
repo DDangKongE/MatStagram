@@ -35,17 +35,17 @@
                                 <% } %>
                             </div>
                             <ul class="middle">
-                                <li>
+                                <li class="postcount">
                                     <span>게시물</span>
                                     <span class="postcount"><%= UserInfo.posts.length %></span>
                                 </li>
                                 <li>
-                                    <span>팔로워</span>
-                                    <span class="followercount"><%= UserInfo.follower.length %></span>
+                                    <span class="followercount" fuser="<%=UserInfo.usernum%>">팔로워</span>
+                                    <span class="followercount" fuser="<%=UserInfo.usernum%>"><%= UserInfo.follower.length %></span>
                                 </li>
                                 <li>
-                                    <span>팔로우</span>
-                                    <span class="followcount"><%= UserInfo.follow.length %></span>
+                                    <span class="followcount" fuser="<%=UserInfo.usernum%>">팔로우</span>
+                                    <span class="followcount" fuser="<%=UserInfo.usernum%>"><%= UserInfo.follow.length %></span>
                                 </li>
                             </ul>
                         </div>
@@ -82,7 +82,6 @@
             
         </section>
         <script src="/javascripts/profile.js"></script>
-        <script src="/javascripts/detail-page.js"></script>
         <script src="/javascripts/dateformat.js"></script>
     </body>
 </html>
