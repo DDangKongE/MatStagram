@@ -16,7 +16,6 @@ router.get('/', function(req, res, next) {
     })
   } else {
     Posts.aggregate([{$sample: {size:10}}], function(err, result){
-      console.log(result);
       res.render('main/index', {UserInfo: null, Posts: result});
     });
   }
@@ -85,6 +84,7 @@ router.get('/profile/:ninkname', function(req, res, next) {
               chkfollow = "Y"
             }
           }
+
           res.render('main/profile', {UserInfo: result, PostData: posts, likeData: likes, LoginData: req.user, chkfollow: chkfollow});
         } else {
           res.render('main/profile', {UserInfo: result, PostData: posts, likeData: likes, LoginData: null, chkfollow: null});
@@ -340,19 +340,57 @@ router.post('/post/like/:postnum', function(req, res, next){
 
 router.get('/follow', function(req, res, next){
   if (req.isAuthenticated()) {
-    Users.find({usernum:req.query.usernum}, function(err, data){
-      console.log(req.query.usernum);
-      console.log(data);
-      if(req.query.type == "follower"){
-        console.log("이건 팔로워를 찾는 것")
-      } else if (req.query.type == "follow"){
-        console.log("이건 팔로우를 찾는 것")
-      } else {
-        alert('잘못된 접근입니다! \n다시한번 시도해주세요!');
-        res.send();
+    Users.findOne({usernum:req.query.usernum}, function(err, data){
+      if(err) console.log(err);
+      
+      // 반복문 async/await 를 어떻게 해야할지 몰라서 임시방편으로 저렇게 만듦..
+      function followfind(){
+        return new Promise(function(resolve, reject){
+          var followlists = [];
+          console.log(result.follow)
+          if(result.follow == ""){
+            console.log("팔로우 없음");
+            return resolve(followlists);
+          }
+          for(var prop in result.follow){
+            console.log('팔로우 있음!!')
+            Users.findOne({usernum:result.follow[prop].usernum}, function(err, followdata){
+              followlists.push(followdata);
+              if(result.follow.length == prop+1){
+                setTimeout(() => {
+                  console.log("1도달");
+                  resolve(followlists);                
+                }, 500);
+              }
+            })
+          }
+        })
       }
-    })
-    res.send();
+
+      function followerfind(){
+        return new Promise(function(resolve, reject){
+          var followerlists = [];
+          console.log(result.follower)
+          if(result.follower == ""){
+            console.log("팔로워 없음");
+            return resolve(followerlists);
+          }
+          for(var prop in result.follower){
+            console.log("팔로워 있음??")
+            Users.findOne({usernum:result.follower[prop].usernum}, function(err, followerdata){
+              followerlists.push(followerdata);
+              if(result.follower.length == prop+1){
+                setTimeout(() => {
+                  console.log("2도달");
+                  resolve(followerlists);
+                }, 500);
+              }
+            })
+          }
+        })
+      }
+
+    });
   } else {
     alert('로그인을 해주세요!');
     res.send();

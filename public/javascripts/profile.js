@@ -80,13 +80,13 @@ $(document).ready(function () {
                 type: 'POST',
                 data: fdata,
                 success: function(result) {
-                    var count = $('.followercount').text();
+                    var count = $('#followers').text();
                     if(chkfollow == "팔로우"){
                         $('.follow').text("언팔로우");
-                        $('.followercount').text(++count);
+                        $('#followers').text(++count);
                     } else if (chkfollow == "언팔로우"){
                         $('.follow').text("팔로우");
-                        $('.followercount').text(--count);
+                        $('#followers').text(--count);
                     }
                }, error: function(req, status, error){
                     console.log(error);
@@ -97,14 +97,6 @@ $(document).ready(function () {
 
     // Get the modal
     var modal = document.getElementById('myModal');
-     
-    // Get the button that opens the modal
-    var btn = document.getElementById("detail-page");                                 
-    
-    // When the user clicks on the button, open the modal 
-    btn.onclick = function() {
-        modal.style.display = "block";
-    }
     
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
@@ -116,12 +108,23 @@ $(document).ready(function () {
     // 팔로워 리스트 확인
     $(document).on('click', '.followercount', function(e){
         var usernum = $(e.target).attr('fuser');
+        modal.style.display = "block";
         $.ajax({
             url: '/matstagram/follow',
             type: 'GET',
             data:{"type":"follower", "usernum":usernum},
             success: function(result){
-
+                var UserData = result.FollowerData;
+                // 모달창을 비워줌
+                $(".modal-content").empty();
+                // 이미지와 유저정보를 보여주는 부분
+                console.log(UserData);
+                for(var prop in UserData){
+                    // 넘버가 아니라 유저 이름을 다 가져와야함 ㅅㅂ 팔로우할때 넘버/이름/닉네임 다 가져와야할듯함. 닉네임 바꾸는 기능 없애는게 행복할듯함.
+                    $(".modal-content").append(
+                        '<div class="col-md-8">' + UserData[prop].usernickname + '</div> <div class="col-6 col-md-4">dfafafdd</div>'
+                    );
+                }
             }, error: function(req, status, error){
                 console.log(error);
             }
@@ -130,6 +133,7 @@ $(document).ready(function () {
 
     // 팔로우 리스트 확인
     $(document).on('click', '.followcount', function(e){
+        modal.style.display = "block";
         var usernum = $(e.target).attr('fuser');
         $.ajax({
             url: '/matstagram/follow',
@@ -145,7 +149,7 @@ $(document).ready(function () {
 
     // 포스트 상세보기
     $(document).on('click', '.pic', function(e){
-        console.log('눌러짐');
+        modal.style.display = "block";
         var postnum = $(e.target).attr('postnum');
         $.ajax({
             url: '/matstagram/post/' + postnum,
