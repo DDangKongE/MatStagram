@@ -6,8 +6,9 @@
     border: 1px solid #888;
     width: 980px; /* Could be more or less, depending on screen size */      
     height: 610px;       
-    flex-direction: inherit
-    ;
+    flex-direction: inherit;
+    overflow-y:auto;
+    overflow-x:hidden;
 
 }
 

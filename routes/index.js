@@ -340,56 +340,59 @@ router.post('/post/like/:postnum', function(req, res, next){
 
 router.get('/follow', function(req, res, next){
   if (req.isAuthenticated()) {
-    Users.findOne({usernum:req.query.usernum}, function(err, data){
+    Users.findOne({usernum:req.query.usernum}, function(err, result){
       if(err) console.log(err);
-      
-      // 반복문 async/await 를 어떻게 해야할지 몰라서 임시방편으로 저렇게 만듦..
-      function followfind(){
-        return new Promise(function(resolve, reject){
-          var followlists = [];
-          console.log(result.follow)
-          if(result.follow == ""){
-            console.log("팔로우 없음");
-            return resolve(followlists);
-          }
-          for(var prop in result.follow){
-            console.log('팔로우 있음!!')
-            Users.findOne({usernum:result.follow[prop].usernum}, function(err, followdata){
-              followlists.push(followdata);
-              if(result.follow.length == prop+1){
-                setTimeout(() => {
-                  console.log("1도달");
-                  resolve(followlists);                
-                }, 500);
-              }
-            })
-          }
-        })
-      }
 
-      function followerfind(){
-        return new Promise(function(resolve, reject){
-          var followerlists = [];
-          console.log(result.follower)
-          if(result.follower == ""){
-            console.log("팔로워 없음");
-            return resolve(followerlists);
-          }
-          for(var prop in result.follower){
-            console.log("팔로워 있음??")
-            Users.findOne({usernum:result.follower[prop].usernum}, function(err, followerdata){
+      // 팔로워일경우
+      if(req.query.type == "follower"){
+        let followerlists = [];
+        if(result.follower == ""){
+          return res.send({Followers:null});
+        }
+
+        function profiledata(usernum){
+          return new Promise(function(resolve, reject){
+            Users.findOne({usernum:usernum}, function(err, followerdata){
               followerlists.push(followerdata);
-              if(result.follower.length == prop+1){
-                setTimeout(() => {
-                  console.log("2도달");
-                  resolve(followerlists);
-                }, 500);
-              }
-            })
-          }
-        })
-      }
+              return resolve(followerdata);
+            });
+          })
+        }
 
+        async function followers(data) {
+          for(let prop in data.follower){
+            await profiledata(data.follower[prop].usernum);
+          }
+          res.send({Followers:followerlists});
+        }
+
+        followers(result);
+
+      // 팔로우일경우
+      } else if (req.query.type == "follow"){
+        let followlists = [];
+        if(result.follow == ""){
+          return res.send({Follows:null});
+        }
+
+        function profiledata(usernum){
+          return new Promise(function(resolve, reject){
+            Users.findOne({usernum:usernum}, function(err, followdata){
+              followlists.push(followdata);
+              return resolve(followdata);
+            });
+          })
+        }
+
+        async function follows(data) {
+          for(let prop in data.follow){
+            await profiledata(data.follow[prop].usernum);
+          }
+          res.send({Follows:followlists});
+        }
+
+        follows(result);
+      }
     });
   } else {
     alert('로그인을 해주세요!');

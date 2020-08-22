@@ -112,17 +112,39 @@ $(document).ready(function () {
         $.ajax({
             url: '/matstagram/follow',
             type: 'GET',
-            data:{"type":"follower", "usernum":usernum},
+            data:{"type":"follower" ,"usernum":usernum},
             success: function(result){
-                var UserData = result.FollowerData;
+                console.log("ajax 실행")
+                var UserData = result.Followers;
                 // 모달창을 비워줌
                 $(".modal-content").empty();
                 // 이미지와 유저정보를 보여주는 부분
-                console.log(UserData);
-                for(var prop in UserData){
-                    // 넘버가 아니라 유저 이름을 다 가져와야함 ㅅㅂ 팔로우할때 넘버/이름/닉네임 다 가져와야할듯함. 닉네임 바꾸는 기능 없애는게 행복할듯함.
-                    $(".modal-content").append(
-                        '<div class="col-md-8">' + UserData[prop].usernickname + '</div> <div class="col-6 col-md-4">dfafafdd</div>'
+                $(".modal-content").append(
+                    '<table class="table" style="text-align: center;">'
+                        +'<thead>'
+                            +'<tr>'
+                            +'<th scope="col">사진</th>'
+                            +'<th scope="col">닉네임</th>'
+                            +'<th scope="col">이름</th>'
+                            +'<th scope="col">프로필</th>'
+                            +'</tr>'
+                        +'</thead>'
+                        +'<tbody class="table_data">'
+                            
+                        +'</tbody>'
+                        +'</table>'
+                );
+                for(let prop in UserData){
+                    console.log(UserData);
+                    $(".table_data").append(
+                        '<tr>'
+                            +'<td style="vertical-align: middle;"><img src="/userdata/profile/' + UserData[prop].usernum + '.png"  width="75" height="75" style="border-radius: 50%;"></td>'
+                            +'<td style="vertical-align: middle;">' + UserData[prop].usernickname + '</td>'
+                            +'<td style="vertical-align: middle;">' + UserData[prop].username + '</td>'
+                            +'<td style="vertical-align: middle;"><button type="button" class="btn btn-secondary" usernickname="' + UserData[prop].usernickname 
+                            + '" onclick="javascript:window.location.href=`/matstagram/profile/' + UserData[prop].usernickname + '`">놀러가기</button></td>'
+                        +'</tr>'
+
                     );
                 }
             }, error: function(req, status, error){
@@ -138,9 +160,41 @@ $(document).ready(function () {
         $.ajax({
             url: '/matstagram/follow',
             type: 'GET',
-            data:{"type":"follow","usernum":usernum},
+            data:{"type":"follow" ,"usernum":usernum},
             success: function(result){
+                console.log("ajax 실행")
+                var UserData = result.Follows;
+                // 모달창을 비워줌
+                $(".modal-content").empty();
+                // 이미지와 유저정보를 보여주는 부분
+                $(".modal-content").append(
+                    '<table class="table" style="text-align: center;">'
+                        +'<thead>'
+                            +'<tr>'
+                            +'<th scope="col">사진</th>'
+                            +'<th scope="col">닉네임</th>'
+                            +'<th scope="col">이름</th>'
+                            +'<th scope="col">프로필</th>'
+                            +'</tr>'
+                        +'</thead>'
+                        +'<tbody class="table_data">'
+                            
+                        +'</tbody>'
+                        +'</table>'
+                );
+                for(let prop in UserData){
+                    console.log(UserData);
+                    $(".table_data").append(
+                        '<tr>'
+                            +'<td style="vertical-align: middle;"><img src="/userdata/profile/' + UserData[prop].usernum + '.png"  width="75" height="75" style="border-radius: 50%;"></td>'
+                            +'<td style="vertical-align: middle;">' + UserData[prop].usernickname + '</td>'
+                            +'<td style="vertical-align: middle;">' + UserData[prop].username + '</td>'
+                            +'<td style="vertical-align: middle;"><button type="button" class="btn btn-secondary" usernickname="' + UserData[prop].usernickname 
+                            + '" onclick="javascript:window.location.href=`/matstagram/profile/' + UserData[prop].usernickname + '`">놀러가기</button></td>'
+                        +'</tr>'
 
+                    );
+                }
             }, error: function(req, status, error){
                 console.log(error);
             }

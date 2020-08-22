@@ -19,17 +19,16 @@
                         <div class="detail">
                             <div class="top">
                                 <div class="user_name"><%=UserInfo.usernickname%></div>
-                                <% if(UserInfo != null) { %>
+                                <% if(UserInfo != null && LoginData != null) { %>
                                     <% if(UserInfo.id == LoginData.id) { %> 
                                         <a href="<%=UserInfo.usernickname%>/edit" style="padding-left: 30%;"><img src="/images/icon/setting_button.png" width="45px" height="45px"></a>
                                         <a href="/matstagram/logout"><img src="/images/icon/logout_button.png" width="45px" height="45px"></a>
-                                    <% } else { %>
-                                        <% if(chkfollow == "N"){ %>
-                                            <button type="button" id="follow" class="btn btn-secondary follow" follow="<%=UserInfo.usernum%>" follower="<%=LoginData.usernum%>">팔로우</button>
-                                        <% } else if(chkfollow == "Y") { %>
-                                            <button type="button" id="follow" class="btn btn-secondary follow" follow="<%=UserInfo.usernum%>" follower="<%=LoginData.usernum%>">언팔로우</button>
                                         <% } else { %>
-
+                                            <% if(chkfollow == "N"){ %>
+                                                <button type="button" id="follow" class="btn btn-secondary follow" follow="<%=UserInfo.usernum%>" follower="<%=LoginData.usernum%>">팔로우</button>
+                                            <% } else if(chkfollow == "Y") { %>
+                                                <button type="button" id="follow" class="btn btn-secondary follow" follow="<%=UserInfo.usernum%>" follower="<%=LoginData.usernum%>">언팔로우</button>
+                                            <% } else { %>
                                         <% } %> 
                                     <% } %> 
                                 <% } %>
