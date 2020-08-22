@@ -114,46 +114,49 @@ $(document).ready(function () {
             type: 'GET',
             data:{"type":"follower" ,"usernum":usernum},
             success: function(result){
-                console.log("ajax 실행")
-                var UserData = result.Followers;
-                // 모달창을 비워줌
-                $(".modal-content").empty();
-                // 이미지와 유저정보를 보여주는 부분
-                $(".modal-content").append(
-                    '<table class="table" style="text-align: center;">'
+                if(result.Followers == "비로그인"){
+                    modal.style.display = "none";
+                } else {
+                    var UserData = result.Followers;
+                    // 모달창을 비워줌
+                    $(".modal-content").empty();
+                    // 이미지와 유저정보를 보여주는 부분
+                    $(".modal-content").append(
+                        '<table class="table" style="text-align: center;">'
                         +'<thead>'
-                            +'<tr>'
-                            +'<th scope="col">사진</th>'
-                            +'<th scope="col">닉네임</th>'
-                            +'<th scope="col">이름</th>'
-                            +'<th scope="col">프로필</th>'
-                            +'</tr>'
+                        +'<tr>'
+                        +'<th scope="col">사진</th>'
+                        +'<th scope="col">닉네임</th>'
+                        +'<th scope="col">이름</th>'
+                        +'<th scope="col">프로필</th>'
+                        +'</tr>'
                         +'</thead>'
                         +'<tbody class="table_data">'
-                            
+                        
                         +'</tbody>'
                         +'</table>'
-                );
-                for(let prop in UserData){
-                    console.log(UserData);
-                    $(".table_data").append(
-                        '<tr>'
-                            +'<td style="vertical-align: middle;"><img src="/userdata/profile/' + UserData[prop].usernum + '.png"  width="75" height="75" style="border-radius: 50%;"></td>'
-                            +'<td style="vertical-align: middle;">' + UserData[prop].usernickname + '</td>'
-                            +'<td style="vertical-align: middle;">' + UserData[prop].username + '</td>'
-                            +'<td style="vertical-align: middle;"><button type="button" class="btn btn-secondary" usernickname="' + UserData[prop].usernickname 
-                            + '" onclick="javascript:window.location.href=`/matstagram/profile/' + UserData[prop].usernickname + '`">놀러가기</button></td>'
-                        +'</tr>'
+                        );
+                        for(let prop in UserData){
+                            console.log(UserData);
+                            $(".table_data").append(
+                                '<tr>'
+                                +'<td style="vertical-align: middle;"><img src="/userdata/profile/' + UserData[prop].usernum + '.png"  width="75" height="75" style="border-radius: 50%;"></td>'
+                                +'<td style="vertical-align: middle;">' + UserData[prop].usernickname + '</td>'
+                                +'<td style="vertical-align: middle;">' + UserData[prop].username + '</td>'
+                                +'<td style="vertical-align: middle;"><button type="button" class="btn btn-secondary" usernickname="' + UserData[prop].usernickname 
+                                + '" onclick="javascript:window.location.href=`/matstagram/profile/' + UserData[prop].usernickname + '`">놀러가기</button></td>'
+                                +'</tr>'
+                                
+                                );
+                            }
+                        }
+                        }, error: function(req, status, error){
+                            console.log(error);
+                        }
+                    })
+                });
 
-                    );
-                }
-            }, error: function(req, status, error){
-                console.log(error);
-            }
-        })
-    });
-
-    // 팔로우 리스트 확인
+                // 팔로우 리스트 확인
     $(document).on('click', '.followcount', function(e){
         modal.style.display = "block";
         var usernum = $(e.target).attr('fuser');
@@ -162,38 +165,41 @@ $(document).ready(function () {
             type: 'GET',
             data:{"type":"follow" ,"usernum":usernum},
             success: function(result){
-                console.log("ajax 실행")
-                var UserData = result.Follows;
-                // 모달창을 비워줌
-                $(".modal-content").empty();
-                // 이미지와 유저정보를 보여주는 부분
-                $(".modal-content").append(
-                    '<table class="table" style="text-align: center;">'
-                        +'<thead>'
-                            +'<tr>'
-                            +'<th scope="col">사진</th>'
-                            +'<th scope="col">닉네임</th>'
-                            +'<th scope="col">이름</th>'
-                            +'<th scope="col">프로필</th>'
-                            +'</tr>'
-                        +'</thead>'
-                        +'<tbody class="table_data">'
-                            
-                        +'</tbody>'
-                        +'</table>'
-                );
-                for(let prop in UserData){
-                    console.log(UserData);
-                    $(".table_data").append(
-                        '<tr>'
-                            +'<td style="vertical-align: middle;"><img src="/userdata/profile/' + UserData[prop].usernum + '.png"  width="75" height="75" style="border-radius: 50%;"></td>'
-                            +'<td style="vertical-align: middle;">' + UserData[prop].usernickname + '</td>'
-                            +'<td style="vertical-align: middle;">' + UserData[prop].username + '</td>'
-                            +'<td style="vertical-align: middle;"><button type="button" class="btn btn-secondary" usernickname="' + UserData[prop].usernickname 
-                            + '" onclick="javascript:window.location.href=`/matstagram/profile/' + UserData[prop].usernickname + '`">놀러가기</button></td>'
-                        +'</tr>'
-
+                if(result.Followers == "비로그인"){
+                    modal.style.display = "none";
+                } else {
+                    var UserData = result.Follows;
+                    // 모달창을 비워줌
+                    $(".modal-content").empty();
+                    // 이미지와 유저정보를 보여주는 부분
+                    $(".modal-content").append(
+                        '<table class="table" style="text-align: center;">'
+                            +'<thead>'
+                                +'<tr>'
+                                +'<th scope="col">사진</th>'
+                                +'<th scope="col">닉네임</th>'
+                                +'<th scope="col">이름</th>'
+                                +'<th scope="col">프로필</th>'
+                                +'</tr>'
+                            +'</thead>'
+                            +'<tbody class="table_data">'
+                                
+                            +'</tbody>'
+                            +'</table>'
                     );
+                    for(let prop in UserData){
+                        console.log(UserData);
+                        $(".table_data").append(
+                            '<tr>'
+                                +'<td style="vertical-align: middle;"><img src="/userdata/profile/' + UserData[prop].usernum + '.png"  width="75" height="75" style="border-radius: 50%;"></td>'
+                                +'<td style="vertical-align: middle;">' + UserData[prop].usernickname + '</td>'
+                                +'<td style="vertical-align: middle;">' + UserData[prop].username + '</td>'
+                                +'<td style="vertical-align: middle;"><button type="button" class="btn btn-secondary" usernickname="' + UserData[prop].usernickname 
+                                + '" onclick="javascript:window.location.href=`/matstagram/profile/' + UserData[prop].usernickname + '`">놀러가기</button></td>'
+                            +'</tr>'
+
+                        );
+                    }
                 }
             }, error: function(req, status, error){
                 console.log(error);

@@ -396,7 +396,7 @@ router.get('/follow', function(req, res, next){
     });
   } else {
     alert('로그인을 해주세요!');
-    res.send();
+    res.send({Follows:"비로그인", Followers:"비로그인"});
   }
 })
 
