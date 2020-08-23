@@ -112,7 +112,7 @@
                     </header>
                     <% for (var user in Recommend){ %> 
                         <% if(Recommend[user].id !== UserInfo.id) { %> 
-                            <div class="thumb_user">
+                            <div class="thumb_user" onclick="location.href='/matstagram/profile/<%=Recommend[user].usernickname%>'">
                                 <div class="profile_thumb">
                                     <img src="/userdata/profile/<%=Recommend[user].profileimg%>" alt="프로필사진">
                                 </div>

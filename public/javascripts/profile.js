@@ -268,10 +268,10 @@ $(document).ready(function () {
                         +'<header class="top">'
                             +'<div class="user_container">'
                                 +'<div class="profile_img">'
-                                    +'<img src="/userdata/profile/' + user.profileimg + '" alt="">'
+                                    +'<img src="/userdata/profile/' + user.profileimg + '" alt="" onclick="location.href=`/matstagram/profile/'+ user.usernickname +'`">'
                                 +'</div>'
                                 +'<div class="user_name">'
-                                    +'<div class="nick_name">'+user.usernickname+'</div>'
+                                    +'<div class="nick_name" onclick="location.href=`/matstagram/profile/'+ user.usernickname +'`">'+user.usernickname+'</div>'
                                     +'<div class="country">'+post.placename+ '<br>(' + post.addressname + ')' +'</div>'
                                 +'</div>'
                             +'</div>'
@@ -283,9 +283,9 @@ $(document).ready(function () {
                         +'</header>'
                         +'<section class="scroll_section">'
                             +'<div class="admin_container">'
-                                +'<div class="admin">'+'<img src="/userdata/profile/' + user.profileimg + '" alt="user">'+'</div>'
+                                +'<div class="admin">'+'<img src="/userdata/profile/' + user.profileimg + '" alt="user" onclick="location.href=`/matstagram/profile/'+ user.usernickname +'`">'+'</div>'
                                 +'<div class="comment">'
-                                    +'<span class="user_id">'+user.usernickname+'</span>'+post.contents
+                                    +'<span class="user_id" onclick="location.href=`/matstagram/profile/'+ user.usernickname +'`">'+user.usernickname+'</span>'+post.contents
                                     +'<div class="time">'+uploadtime+'</div>'
                                 +'</div>'
                             +'</div>'
@@ -384,9 +384,9 @@ $(document).ready(function () {
                         var uploadcomments = new Date(post.comments[prop].uploadtime).format("yyyy-MM-dd HH:mm:ss");
                         $(".scroll_section").append(
                             '<div class="user_container-detail">'
-                            +'<div class="user">'+'<img src="/userdata/profile/' + post.comments[prop].usernum + '.png" alt="user">'+'</div>'
+                            +'<div class="user">'+'<img src="/userdata/profile/' + post.comments[prop].usernum + '.png" alt="user" onclick="location.href=`/matstagram/profile/'+ post.comments[prop].nickname +'`">'+'</div>'
                             +'<div class="comment">'
-                                +'<span class="user_id">'+ post.comments[prop].nickname +'</span>' + post.comments[prop].contents
+                                +'<span class="user_id" onclick="location.href=`/matstagram/profile/'+ post.comments[prop].nickname +'`">'+ post.comments[prop].nickname +'</span>' + post.comments[prop].contents
                                 +'<div class="time">'+ uploadcomments +'<span class="try_comment">댓글 삭제</span>'+ '</div>'
                             +'</div>'
                         );
