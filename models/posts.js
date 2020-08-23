@@ -3,7 +3,12 @@ const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 var likesSchema = mongoose.Schema({ usernum: 'string' });
 var hashsSchema = mongoose.Schema({ usernum: 'string' });
-var commentsSchema = mongoose.Schema({ usernum: 'string' });
+var commentsSchema = mongoose.Schema({ 
+    usernum: 'string',
+    nickname: 'string',
+    contents: 'string',
+    uploadtime: {type:Date, default:Date.now}
+});
 
 //Schema
 var postSchema = mongoose.Schema({

@@ -475,6 +475,22 @@ router.post('/follow', function(req, res, next){
   }
 })
 
+router.post('/post/comment', function(req, res, next){
+  if (req.isAuthenticated()) {
+    Users.findOne({id:req.user.id}, function(err, user){
+      console.log(user);
+      Posts.updateOne({postnum:req.body.postnum}, {
+        $push:{'comments':{'usernum' : user.usernum, 'nickname' : user.usernickname, 'contents' : req.body.contents}}
+      }, function(err, result){
+        res.send({usernum:user.usernum, nickname:user.usernickname, contents:req.body.contents, uploadtime:Date.now()});
+      })
+    })
+  } else {
+    res.send();
+    alert('로그인을 해주세요!');
+  }
+})
+
 router.get('/explore', function(req, res, next){
   Users.findOne({id:req.user.id}, function(err, result){
     res.render('main/explore', {UserInfo: result});

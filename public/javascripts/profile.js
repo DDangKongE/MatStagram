@@ -137,7 +137,6 @@ $(document).ready(function () {
                         +'</table>'
                         );
                         for(let prop in UserData){
-                            console.log(UserData);
                             $(".table_data").append(
                                 '<tr>'
                                 +'<td style="vertical-align: middle;"><img src="/userdata/profile/' + UserData[prop].usernum + '.png"  width="75" height="75" style="border-radius: 50%;"></td>'
@@ -188,7 +187,6 @@ $(document).ready(function () {
                             +'</table>'
                     );
                     for(let prop in UserData){
-                        console.log(UserData);
                         $(".table_data").append(
                             '<tr>'
                                 +'<td style="vertical-align: middle;"><img src="/userdata/profile/' + UserData[prop].usernum + '.png"  width="75" height="75" style="border-radius: 50%;"></td>'
@@ -201,6 +199,35 @@ $(document).ready(function () {
                         );
                     }
                 }
+            }, error: function(req, status, error){
+                console.log(error);
+            }
+        })
+    });
+
+    $(document).on('click', '.upload_comment', function(e){
+        console.log('ee');
+        var contents = $('.comment_contents').val();
+        var postnum = $('.comment_contents').attr('postnum');
+        console.log(contents);
+        
+        $.ajax({
+            url: '/matstagram/post/comment',
+            type: 'POST',
+            data:{contents:contents, postnum:postnum},
+            success: function(result){
+                console.log(result);
+                var uploadcomments = new Date(result.uploadtime).format("yyyy-MM-dd HH:mm:ss");
+                $(".scroll_section").append(
+                    '<div class="user_container-detail">'
+                    +'<div class="user">'+'<img src="/userdata/profile/' + result.usernum + '.png" alt="user">'+'</div>'
+                    +'<div class="comment">'
+                        +'<span class="user_id">'+ result.nickname +'</span>' + result.contents
+                        +'<div class="time">'+ uploadcomments +'<span class="try_comment">댓글 삭제</span>'+ '</div>'
+                    +'</div>'
+                );
+
+                $('.comment_contents').val('');
             }, error: function(req, status, error){
                 console.log(error);
             }
@@ -262,19 +289,6 @@ $(document).ready(function () {
                                     +'<div class="time">'+uploadtime+'</div>'
                                 +'</div>'
                             +'</div>'
-
-                            +'<div class="user_container-detail">'
-                                +'<div class="user">'+'<img src="/userdata/profile/0.png" alt="user">'+'</div>'
-                                +'<div class="comment">'
-                                    +'<span class="user_id">'+'댓글단 아이디'+'</span>'+'이게 댓글이 제대로 입력이 되는건지 모르겠네 진짜루 하나도 모르겠네'
-                                    +'<div class="time">'+ '댓글달린 시간' +'<span class="try_comment">답글 달기</span>'+'</div>'
-                                    +'<div class="icon_wrap">'
-                                        +'<div class="more_trigger">'
-                                            +'<div class="sprite_more_icon">'+'</div>'
-                                        +'</div>'
-                                    +'</div>'
-                                +'</div>'
-                            +'</div>'
                         +'</section>'
                         // 좋아요 여부에 따라 하트 모양 변경 - 조건문
                     +'</div>')
@@ -286,9 +300,10 @@ $(document).ready(function () {
                         // +'<div class="timer">'+'2시간'+'</div>'
 
                         +'<div class="commit_field">'
-                            +'<input type="text" placeholder="댓글달기..">'
+                            +'<input class="comment_contents" type="text" postnum="' + post.postnum + '" placeholder="댓글달기..">'
+                            +'<input type="hidden" value="dd">'
 
-                            +'<div class="upload_btn">게시</div>'
+                            +'<button class="btn btn-success btn-sm btn-block upload_comment">댓글 등록</button>'
                         +'</div>'
 
 
@@ -363,6 +378,18 @@ $(document).ready(function () {
                                 
                             )
                         }
+                    }
+
+                    for(var prop in post.comments){
+                        var uploadcomments = new Date(post.comments[prop].uploadtime).format("yyyy-MM-dd HH:mm:ss");
+                        $(".scroll_section").append(
+                            '<div class="user_container-detail">'
+                            +'<div class="user">'+'<img src="/userdata/profile/' + post.comments[prop].usernum + '.png" alt="user">'+'</div>'
+                            +'<div class="comment">'
+                                +'<span class="user_id">'+ post.comments[prop].nickname +'</span>' + post.comments[prop].contents
+                                +'<div class="time">'+ uploadcomments +'<span class="try_comment">댓글 삭제</span>'+ '</div>'
+                            +'</div>'
+                        );
                     }
                 }
                 modal.style.display = "block";
