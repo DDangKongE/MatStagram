@@ -306,6 +306,26 @@ body{
 }
 
 
+.contents .posts_contents{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 20px;
+}
+.contents .posts_contents .posts{
+    display:flex;
+    flex-direction: column;
+    font-size: 14px;
+}
+
+.contents .posts_contents .posts-detail{
+    display: flex;
+}
+
+.contents .posts_contents .posts .nick_name{
+    margin-right: 10px;
+}
+
 .contents .comment_container{
     display:flex;
     justify-content: space-between;

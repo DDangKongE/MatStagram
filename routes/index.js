@@ -3,17 +3,63 @@ var router = express.Router();
 var request = require('request');
 var fs = require('fs');
 var alert = require('alert');
+const util = require('../util');
 const Users = require('../models/users');
 const Posts = require('../models/posts');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', util.ischangenickname, function(req, res, next) {
   if (req.isAuthenticated()) {
-    Users.aggregate([{$sample: {size:6}}], function(err, result){
-      Users.findOne({id: req.user.id}, function(err, userdata){
-        res.render('main/index', {UserInfo: userdata, Recommend: result});
+    var postsdata = [];
+    function usersfind(){
+      return new Promise(function(resolve, reject){
+        Users.aggregate([{$sample: {size:6}}], function(err, result){
+          resolve(result);
+        })
       })
-    })
+    }
+
+    function postsfind(){
+      return new Promise(function(resolve, reject){
+        Users.findOne({id:req.user.id}, function(err, result){
+          function dataload(usernum){
+            return new Promise(function(resolve_inner, reject_inner){
+              Users.findOne({usernum:usernum}, function(err, userdata){
+                Posts.find({writerid:userdata.id}, function(err, data){
+                  for(let prop in data){
+                    postsdata.push(data[prop]);  
+                  }
+                  return resolve_inner(postsdata);
+                })
+              })
+            })
+          }
+
+          async function postsload(userdata){
+            for(let prop in userdata.follow){
+              await dataload(userdata.follow[prop].usernum);
+            }
+            await dataload(req.user.usernum);
+            return resolve(postsdata);
+          }
+          postsload(result);
+        })
+      })
+    }
+
+    async function loadmain(data){
+      var Recommends = await usersfind();
+      var posts = await postsfind();
+
+      Users.findOne({id:req.user.id}, function(err, logindata){
+        res.render('main/index', {UserInfo: logindata, Recommend: Recommends, Posts: posts});
+      })
+    }
+    
+    loadmain();
+
+
+    
   } else {
     Posts.aggregate([{$sample: {size:10}}], function(err, result){
       res.render('main/index', {UserInfo: null, Posts: result});
@@ -41,7 +87,6 @@ router.get('/my/profile', function(req, res, next) {
       res.redirect('/matstagram/profile/' + result.usernickname);
     })
   } else {
-    alert('로그인을 해주세요!');
     res.redirect('/matstagram/login');
   }
 });
@@ -101,6 +146,7 @@ router.get('/profile/:nickname/edit', function(req, res, next) {
   if (req.isAuthenticated()) {
     if(req.user){
       Users.findOne({usernickname:req.params.nickname}, function(err, result){
+        console.log(result);
         if(result.id == req.user.id){
           res.render('main/profile_edit', {UserInfo: result});
         } else {
@@ -126,6 +172,7 @@ router.post('/profile/:nickname/edit', function(req, res, next) {
           if(req.params.nickname == req.body.usernickname){
             Users.updateOne({usernickname : result.usernickname}, {usernickname : req.body.usernickname, username : req.body.username}, function(err, result){
               res.redirect('/matstagram/profile/' + req.body.usernickname);
+              
             })
           } else {
             Users.updateOne({usernickname : result.usernickname}, {usernickname : req.body.usernickname, username : req.body.username, changenickname:'Y'}, function(err, result){
@@ -175,7 +222,7 @@ router.post('/profile/:nickname/edit/img', function(req, res, next) {
 });
 
 // post(게시물) 관련 router
-router.get('/post/new', function(req, res, next) {
+router.get('/post/new', util.ischangenickname, function(req, res, next) {
   if (req.isAuthenticated()) {
     Users.findOne({id:req.user.id}, function(err, result){
       res.render('main/post_new', {UserInfo: result, PostInfo: null});
@@ -186,13 +233,15 @@ router.get('/post/new', function(req, res, next) {
   }
 });
 
-router.post('/post/create', function(req, res, next) {
+router.post('/post/create', util.ischangenickname, function(req, res, next) {
   if (req.isAuthenticated()) {
     let samplefile = req.files.photo;
     Users.findOne({id:req.user.id}, function(err, result){
       Posts.create({
         contents: req.body.content,
+        nickname: req.user.usernickname,
         writerid: req.user.id,
+        writerid: req.user.usernum,
         placename: req.body.place_name,
         addressname: req.body.address_name,
         placeid: req.body.place_id
@@ -214,7 +263,7 @@ router.post('/post/create', function(req, res, next) {
   }
 });
 
-router.get('/post/:postnum/edit', function(req, res, next){
+router.get('/post/:postnum/edit', util.ischangenickname, function(req, res, next){
   if (req.isAuthenticated()) {
     Posts.findOne({postnum:req.params.postnum}, function(error, postdata){
       if(postdata.writerid == req.user.id){
@@ -232,7 +281,7 @@ router.get('/post/:postnum/edit', function(req, res, next){
   }
 })
 
-router.put('/post/:postnum', function(req, res, next){
+router.put('/post/:postnum', util.ischangenickname, function(req, res, next){
   if (req.isAuthenticated()) {
     Posts.findOne({postnum:req.params.postnum}, function(error, postdata){
       if(postdata.writerid == req.user.id){
@@ -267,7 +316,7 @@ router.put('/post/:postnum', function(req, res, next){
 })
 
 // 씹콜백지옥
-router.get('/post/:postnum/delete', function(req, res, next){
+router.get('/post/:postnum/delete', util.ischangenickname, function(req, res, next){
   if (req.isAuthenticated()) {
     Posts.findOne({postnum:req.params.postnum}, function(error, postdata){
       if(error) console.log(err);
@@ -291,7 +340,7 @@ router.get('/post/:postnum/delete', function(req, res, next){
   }
 })
 
-router.get('/post/:postnum', function(req, res, next){
+router.get('/post/:postnum', util.ischangenickname, function(req, res, next){
   if(req.isAuthenticated()){
     Posts.findOne({postnum:req.params.postnum}, function(err, post){
       Users.findOne({id:post.writerid}, function(err, user){
@@ -310,7 +359,7 @@ router.get('/post/:postnum', function(req, res, next){
 })
 
 // 좋아요-팔로우 기능
-router.post('/post/like/:postnum', function(req, res, next){
+router.post('/post/like/:postnum', util.ischangenickname, function(req, res, next){
   if (req.isAuthenticated()) {
     Posts.findOne({postnum:req.params.postnum}, function(err,result){
       if(err) console.log(err);
@@ -338,7 +387,7 @@ router.post('/post/like/:postnum', function(req, res, next){
   }
 })
 
-router.get('/follow', function(req, res, next){
+router.get('/follow', util.ischangenickname, function(req, res, next){
   if (req.isAuthenticated()) {
     Users.findOne({usernum:req.query.usernum}, function(err, result){
       if(err) console.log(err);
@@ -400,7 +449,7 @@ router.get('/follow', function(req, res, next){
   }
 })
 
-router.post('/follow', function(req, res, next){
+router.post('/follow', util.ischangenickname, function(req, res, next){
   if (req.isAuthenticated()) {
     console.log("도착")
     console.log(req.body.follower)
@@ -475,7 +524,7 @@ router.post('/follow', function(req, res, next){
   }
 })
 
-router.post('/post/comment', function(req, res, next){
+router.post('/post/comment', util.ischangenickname, function(req, res, next){
   if (req.isAuthenticated()) {
     Users.findOne({id:req.user.id}, function(err, user){
       console.log(user);
@@ -491,7 +540,7 @@ router.post('/post/comment', function(req, res, next){
   }
 })
 
-router.get('/explore', function(req, res, next){
+router.get('/explore', util.ischangenickname, function(req, res, next){
   Users.findOne({id:req.user.id}, function(err, result){
     res.render('main/explore', {UserInfo: result});
   });
