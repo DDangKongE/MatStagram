@@ -104,7 +104,7 @@
                             </div>
                         <% } %>
                     </div>
-                    <div class="timer"><%= moment(Posts[prop].uploadtime).format('YYYY-MM-DD HH:mm:ss')%></div>
+                    <div class="timer"><%= moment(Posts[prop].uploadtime).fromNow()%></div>
                     <div class="comment_field" id="add-comment-post37">
                         <input type="text" class="comment_contents" placeholder="댓글달기...">
                         <div class="upload_btn m_text" data-name="comment">댓글등록</div>

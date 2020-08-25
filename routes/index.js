@@ -7,6 +7,7 @@ var moment = require('moment');
 const util = require('../util');
 const Users = require('../models/users');
 const Posts = require('../models/posts');
+moment.lang('ko');
 
 /* GET home page. */
 router.get('/', util.ischangenickname, function(req, res, next) {
