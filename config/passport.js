@@ -43,7 +43,6 @@ module.exports = () => {
         if(!user){
           createUser(profile, done, user, profile.provider);
         }else{
-          console.log(profile);
             return done(err, user);
         }
       })

@@ -3,6 +3,7 @@ var router = express.Router();
 var request = require('request');
 var fs = require('fs');
 var alert = require('alert');
+var moment = require('moment');
 const util = require('../util');
 const Users = require('../models/users');
 const Posts = require('../models/posts');
@@ -51,8 +52,12 @@ router.get('/', util.ischangenickname, function(req, res, next) {
       var Recommends = await usersfind();
       var posts = await postsfind();
 
+      posts.sort(function(a, b){
+        return a.postnum > b.postnum ? -1 : a.postnum < b.postnum ? 1 : 0;
+      });
+
       Users.findOne({id:req.user.id}, function(err, logindata){
-        res.render('main/index', {UserInfo: logindata, Recommend: Recommends, Posts: posts});
+        res.render('main/index', {UserInfo: logindata, Recommend: Recommends, Posts: posts, moment});
       })
     }
     
@@ -62,7 +67,7 @@ router.get('/', util.ischangenickname, function(req, res, next) {
     
   } else {
     Posts.aggregate([{$sample: {size:10}}], function(err, result){
-      res.render('main/index', {UserInfo: null, Posts: result});
+      res.render('main/index', {UserInfo: null, Posts: result ,moment});
     });
   }
 });
@@ -239,9 +244,9 @@ router.post('/post/create', util.ischangenickname, function(req, res, next) {
     Users.findOne({id:req.user.id}, function(err, result){
       Posts.create({
         contents: req.body.content,
-        nickname: req.user.usernickname,
-        writerid: req.user.id,
-        writerid: req.user.usernum,
+        nickname: result.usernickname,
+        writerid: result.id,
+        writernum: req.user.usernum,
         placename: req.body.place_name,
         addressname: req.body.address_name,
         placeid: req.body.place_id

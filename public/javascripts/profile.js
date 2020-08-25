@@ -205,6 +205,7 @@ $(document).ready(function () {
         })
     });
 
+    // 코멘트 남기기
     $(document).on('click', '.upload_comment', function(e){
         console.log('ee');
         var contents = $('.comment_contents').val();
@@ -381,7 +382,7 @@ $(document).ready(function () {
                     }
 
                     for(var prop in post.comments){
-                        var uploadcomments = new Date(post.comments[prop].uploadtime).format("yyyy-MM-dd HH:mm:ss");
+                        var uploadcomments = new Date(post.comments[prop].uploadtime).format("yyyy-MM-dd(KS) HH:mm:ss");
                         $(".scroll_section").append(
                             '<div class="user_container-detail">'
                             +'<div class="user">'+'<img src="/userdata/profile/' + post.comments[prop].usernum + '.png" alt="user" onclick="location.href=`/matstagram/profile/'+ post.comments[prop].nickname +'`">'+'</div>'

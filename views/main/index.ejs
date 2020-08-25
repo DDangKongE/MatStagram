@@ -21,21 +21,21 @@
                                 <div class="nick_name f_name"><%=Posts[prop].nickname%> </div>
                             </div>
                         </div>
-                        <div class="sprite_more_icon" data-name="more">
+                        <div class="sprite_more_icon" prop="<%=prop%>" data-name="more">
                             <% if(UserInfo != null){ %>
                                 <% if(UserInfo.id == Posts[prop].writerid) { %>
-                                    <ul id="toggle" class="toggle_box">
-                                        <li>수정</li>
-                                        <li>삭제</li>
+                                    <ul id="toggle<%=prop%>" class="toggle_box">
+                                        <li onclick="location.href=`/matstagram/post/<%=Posts[prop].postnum%>/edit`">수정</li>
+                                        <li onclick="location.href=`/matstagram/post/<%=Posts[prop].postnum%>/delete`">삭제</li>
                                     </ul>
                                 <% } else {%>
-                                    <ul id="toggle" class="toggle_box">
-                                        <li><input type="submit" class="follow" value="팔로우" data-name="follow"></li>
+                                    <ul id="toggle<%=prop%>" class="toggle_box">
+                                        <li class="follow" follower="<%=UserInfo.usernum%>" follow="<%=Posts[prop].writernum%>">언팔로우</li>
                                     </ul>
                                 <% } %>
                             <% } else {%>
-                                <ul id="toggle" class="toggle_box">
-                                    <li><input type="submit" class="follow" value="팔로우" data-name="follow"></li>
+                                <ul id="toggle<%=prop%>" class="toggle_box">
+                                    <li class="follow" onclick="location.href='/matstagram/login'">팔로우</li>
                                 </ul>
                             <% } %>
                             </div>
@@ -56,13 +56,26 @@
                     <div class="bottom_icons">
                         <div class="left_icons">
                             <div class="heart_btn">
-                                <div class="sprite_heart_icon_outline" name="39" data-name="heartbeat"></div>
+                                <% var chklike = "N" %>
+                                <% for(var lprop in Posts[prop].likes){ %>
+                                    <% if(Posts[prop].likes[lprop].usernum == UserInfo.usernum){ %>
+                                        <% chklike = "Y" %>
+                                    <% } %>
+                                <% } %>
+
+                                <% if(chklike == "N") { %>
+                                    <div class="sprite_heart_icon_outline" postnum="<%=Posts[prop].postnum%>" data-name="heartbeat"></div>
+                                <% } else { %>
+                                    <div class="sprite_heart_icon_outline hearton" postnum="<%=Posts[prop].postnum%>" data-name="heartbeat"></div>
+                                <% } %>
                             </div>
+                            <!-- 
                             <div class="sprite_bubble_icon"></div>
-                            <div class="sprite_share_icon" data-name="share"></div>
+                            <div class="sprite_share_icon" data-name="share"></div> 
+                            -->
                         </div>
                         <div class="right_icon">
-                            <div class="sprite_bookmark_outline" data-name="bookmark"></div>
+                            <!-- <div class="sprite_bookmark_outline" data-name="bookmark"></div> -->
                         </div>
                     </div>
                     <div class="posts_contents">
@@ -75,8 +88,8 @@
                     </div>
                     <div class="likes m_text">
                         좋아요
-                        <span id="like-count-39"><%=Posts[prop].likes.length%></span>
-                        <span id="bookmark-count-39"></span>
+                        <span id="count<%=Posts[prop].postnum%>"><%=Posts[prop].likes.length%></span>
+                        <span id="bookmark-count"></span>
                         개
                     </div>
                     <div class="comment_box">
@@ -91,14 +104,15 @@
                             </div>
                         <% } %>
                     </div>
-                    <div class="timer">시간 변환해서 입력하도록 추가해야함</div>
+                    <div class="timer"><%= moment(Posts[prop].uploadtime).format('YYYY-MM-DD HH:mm:ss')%></div>
                     <div class="comment_field" id="add-comment-post37">
-                        <input type="text" placeholder="댓글달기...">
-                        <div class="upload_btn m_text" data-name="comment">게시</div>
+                        <input type="text" class="comment_contents" placeholder="댓글달기...">
+                        <div class="upload_btn m_text" data-name="comment">댓글등록</div>
                     </div>
                 </article>
 
                 <% } %>
+
             </div>
             <input type="hidden" id="page" value="1">
 
@@ -168,6 +182,7 @@
 
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="/javascripts/index.js"></script>
+    <script src="/javascripts/dateformat.js"></script>
 </body>
 
 </html>
