@@ -58,35 +58,37 @@ $(document).ready(function () {
                 }
             });
         }
+        // 코멘트 남기기
+        if($(e.target).hasClass("upload_btn")) {
+            var postnum = $(e.target).attr('postnum');
+            var key = '.comment_contents' + postnum
+            var contents = $(key).val();
+            console.log(contents);
+            
+            $.ajax({
+                url: '/matstagram/post/comment',
+                type: 'POST',
+                data:{contents:contents, postnum:postnum},
+                success: function(result){
+                    console.log(result);
+                    var comment_key = '.post' + postnum;
+                    console.log(comment_key);
+                    $(comment_key).append(
+                        '<div class="comment_container">'
+                            +'<div class="comment" id="comment-list-ajax-post37">'
+                                +'<div class="comment-detail">'
+                                    +'<div class="nick_name m_text">' + result.nickname + '</div>'
+                                    +'<div>' + result.contents + '</div>'
+                                +'</div>'
+                            +'</div>'                 
+                        +'</div>'
+                    );
 
-    // 코멘트 남기기
-    $(document).on('click', '.upload_comment', function(e){
-        console.log('ee');
-        var contents = $('.comment_contents').val();
-        var postnum = $('.comment_contents').attr('postnum');
-        console.log(contents);
-        
-        $.ajax({
-            url: '/matstagram/post/comment',
-            type: 'POST',
-            data:{contents:contents, postnum:postnum},
-            success: function(result){
-                console.log(result);
-                var uploadcomments = new Date(result.uploadtime).format("yyyy-MM-dd HH:mm:ss");
-                $(".scroll_section").append(
-                    '<div class="user_container-detail">'
-                    +'<div class="user">'+'<img src="/userdata/profile/' + result.usernum + '.png" alt="user">'+'</div>'
-                    +'<div class="comment">'
-                        +'<span class="user_id">'+ result.nickname +'</span>' + result.contents
-                        +'<div class="time">'+ uploadcomments +'<span class="try_comment">댓글 삭제</span>'+ '</div>'
-                    +'</div>'
-                );
-
-                $('.comment_contents').val('');
-            }, error: function(req, status, error){
-                console.log(error);
-            }
-        })
-    });
+                    $(key).val('');
+                }, error: function(req, status, error){
+                    console.log(error);
+                }
+            })
+        }    
     });
   });

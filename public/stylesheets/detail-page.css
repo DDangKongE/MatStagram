@@ -32,6 +32,35 @@
     height: 600px;
 }
 
+/* Normal Content/Box */
+.contents {
+    max-width:933px;
+    display: flex;
+    border: 1px solid rgba(0,0,0,.0975);
+    border-radius: 3px;
+    background: #fff;
+}
+
+.contents .img_section{
+    overflow: hidden;
+    border-right: 1px solid rgba(0,0,0,.0975);
+
+}
+
+.contents .img_section .trans_inner{
+    /*width: 2448px;*/
+    font-size: 0;
+}
+
+.contents .img_section .trans_inner > div{
+    width: 150%;
+    display: inline-block;
+}
+.contents .img_section .trans_inner img{
+    width: 600px;
+    height: 600px;
+}
+
 .user_container{
     display: flex;
     align-items: center;

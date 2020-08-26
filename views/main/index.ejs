@@ -42,7 +42,7 @@
                     </header>
                     <div class="img_section">
                         <div class="trans_inner">
-                            <div><img src="/userdata/posts/<%=Posts[prop].postnum%>.png" alt=""></div>
+                            <div onclick="location.href=`/matstagram/post/detail/<%=Posts[prop].postnum%>`"><img src="/userdata/posts/<%=Posts[prop].postnum%>.png" alt=""></div>
                         </div>
                     </div>
                     <div>
@@ -92,8 +92,9 @@
                         <span id="bookmark-count"></span>
                         개
                     </div>
-                    <div class="comment_box">
-                        <% for(let cprop in Posts[prop].comments){ %>
+                    <div class="comment_box post<%=Posts[prop].postnum%>">
+                        <% for(var cprop in Posts[prop].comments){ %>
+                            <% if(cprop > 4) { break; } %>
                             <div class="comment_container">
                                 <div class="comment" id="comment-list-ajax-post37">
                                     <div class="comment-detail">
@@ -104,10 +105,11 @@
                             </div>
                         <% } %>
                     </div>
+                    <div class="comment_count" onclick="location.href=`/matstagram/post/detail/<%=Posts[prop].postnum%>`">댓글 <%=Posts[prop].comments.length%>개</div>
                     <div class="timer"><%= moment(Posts[prop].uploadtime).fromNow()%></div>
-                    <div class="comment_field" id="add-comment-post37">
-                        <input type="text" class="comment_contents" placeholder="댓글달기...">
-                        <div class="upload_btn m_text" data-name="comment">댓글등록</div>
+                    <div class="comment_field" id="add-comment">
+                        <input type="text" class="comment_contents<%=Posts[prop].postnum%>" placeholder="댓글달기...">
+                        <div class="upload_btn m_text" data-name="comment" postnum="<%=Posts[prop].postnum%>">등록</div>
                     </div>
                 </article>
 
@@ -179,7 +181,6 @@
 
         </div>
     </section>
-
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="/javascripts/index.js"></script>
     <script src="/javascripts/dateformat.js"></script>

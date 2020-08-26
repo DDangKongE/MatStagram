@@ -7,7 +7,7 @@ var moment = require('moment');
 const util = require('../util');
 const Users = require('../models/users');
 const Posts = require('../models/posts');
-moment.lang('ko');
+moment.locale('ko');
 
 /* GET home page. */
 router.get('/', util.ischangenickname, function(req, res, next) {
@@ -364,6 +364,31 @@ router.get('/post/:postnum', util.ischangenickname, function(req, res, next){
   }
 })
 
+router.get('/post/detail/:postnum', util.ischangenickname, function(req, res, next){
+  if(req.isAuthenticated()){
+    Posts.findOne({postnum:req.params.postnum}, function(err, post){
+      if(post){
+
+        Users.findOne({id:post.writerid}, function(err, user){
+          var chkfollow = "N"
+          for(var prop in user.follower){
+            if(user.follower[prop].usernum == req.user.usernum){
+            chkfollow = "Y"
+          }
+        }
+        res.render('main/detail-page', {UserInfo: req.user, post:post, user:user, login:req.user, chkfollow: chkfollow, moment});
+      })
+    } else {
+      alert('잘못된 접근입니다! \n다시한번 시도해주세요!');
+      res.redirect('/matstagram');
+    }
+    })
+  } else {
+    alert('로그인을 해주세요!');
+    res.redirect('/matstagram/login');
+  }
+})
+
 // 좋아요-팔로우 기능
 router.post('/post/like/:postnum', util.ischangenickname, function(req, res, next){
   if (req.isAuthenticated()) {
@@ -533,7 +558,6 @@ router.post('/follow', util.ischangenickname, function(req, res, next){
 router.post('/post/comment', util.ischangenickname, function(req, res, next){
   if (req.isAuthenticated()) {
     Users.findOne({id:req.user.id}, function(err, user){
-      console.log(user);
       Posts.updateOne({postnum:req.body.postnum}, {
         $push:{'comments':{'usernum' : user.usernum, 'nickname' : user.usernickname, 'contents' : req.body.contents}}
       }, function(err, result){

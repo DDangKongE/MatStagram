@@ -1,4 +1,5 @@
 const passport = require('passport');
+const alert = require('alert');
 const KakaoStrategy = require('passport-kakao').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
@@ -25,6 +26,7 @@ module.exports = () => {
       changenickname: 'N'
     }, function(err, post){
       if(err) return console.log(err);
+      alert("가입이 완료되었습니다!\n다시 한번 로그인 해주세요!")
       return done(err, user);
     });
   }

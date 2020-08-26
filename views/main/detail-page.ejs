@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <%- include('../partials/head') %>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/detail-page.css" >
+</head>
+
+<body>
+    <%- include('../partials/nav') %>
+    <section id="container">
+         <div id="main_container">
+            <section class="b_inner">
+                <div class="contents_box">
+                    <article class="contents cont01">
+                        <div class="img_section">
+                            <div class="trans_inner">
+                                <div>
+                                    <img src="/userdata/posts/<%=post.postnum%>.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="detail--right_box">
+                            <header class="top">
+                                <div class="user_container">
+                                    <div class="profile_img">
+                                        <img src="/userdata/profile/<%=user.profileimg%>" alt="" onclick="location.href=`/matstagram/profile/<%=user.usernickname%>`">
+                                    </div>
+                                    <div class="user_name">
+                                        <div class="nick_name" onclick="location.href=`/matstagram/profile/<%=user.usernickname%>`"><%=user.usernickname%></div>
+                                        <div class="country"><%=post.placename%><br>(<%=post.addressname%>) </div>
+                                    </div>
+                                </div>
+                                <div class="sprite_more_icon" data-name="more">
+                                    <ul id="toggle" class="more_detail" style="width:165px;">
+                                        <% if(user.id == login.id){ %>
+                                                <li onclick="location.href=`/matstagram/post/<%=post.postnum%>/edit`">수정</li>
+                                                <li onclick="location.href=`/matstagram/post/<%=post.postnum%>/delete`">삭제</li>
+                                        <% } else { %>
+                                            <li class="follow" follower="<%=login.usernum%>" follow="<%=user.usernum%>">팔로우/언팔로우</li>
+                                        <% } %>
+                                    </ul>
+                                </div>
+                            </header>
+                            <section class="scroll_section">
+                                <div class="admin_container">
+                                    <div class="admin"><img src="/userdata/profile/<%=user.profileimg%>" alt="user" onclick="location.href=`/matstagram/profile/<%=user.usernickname%>`"></div>
+                                    <div class="comment">
+                                        <span class="user_id" onclick="location.href=`/matstagram/profile/<%=user.usernickname%>`"><%=user.usernickname%></span><%=post.contents%>
+                                    </div>
+                                </div>
+                                <% for(var prop in post.comments){ %>
+                                <div class="user_container-detail">
+                                    <div class="user"><img src="/userdata/profile/<%=post.comments[prop].usernum%>.png" alt="user" onclick="location.href=`/matstagram/profile/<%=post.comments[prop].nickname%>`"></div>
+                                    <div class="comment">
+                                        <span class="user_id" onclick="location.href=`/matstagram/profile/<%=post.comments[prop].nickname%>`"><%=post.comments[prop].nickname%></span><%=post.comments[prop].contents%>
+                                        <div class="time"><%=moment(post.comments[prop].uploadtime).startOf('').fromNow();%><span class="try_comment">댓글 삭제</span></div>
+                                    </div>
+                                </div>
+                                <% } %>
+                            </section>
+
+                            <%  var chklikes = 'N'; %>
+                            <% for(var prop in post.likes){ %>
+                                <% if(post.likes[prop].usernum == login.usernum){ %>
+                                    <% chklikes = 'Y'; %>
+                                <% } %>
+                            <% } %>
+                            
+                            <% if(chklikes == 'N'){ %>
+                                <div class="bottom_icons">
+                                <div class="left_icons">
+                                    <div class="heart_btn">
+                                        <div postnum="<%=post.postnum%>" class="sprite_heart_icon_outline" data-name="heartbeat"></div>
+                                    </div>
+                                </div>
+                                </div>
+                            <% } else { %>
+                                <div class="bottom_icons">
+                                <div class="left_icons">
+                                    <div class="heart_btn">
+                                        <div postnum="<%=post.postnum%>" class="sprite_heart_icon_outline hearton" data-name="heartbeat"></div>
+                                    </div>
+                                </div>
+                                </div>
+                            <% } %>
+                            <div class="count_likes">좋아요 <span class="count"><%=post.likes.length%></span>개</div>
+                            <div class="timer"><%= moment(post.uploadtime).fromNow()%></div>
+
+                            <div class="commit_field">
+                                <input class="comment_contents" type="text" postnum="<%=post.postnum%>" placeholder="댓글달기..">
+                                <input type="hidden" value="dd">
+
+                                <button class="btn btn-success btn-sm btn-block upload_comment">댓글 등록</button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </section>
+        </div>
+    
+        <div class="del_pop">
+            <div class="btn_box">
+                <div class="del">삭제</div>
+                <div class="cancel">취소</div>
+            </div>
+       </div>
+    
+    </section>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="/javascripts/detail-page.js"></script>
+</body>
+
+</html>

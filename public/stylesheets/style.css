@@ -347,6 +347,13 @@ body{
 }
 
 
+.contents .comment_count{
+    font-size: 12px;
+    letter-spacing: 0.2px;
+    color:#999;
+    padding: 10px 20px;
+}
+
 .contents .timer{
     font-size: 10px;
     letter-spacing: 0.2px;

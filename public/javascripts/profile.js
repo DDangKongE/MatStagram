@@ -298,7 +298,6 @@ $(document).ready(function () {
 
                     $(".detail--right_box").append(
                          '<div class="count_likes">좋아요 <span class="count">'+ post.likes.length +'</span>개</div>'
-                        // +'<div class="timer">'+'2시간'+'</div>'
 
                         +'<div class="commit_field">'
                             +'<input class="comment_contents" type="text" postnum="' + post.postnum + '" placeholder="댓글달기..">'
@@ -328,18 +327,12 @@ $(document).ready(function () {
                             +'<div class="heart_btn">'
                                 +'<div postnum="' +post.postnum + '" class="sprite_heart_icon_outline" data-name="heartbeat">'+'</div>'
                             +'</div>'
-                            // 멘션/북마크 부분 일단 삭제
-                            // +'<div>'
-                            //     +'<div class="sprite_bubble_icon">'+'</div>'
-                            // +'</div>'
                             +'<div>'
                                 +'<div class="sprite_share_icon" data-name="share">'+'</div>'
                             +'</div>'
                         +'</div>'
 
-                        // +'<div class="right_icon">'
-                        //     +'<div class="sprite_bookmark_outline" data-name="book-mark">'+'</div>'
-                        // +'</div>'
+
                         +'</div>')
                     } else {
                         $(".detail--right_box").append('<div class="bottom_icons">'
@@ -347,18 +340,10 @@ $(document).ready(function () {
                             +'<div class="heart_btn">'
                                 +'<div postnum="' +post.postnum + '" class="sprite_heart_icon_outline hearton" data-name="heartbeat">'+'</div>'
                             +'</div>'
-                            // 멘션/북마크 부분 일단 삭제
-                            // +'<div>'
-                            //     +'<div class="sprite_bubble_icon">'+'</div>'
-                            // +'</div>'
                             +'<div>'
                                 +'<div class="sprite_share_icon" data-name="share">'+'</div>'
                             +'</div>'
                         +'</div>'
-
-                        // +'<div class="right_icon">'
-                        //     +'<div class="sprite_bookmark_outline" data-name="book-mark">'+'</div>'
-                        // +'</div>'
                         +'</div>')
                     }
                     
