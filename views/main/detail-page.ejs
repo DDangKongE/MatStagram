@@ -59,13 +59,15 @@
                                 </div>
                                 <% } %>
                             </section>
-
-                            <%  var chklikes = 'N'; %>
-                            <% for(var prop in post.likes){ %>
-                                <% if(post.likes[prop].usernum == login.usernum){ %>
-                                    <% chklikes = 'Y'; %>
-                                <% } %>
+                            <% if(UserInfo != null){ %> 
+                                <%  var chklikes = 'N'; %>
+                                <% for(var prop in post.likes){ %>
+                                    <% if(post.likes[prop].usernum == login.usernum){ %>
+                                        <% chklikes = 'Y'; %>
+                                    <% } %>
+                              <% } %>
                             <% } %>
+                            
                             
                             <% if(chklikes == 'N'){ %>
                                 <div class="bottom_icons">

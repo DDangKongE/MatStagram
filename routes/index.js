@@ -414,7 +414,8 @@ router.post('/post/like/:postnum', util.ischangenickname, function(req, res, nex
     })
     res.send();
   } else {
-    res.send();
+    alert('로그인을 해주세요!');
+    res.redirect('/matstagram/login');
   }
 })
 
@@ -550,8 +551,8 @@ router.post('/follow', util.ischangenickname, function(req, res, next){
     })
     
   } else {
-    res.send();
     alert('로그인을 해주세요!');
+    res.send();
   }
 })
 
@@ -565,8 +566,8 @@ router.post('/post/comment', util.ischangenickname, function(req, res, next){
       })
     })
   } else {
-    res.send();
     alert('로그인을 해주세요!');
+    res.send();
   }
 })
 

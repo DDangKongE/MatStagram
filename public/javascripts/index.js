@@ -23,13 +23,15 @@ $(document).ready(function () {
                 url: '/matstagram/post/like/' + postnum,
                 type: 'POST',
                 success: function(result) {
-                    var count = $(key).text();
-                    if(element_o == 'sprite_heart_icon_outline'){
-                        $(e.target).attr('class','sprite_heart_icon_outline hearton');
-                        $(key).text(++count);
-                    } else {
-                        $(e.target).attr('class','sprite_heart_icon_outline');
-                        $(key).text(--count);
+                    if(result != ""){
+                        var count = $(key).text();
+                        if(element_o == 'sprite_heart_icon_outline'){
+                            $(e.target).attr('class','sprite_heart_icon_outline hearton');
+                            $(key).text(++count);
+                        } else {
+                            $(e.target).attr('class','sprite_heart_icon_outline');
+                            $(key).text(--count);
+                        }
                     }
             }, error: function(req, status, error){
                     console.log(error);
@@ -47,11 +49,13 @@ $(document).ready(function () {
                 type: 'POST',
                 data: fdata,
                 success: function(result) {
-                    var count = $('#followers').text();
-                    if(chkfollow == "팔로우"){
-                        $(this).text("언팔로우");
-                    } else if (chkfollow == "언팔로우"){
-                        $(this).text("팔로우");
+                    if(result != ""){
+                        var count = $('#followers').text();
+                        if(chkfollow == "팔로우"){
+                            $(this).text("언팔로우");
+                        } else if (chkfollow == "언팔로우"){
+                            $(this).text("팔로우");
+                        }
                     }
                }, error: function(req, status, error){
                     console.log(error);
@@ -63,28 +67,28 @@ $(document).ready(function () {
             var postnum = $(e.target).attr('postnum');
             var key = '.comment_contents' + postnum
             var contents = $(key).val();
-            console.log(contents);
             
             $.ajax({
                 url: '/matstagram/post/comment',
                 type: 'POST',
                 data:{contents:contents, postnum:postnum},
                 success: function(result){
-                    console.log(result);
-                    var comment_key = '.post' + postnum;
-                    console.log(comment_key);
-                    $(comment_key).append(
-                        '<div class="comment_container">'
+                    if(result != ""){
+                        var comment_key = '.post' + postnum;
+                        console.log(comment_key);
+                        $(comment_key).append(
+                            '<div class="comment_container">'
                             +'<div class="comment" id="comment-list-ajax-post37">'
-                                +'<div class="comment-detail">'
-                                    +'<div class="nick_name m_text">' + result.nickname + '</div>'
-                                    +'<div>' + result.contents + '</div>'
-                                +'</div>'
+                            +'<div class="comment-detail">'
+                            +'<div class="nick_name m_text">' + result.nickname + '</div>'
+                            +'<div>' + result.contents + '</div>'
+                            +'</div>'
                             +'</div>'                 
-                        +'</div>'
-                    );
-
-                    $(key).val('');
+                            +'</div>'
+                        );
+                        
+                        $(key).val('');
+                    }
                 }, error: function(req, status, error){
                     console.log(error);
                 }

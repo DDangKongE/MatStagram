@@ -65,7 +65,6 @@ $(document).ready(function () {
         console.log('ee');
         var contents = $('.comment_contents').val();
         var postnum = $('.comment_contents').attr('postnum');
-        console.log(contents);
         
         $.ajax({
             url: '/matstagram/post/comment',
