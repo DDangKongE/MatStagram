@@ -7,6 +7,7 @@ var moment = require('moment');
 const util = require('../util');
 const Users = require('../models/users');
 const Posts = require('../models/posts');
+const { remove } = require('../models/users');
 moment.locale('ko');
 
 /* GET home page. */
@@ -305,7 +306,8 @@ router.put('/post/:postnum', util.ischangenickname, function(req, res, next){
           writerid: req.user.id,
           placename: req.body.place_name,
           addressname: req.body.address_name,
-          placeid: req.body.place_id
+          placeid: req.body.place_id,
+          hashtags: []
         }, function(err){
           if(err) return console.log(err);
           if(req.files !== null){
@@ -316,9 +318,8 @@ router.put('/post/:postnum', util.ischangenickname, function(req, res, next){
             }
           }
           if(hashtags != null){
-            
             for(let prop in hashtags){
-              Posts.updateOne({postnum:post.postnum}, {$push:{'hashtags':{'tag' : hashtags[prop]}}},function(err){
+              Posts.updateOne({postnum:postdata.postnum}, {$push:{'hashtags':{'tag' : hashtags[prop]}}},function(err){
                 if(err) console.log(err);
               });
             }
@@ -596,8 +597,9 @@ router.get('/explore', util.ischangenickname, function(req, res, next){
 })
 
 router.get('/test/:tag', function(req, res, next){
-  Posts.find({'hashtags.tag':{$all:["#"+req.params.tag]}},function(err, result){
-    console.log(result);
+  Posts.findOne({postnum:req.params.tag},function(err, result){
+    result.hashtags = [];
+    result.save();
     res.redirect('/matstagram');
   })
 });
