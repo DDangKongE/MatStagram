@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 var likesSchema = mongoose.Schema({ usernum: 'string' });
-var hashsSchema = mongoose.Schema({ usernum: 'string' });
+var hashsSchema = mongoose.Schema({ tag: 'string' });
 var commentsSchema = mongoose.Schema({ 
     usernum: 'string',
     nickname: 'string',

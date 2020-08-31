@@ -57,14 +57,14 @@
                         <div class="left_icons">
                             <div class="heart_btn">
                                 <% if(UserInfo != null){ %> 
-                                    <%  var chklikes = 'N'; %>
+                                    <% var chklikes = 'N'; %>
                                     <% for(var lprop in Posts[prop].likes){ %>
                                         <% if(Posts[prop].likes[lprop].usernum == UserInfo.usernum){ %>
                                             <% chklikes = 'Y'; %>
                                         <% } %>
                                     <% } %>
 
-                                    <% if(chklike == "N") { %>
+                                    <% if(chklikes == "N") { %>
                                         <div class="sprite_heart_icon_outline" postnum="<%=Posts[prop].postnum%>" data-name="heartbeat"></div>
                                     <% } else { %>
                                         <div class="sprite_heart_icon_outline hearton" postnum="<%=Posts[prop].postnum%>" data-name="heartbeat"></div>

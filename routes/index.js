@@ -242,6 +242,7 @@ router.get('/post/new', util.ischangenickname, function(req, res, next) {
 router.post('/post/create', util.ischangenickname, function(req, res, next) {
   if (req.isAuthenticated()) {
     let samplefile = req.files.photo;
+    const hashtags = req.body.content.match(/#([0-9a-zA-Z가-힣]*)/g)
     Users.findOne({id:req.user.id}, function(err, result){
       Posts.create({
         contents: req.body.content,
@@ -256,6 +257,13 @@ router.post('/post/create', util.ischangenickname, function(req, res, next) {
         samplefile.mv('./public/userdata/posts/' + post.postnum + '.png'), function(err){
           console.log(samplefile);
           if(err) return res.status(500).send(err);
+        }
+        if(hashtags != null){
+          for(let prop in hashtags){
+            Posts.updateOne({postnum:post.postnum}, {$push:{'hashtags':{'tag' : hashtags[prop]}}},function(err){
+              if(err) console.log(err);
+            });
+          }
         }
         Users.updateOne({id:result.id},{$push:{'posts':{'postnum' : post.postnum}}}, function(err){
           if(err) console.log(err)
@@ -289,6 +297,7 @@ router.get('/post/:postnum/edit', util.ischangenickname, function(req, res, next
 
 router.put('/post/:postnum', util.ischangenickname, function(req, res, next){
   if (req.isAuthenticated()) {
+    const hashtags = req.body.content.match(/#([0-9a-zA-Z가-힣]*)/g)
     Posts.findOne({postnum:req.params.postnum}, function(error, postdata){
       if(postdata.writerid == req.user.id){
         Posts.updateOne({postnum:req.params.postnum}, {
@@ -304,6 +313,13 @@ router.put('/post/:postnum', util.ischangenickname, function(req, res, next){
             samplefile.mv('./public/userdata/posts/' + postdata.postnum + '.png'), function(err){
               console.log(samplefile);
               if(err) return res.status(500).send(err);
+            }
+          }
+          if(hashtags != null){
+            for(let prop in hashtags){
+              Posts.updateOne({postnum:post.postnum}, {$push:{'hashtags':{'tag' : hashtags[prop]}}},function(err){
+                if(err) console.log(err);
+              });
             }
           }
           Users.findOne({id:req.user.id}, function(err, userdata){
@@ -577,6 +593,13 @@ router.get('/explore', util.ischangenickname, function(req, res, next){
   });
   
 })
+
+router.get('/test/:tag', function(req, res, next){
+  Posts.find({'hashtags.tag':{$all:["#"+req.params.tag]}},function(err, result){
+    console.log(result);
+    res.redirect('/matstagram');
+  })
+});
 
 router.get('/logout', function(req, res){
   req.logout();
