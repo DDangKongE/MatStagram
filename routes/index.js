@@ -316,6 +316,7 @@ router.put('/post/:postnum', util.ischangenickname, function(req, res, next){
             }
           }
           if(hashtags != null){
+            
             for(let prop in hashtags){
               Posts.updateOne({postnum:post.postnum}, {$push:{'hashtags':{'tag' : hashtags[prop]}}},function(err){
                 if(err) console.log(err);
