@@ -49,10 +49,8 @@ $(document).ready(function () {
                 type: 'POST',
                 data: fdata,
                 success: function(result) {
-                    console.log(result);
                     if(result == ""){
                         var chkfollow = $(e.target).text();
-                        console.log(chkfollow)
                         if(chkfollow == "팔로우"){
                             $(key).text("언팔로우");
                         } else if (chkfollow == "언팔로우"){
