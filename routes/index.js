@@ -339,7 +339,6 @@ router.put('/post/:postnum', util.ischangenickname, function(req, res, next){
   }
 })
 
-// 씹콜백지옥
 router.get('/post/:postnum/delete', util.ischangenickname, function(req, res, next){
   if (req.isAuthenticated()) {
     Posts.findOne({postnum:req.params.postnum}, function(error, postdata){

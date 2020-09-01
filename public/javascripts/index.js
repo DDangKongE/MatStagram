@@ -17,13 +17,12 @@ $(document).ready(function () {
         if($(e.target).hasClass("sprite_heart_icon_outline")) {
             var postnum = $(e.target).attr('postnum');
             var element_o = $(e.target).attr('class');
-            console.log(element_o)
             var key = "#count"+postnum
             $.ajax({
                 url: '/matstagram/post/like/' + postnum,
                 type: 'POST',
                 success: function(result) {
-                    if(result != ""){
+                    if(result == ""){
                         var count = $(key).text();
                         if(element_o == 'sprite_heart_icon_outline'){
                             $(e.target).attr('class','sprite_heart_icon_outline hearton');
@@ -44,17 +43,20 @@ $(document).ready(function () {
             var follow = $(e.target).attr('follow');
             var follower = $(e.target).attr('follower');
             var fdata = {"follow": follow, "follower": follower};
+            var key = ".follow" + follow;
             $.ajax({
                 url: '/matstagram/follow',
                 type: 'POST',
                 data: fdata,
                 success: function(result) {
-                    if(result != ""){
-                        var count = $('#followers').text();
+                    console.log(result);
+                    if(result == ""){
+                        var chkfollow = $(e.target).text();
+                        console.log(chkfollow)
                         if(chkfollow == "팔로우"){
-                            $(this).text("언팔로우");
+                            $(key).text("언팔로우");
                         } else if (chkfollow == "언팔로우"){
-                            $(this).text("팔로우");
+                            $(key).text("팔로우");
                         }
                     }
                }, error: function(req, status, error){

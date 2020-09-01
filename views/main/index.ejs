@@ -30,7 +30,7 @@
                                     </ul>
                                 <% } else {%>
                                     <ul id="toggle<%=prop%>" class="toggle_box">
-                                        <li class="follow" follower="<%=UserInfo.usernum%>" follow="<%=Posts[prop].writernum%>">언팔로우</li>
+                                        <li class="follow follow<%=Posts[prop].writernum%>" follower="<%=UserInfo.usernum%>" follow="<%=Posts[prop].writernum%>">언팔로우</li>
                                     </ul>
                                 <% } %>
                             <% } else {%>
