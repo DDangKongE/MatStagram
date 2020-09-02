@@ -4,6 +4,7 @@ var request = require('request');
 var fs = require('fs');
 var alert = require('alert');
 var moment = require('moment');
+var sanitizeHtml = require('sanitize-html');
 const util = require('../util');
 const Users = require('../models/users');
 const Posts = require('../models/posts');
@@ -174,16 +175,18 @@ router.get('/profile/:nickname/edit', function(req, res, next) {
 router.post('/profile/:nickname/edit', function(req, res, next) {
   if (req.isAuthenticated()) {
     if(req.user){
+      var sanitizedNickname = sanitizeHtml(req.body.usernickname);
+      var sanitizedUsername = sanitizeHtml(req.body.username);
       Users.findOne({id:req.user.id}, function(err, result){
         if(req.params.nickname == result.usernickname){
           if(req.params.nickname == req.body.usernickname){
-            Users.updateOne({usernickname : result.usernickname}, {usernickname : req.body.usernickname, username : req.body.username}, function(err, result){
-              res.redirect('/matstagram/profile/' + req.body.usernickname);
+            Users.updateOne({usernickname : result.usernickname}, {usernickname : sanitizedNickname, username : sanitizedUsername}, function(err, result){
+              res.redirect('/matstagram/profile/' + sanitizedNickname);
               
             })
           } else {
-            Users.updateOne({usernickname : result.usernickname}, {usernickname : req.body.usernickname, username : req.body.username, changenickname:'Y'}, function(err, result){
-              res.redirect('/matstagram/profile/' + req.body.usernickname);
+            Users.updateOne({usernickname : result.usernickname}, {usernickname : sanitizedNickname, username : sanitizedUsername, changenickname:'Y'}, function(err, result){
+              res.redirect('/matstagram/profile/' + sanitizedNickname);
             })
           }
         } else {
@@ -242,11 +245,13 @@ router.get('/post/new', util.ischangenickname, function(req, res, next) {
 
 router.post('/post/create', util.ischangenickname, function(req, res, next) {
   if (req.isAuthenticated()) {
+    var sanitizedContents = sanitizeHtml(req.body.content);
     let samplefile = req.files.photo;
-    const hashtags = req.body.content.match(/#([0-9a-zA-Z가-힣]*)/g)
+    console.log(samplefile);
+    const hashtags = sanitizedContents.match(/#([0-9a-zA-Z가-힣]*)/g)
     Users.findOne({id:req.user.id}, function(err, result){
       Posts.create({
-        contents: req.body.content,
+        contents: sanitizedContents,
         nickname: result.usernickname,
         writerid: result.id,
         writernum: req.user.usernum,
@@ -298,11 +303,12 @@ router.get('/post/:postnum/edit', util.ischangenickname, function(req, res, next
 
 router.put('/post/:postnum', util.ischangenickname, function(req, res, next){
   if (req.isAuthenticated()) {
-    const hashtags = req.body.content.match(/#([0-9a-zA-Z가-힣]*)/g)
+    var sanitizedContents = sanitizeHtml(req.body.content);
+    const hashtags = sanitizedContents.match(/#([0-9a-zA-Z가-힣]*)/g)
     Posts.findOne({postnum:req.params.postnum}, function(error, postdata){
       if(postdata.writerid == req.user.id){
         Posts.updateOne({postnum:req.params.postnum}, {
-          contents: req.body.content,
+          contents: sanitizedContents,
           writerid: req.user.id,
           placename: req.body.place_name,
           addressname: req.body.address_name,
@@ -575,11 +581,12 @@ router.post('/follow', util.ischangenickname, function(req, res, next){
 
 router.post('/post/comment', util.ischangenickname, function(req, res, next){
   if (req.isAuthenticated()) {
+    var sanitizedContents = sanitizeHtml(req.body.content);
     Users.findOne({id:req.user.id}, function(err, user){
       Posts.updateOne({postnum:req.body.postnum}, {
-        $push:{'comments':{'usernum' : user.usernum, 'nickname' : user.usernickname, 'contents' : req.body.contents}}
+        $push:{'comments':{'usernum' : user.usernum, 'nickname' : user.usernickname, 'contents' : sanitizedContents}}
       }, function(err, result){
-        res.send({usernum:user.usernum, nickname:user.usernickname, contents:req.body.contents, uploadtime:Date.now()});
+        res.send({usernum:user.usernum, nickname:user.usernickname, contents:sanitizedContents, uploadtime:Date.now()});
       })
     })
   } else {
@@ -589,6 +596,20 @@ router.post('/post/comment', util.ischangenickname, function(req, res, next){
 })
 
 router.get('/explore', util.ischangenickname, function(req, res, next){
+  Posts.aggregate([{$sample: {size:15}}], function(err, posts){
+    if(req.isAuthenticated()){
+      Users.findOne({id:req.user.id}, function(err, result){
+        res.render('main/explore', {UserInfo: result, Posts: posts , moment});
+      });
+    } else {
+      res.render('main/explore', {UserInfo: null, Posts: posts , moment});
+    }
+  });
+  
+  
+})
+
+router.get('/explore/:search', util.ischangenickname, function(req, res, next){
   Users.findOne({id:req.user.id}, function(err, result){
     res.render('main/explore', {UserInfo: result});
   });
