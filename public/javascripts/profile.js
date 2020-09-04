@@ -273,7 +273,7 @@ $(document).ready(function () {
                                 +'</div>'
                                 +'<div class="user_name">'
                                     +'<div class="nick_name" onclick="location.href=`/matstagram/profile/'+ user.usernickname +'`">'+user.usernickname+'</div>'
-                                    +'<div class="country">'+post.placename+ '<br>(' + post.addressname + ')' +'</div>'
+                                    +'<div class="country" onclick="window.open(`https://place.map.kakao.com/'+ post.placeid +'`)" style="cursor:pointer">'+post.placename+ '<br>(' + post.addressname + ')' +'</div>'
                                 +'</div>'
                             +'</div>'
                             +'<div class="sprite_more_icon" data-name="more">'
