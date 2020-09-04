@@ -247,7 +247,10 @@ router.post('/post/create', util.ischangenickname, function(req, res, next) {
   if (req.isAuthenticated()) {
     var sanitizedContents = sanitizeHtml(req.body.content);
     let samplefile = req.files.photo;
-    console.log(samplefile);
+    if(samplefile.mimetype != 'image/png' && samplefile.mimetype != 'image/jpg' && samplefile.mimetype != 'image/jpeg'){
+      alert("이미지 파일을 등록해주세요. \n이미지는 JPG, PNG 파일을 등록하실 수 있습니다.")
+      return res.redirect('/matstagram/post/new');
+    }
     const hashtags = sanitizedContents.match(/#([0-9a-zA-Z가-힣]*)/g)
     Users.findOne({id:req.user.id}, function(err, result){
       Posts.create({
@@ -303,6 +306,13 @@ router.get('/post/:postnum/edit', util.ischangenickname, function(req, res, next
 
 router.put('/post/:postnum', util.ischangenickname, function(req, res, next){
   if (req.isAuthenticated()) {
+    console.log(req.files);
+    if(req.files != null){
+      if(req.files.photo.mimetype != 'image/png' && req.files.photo.mimetype != 'image/jpg' && req.files.photo.mimetype != 'image/jpeg'){
+        alert("이미지 파일을 등록해주세요. \n이미지는 JPG, PNG 파일을 등록하실 수 있습니다.")
+        return res.redirect('/matstagram/post/new');
+      }
+    }
     var sanitizedContents = sanitizeHtml(req.body.content);
     const hashtags = sanitizedContents.match(/#([0-9a-zA-Z가-힣]*)/g)
     Posts.findOne({postnum:req.params.postnum}, function(error, postdata){
@@ -581,7 +591,7 @@ router.post('/follow', util.ischangenickname, function(req, res, next){
 
 router.post('/post/comment', util.ischangenickname, function(req, res, next){
   if (req.isAuthenticated()) {
-    var sanitizedContents = sanitizeHtml(req.body.content);
+    var sanitizedContents = sanitizeHtml(req.body.contents);
     Users.findOne({id:req.user.id}, function(err, user){
       Posts.updateOne({postnum:req.body.postnum}, {
         $push:{'comments':{'usernum' : user.usernum, 'nickname' : user.usernickname, 'contents' : sanitizedContents}}
@@ -595,25 +605,56 @@ router.post('/post/comment', util.ischangenickname, function(req, res, next){
   }
 })
 
-router.get('/explore', util.ischangenickname, function(req, res, next){
-  Posts.aggregate([{$sample: {size:15}}], function(err, posts){
-    if(req.isAuthenticated()){
-      Users.findOne({id:req.user.id}, function(err, result){
-        res.render('main/explore', {UserInfo: result, Posts: posts , moment});
-      });
+router.get('/explore', function(req, res, next){
+  var start = 0
+  if(req.query.start) start = parseInt(req.query.start);
+
+  Posts.find().sort('-likes').skip(start).limit(15).exec(function(err, posts){
+    if(err) console.log(err);
+    if(start == 0){
+      if(req.isAuthenticated()){
+        Users.findOne({id:req.user.id}, function(err, result){
+          res.render('main/explore', {UserInfo: result, Posts: posts});
+        });
+      } else {
+        res.render('main/explore', {UserInfo: null, Posts: posts});
+      }
     } else {
-      res.render('main/explore', {UserInfo: null, Posts: posts , moment});
+      if(req.isAuthenticated()){
+        Users.findOne({id:req.user.id}, function(err, result){
+          res.send({UserInfo: result, Posts: posts});
+        });
+      } else {
+        res.send({UserInfo: null, Posts: posts});
+      }
     }
   });
-  
-  
 })
 
-router.get('/explore/:search', util.ischangenickname, function(req, res, next){
-  Users.findOne({id:req.user.id}, function(err, result){
-    res.render('main/explore', {UserInfo: result});
+router.get('/explore/:keyword', function(req, res, next){
+  var start = 0
+  if(req.query.start) start = parseInt(req.query.start);
+
+  Posts.find({'hashtags':{$elemMatch:{'tag':'#'+req.params.keyword}}}).skip(start).limit(15).exec(function(err, posts){
+    if(err) console.log(err);
+    if(start == 0){
+      if(req.isAuthenticated()){
+        Users.findOne({id:req.user.id}, function(err, result){
+          res.render('main/explore', {UserInfo: result, Posts: posts});
+        });
+      } else {
+        res.render('main/explore', {UserInfo: null, Posts: posts});
+      }
+    } else {
+      if(req.isAuthenticated()){
+        Users.findOne({id:req.user.id}, function(err, result){
+          res.send({UserInfo: result, Posts: posts});
+        });
+      } else {
+        res.send({UserInfo: null, Posts: posts});
+      }
+    }
   });
-  
 })
 
 router.get('/test/:tag', function(req, res, next){

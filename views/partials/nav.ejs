@@ -8,12 +8,8 @@
         </h1>
 
         <div class="search_box">
-            <input type="text" placeholder="검색" id="search-field">
-
-            <div class="fake_field">
-                <span class="sprite_small_search_icon"></span>
-                <span>검색</span>
-            </div>
+            <span class="sprite_small_search_icon"></span>
+            <input type="text" id="search-field">
         </div>
         <% if(UserInfo != null) { %>   
         <div class="right_icons">
@@ -30,5 +26,13 @@
         <% } %>
 
     </section>
-
+    <script type="text/javascript">
+        $('#search-field').keypress(function(event){
+            var keyword = $('#search-field').val();
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if(keycode == '13'){
+                window.location.replace("/matstagram/explore/"+keyword);
+            }
+        });
+    </script>
 </header>

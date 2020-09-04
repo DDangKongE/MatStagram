@@ -3,6 +3,7 @@
     <head>
         <%- include('../partials/head') %>
         <link type="text/css" rel="stylesheet" href="/stylesheets/explore.css" >
+        <link type="text/css" rel="stylesheet" href="/stylesheets/detail-page.css" >
     </head>
     <body>
         <%- include('../partials/nav') %>
@@ -10,14 +11,29 @@
             <div id="main_container">
                 <section class="b_inner">
                     <div class="mylist_contents contents_container">
-                        <% for(var prop in Posts){ %> 
-                            <div class="pic">
-                                <a><img src="/userdata/posts/<%=Posts[prop].postnum%>.png" alt=""></a>
+                        <% if(Posts.length != 0) { %>
+                            <% for(var prop in Posts){ %>
+                                <div class="pic">
+                                    <a><img id="detail-page" nickname="<%=UserInfo.usernickname%>" postnum="<%=Posts[prop].postnum%>" src="/userdata/posts/<%=Posts[prop].postnum%>.png" alt=""></a>
+                                </div>
+                            <% } %>
+                        <% } else if (Posts.length == 0) { %>
+                            <div style="margin: 0px auto; text-align: center;">
+                                <h1>검색하신 태그는 등록된 포스트가 없습니다!</h1><br>
+                                <h2>첫 포스트를 남겨보세요!</h2>
                             </div>
                         <% } %>
                     </div>
                 </section>
             </div>
         </section>
+        <div id="myModal" class="modal" style="top:-70px">
+            <article class="modal-content">
+               <!-- 포스트 내용-->
+            </article>
+        </div>
+        
+        <script src="/javascripts/explore.js"></script>
+        <script src="/javascripts/dateformat.js"></script>
     </body>
 </html>

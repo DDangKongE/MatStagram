@@ -12,15 +12,16 @@
 .contents_container{
     /*display: flex;*/
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: end;
     display: flex;
 }
 
 .contents_container .pic{
-    max-width:300px;
-    max-height:300px;
+    width:300px;
+    height:300px;
     overflow:hidden;
     margin-bottom: 18px;
+    margin-right: 11px;
 }
 
 .contents_container .pic img{
