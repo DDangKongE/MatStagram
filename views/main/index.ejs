@@ -13,7 +13,7 @@
                 <% for(var prop in Posts){ %>
                 <article class="contents">
                     <header class="top">
-                        <div class="user_container">
+                        <div class="user_container" style="cursor:pointer">
                             <div class="profile_img">
                                 <img src="/userdata/profile/<%=Posts[prop].writernum%>.png" style="height: 32px;" alt="프로필이미지">
                             </div>
@@ -47,7 +47,7 @@
                     </div>
                     <div>
                         <div class="location">
-                            <a href="/matstagram">
+                            <a onclick="window.open('https://place.map.kakao.com/<%=Posts[prop].placeid%>')">
                                 <div class="location-name"><%=Posts[prop].placename%></div>
                                 <div class="location-detail"><%=Posts[prop].addressname%></div>
                             </a>
@@ -109,7 +109,7 @@
                             </div>
                         <% } %>
                     </div>
-                    <div class="comment_count" onclick="location.href=`/matstagram/post/detail/<%=Posts[prop].postnum%>`">댓글 <%=Posts[prop].comments.length%>개</div>
+                    <div class="comment_count" onclick="location.href=`/matstagram/post/detail/<%=Posts[prop].postnum%>`" style="cursor:pointer">댓글 <%=Posts[prop].comments.length%>개</div>
                     <div class="timer"><%= moment(Posts[prop].uploadtime).fromNow()%></div>
                     <div class="comment_field" id="add-comment">
                         <input type="text" class="comment_contents<%=Posts[prop].postnum%>" placeholder="댓글달기...">
@@ -154,7 +154,7 @@
                     </header>
                     <% for (var user in Recommend){ %> 
                         <% if(Recommend[user].id !== UserInfo.id) { %> 
-                            <div class="thumb_user" onclick="location.href='/matstagram/profile/<%=Recommend[user].usernickname%>'">
+                            <div class="thumb_user" onclick="location.href='/matstagram/profile/<%=Recommend[user].usernickname%>'" style="cursor:pointer">
                                 <div class="profile_thumb">
                                     <img src="/userdata/profile/<%=Recommend[user].profileimg%>" alt="프로필사진">
                                 </div>
