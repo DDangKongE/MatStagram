@@ -88,6 +88,11 @@
                                 <div class="nick_name m_text"><%=Posts[prop].nickname%></div>
                                 <div><%=Posts[prop].contents%></div>
                             </div>
+                            <div style="margin-top: 5px;">
+                                <% for(let tag in Posts[prop].hashtags) {%>
+                                    <a href="matstagram/explore/<%=Posts[prop].hashtags[tag].tag%>"><%=Posts[prop].hashtags[tag].tag%> &nbsp;</a>
+                                <% } %>
+                            </div>
                         </div>
                     </div>
                     <div class="likes m_text">
