@@ -35,7 +35,7 @@ module.exports = () => {
   passport.use("kakao", new KakaoStrategy({
     clientID: process.env.KAKAO_CLIENT_ID,
     clientSecret: process.env.KAKAO_CLIENT_PW,
-    callbackURL: "http://localhost:3000/matstagram/login/oauth/kakao"
+    callbackURL: "http://ddangkonge.ddns.net:3025/matstagram/login/oauth/kakao"
     },
     function(accessToken, refreshToken, profile, done){
       Users.findOne({
@@ -55,7 +55,7 @@ module.exports = () => {
   passport.use("facebook", new FacebookStrategy({
     clientID: process.env.FACEBOOK_CLIENT_ID,
     clientSecret: process.env.FACEBOOK_CLIENT_PW,
-    callbackURL: "http://localhost:3000/matstagram/login/oauth/facebook"
+    callbackURL: "http://ddangkonge.ddns.net:3025/matstagram/login/oauth/facebook"
     },
     function(req, accessToken, refreshToken, profile, done){
       Users.findOne({
@@ -74,7 +74,7 @@ module.exports = () => {
   passport.use("google", new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_PW,
-    callbackURL: "http://localhost:3000/matstagram/login/oauth/google"
+    callbackURL: "http://ddangkonge.ddns.net:3025/matstagram/login/oauth/google"
     },
     function(accessToken, refreshToken, profile, done){
       Users.findOne({
@@ -93,7 +93,7 @@ module.exports = () => {
   passport.use("naver", new NaverStrategy({
     clientID: process.env.NAVER_CLIENT_ID,
     clientSecret: process.env.NAVER_CLIENT_PW,
-    callbackURL: "http://localhost:3000/matstagram/login/oauth/naver"
+    callbackURL: "http://ddangkonge.ddns.net:3025/matstagram/login/oauth/naver"
     },
     function(accessToken, refreshToken, profile, done){
       Users.findOne({
