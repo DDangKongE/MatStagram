@@ -149,10 +149,9 @@ $(document).ready(function () {
                         +'<section class="scroll_section">'
                             +'<div class="admin_container">'
                                 +'<div class="admin">'+'<img src="/userdata/profile/' + user.profileimg + '" alt="user" onclick="location.href=`/matstagram/profile/'+ user.usernickname +'`">'+'</div>'
-                                +'<div class="hashtags" style="margin-top: 5px;">'
-                                +'</div>'
                                 +'<div class="comment">'
                                     +'<span class="user_id" onclick="location.href=`/matstagram/profile/'+ user.usernickname +'`">'+user.usernickname+'</span>'+post.contents
+                                    +'<div class="hashtags" style="margin-top: 5px; font-size:12px;"></div>'
                                     +'<div class="time">'+uploadtime+'</div>'
                                 +'</div>'
                             +'</div>'
@@ -245,7 +244,7 @@ $(document).ready(function () {
                     }
                     
                     for(let tag in post.hashtags) {
-                        $(".hashtags").append('<a href="matstagram/explore/<%=post.hashtags[tag].tag%>"><%=post.hashtags[tag].tag%> &nbsp;</a>')
+                        $(".hashtags").append('<a href="/matstagram/explore/' + post.hashtags[tag].tag.match(/[^#]+/g) + '">' + post.hashtags[tag].tag + ' &nbsp;</a>')
                     }
                 }
                 modal.style.display = "block";
