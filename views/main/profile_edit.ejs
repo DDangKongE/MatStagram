@@ -27,7 +27,7 @@
                               <span class="input-group-text" id="inputimgadd">jpg, png ...</span>
                             </div>
                             <div class="custom-file">
-                              <input type="file" class="custom-file-input" id="inputimg" name="inputimg" aria-describedby="inputimgadd" accept=".jpg, .png" onchange='chk_file_type(this)'>
+                              <input type="file" class="custom-file-input" id="inputimg" name="inputimg" aria-describedby="inputimgadd" accept=".jpg, .png">
                               <label class="custom-file-label" for="inputimg">프로필 이미지를 선택해주세요.</label>
                             </div>
                             <button class="btn btn-primary btn-lg btn-block" type="submit" id="img_submit" disabled=true style="margin-top: 15px;">이미지 수정</button>
@@ -144,34 +144,6 @@
               };
               reader.readAsDataURL(e.target.files[0]);
           }
-      </script>
-      <script type="text/javascript">
-        $(".custom-file-input").on("change", function() {
-          var fileName = $(this).val().split("\\").pop();
-          $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-          $("#img_submit").attr("disabled", false);
-        });
-
-        function chk_file_type(obj) {
-          var file_kind = obj.value.lastIndexOf('.');
-          var file_name = obj.value.substring(file_kind+1,obj.length);
-          var file_type = file_name.toLowerCase();
-
-
-
-          var check_file_type=new Array();​
-
-          check_file_type=['jpg','png','jpeg'];
-
-
-
-          if(check_file_type.indexOf(file_type)==-1){
-            alert('이미지 파일만 선택할 수 있습니다.');
-            var parent_Obj=obj.parentNode
-            var node=parent_Obj.replaceChild(obj.cloneNode(true),obj);
-            return false;
-          }
-        }
       </script>
     </body>
 </html>

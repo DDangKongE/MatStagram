@@ -207,6 +207,10 @@ router.post('/profile/:nickname/edit', function(req, res, next) {
 router.post('/profile/:nickname/edit/img', function(req, res, next) {
   if(req.user){
     let samplefile = req.files.inputimg;
+    if(samplefile.mimetype != 'image/png' && samplefile.mimetype != 'image/jpg' && samplefile.mimetype != 'image/jpeg'){
+      alert("이미지 파일을 등록해주세요. \n이미지는 JPG, PNG 파일을 등록하실 수 있습니다.")
+      return res.redirect('/matstagram/profile/' + req.params.nickname + '/edit');
+    }
     Users.findOne({id:req.user.id}, function(err, result){
       if(req.params.nickname == result.usernickname){
         if(req.files===undefined){
