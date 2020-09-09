@@ -145,5 +145,12 @@
               reader.readAsDataURL(e.target.files[0]);
           }
       </script>
+      <script type="text/javascript">
+        $(".custom-file-input").on("change", function() {
+          var fileName = $(this).val().split("\\").pop();
+          $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+          $("#img_submit").attr("disabled", false);
+        });
+      </script>
     </body>
 </html>
