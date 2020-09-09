@@ -77,7 +77,7 @@
             // id = "id_reg" / name = "userId"
             var usernickname = $('#usernickname').val();						
             $.ajax({
-              url : 'http://localhost:3000/matstagram/idCheck/' + usernickname,
+              url : '/matstagram/idCheck/' + usernickname,
               type : 'get',
               success : function(data) {                
                 if (data == 1) {
