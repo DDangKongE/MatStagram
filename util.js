@@ -1,7 +1,7 @@
 var util={};
 
 const Users = require('./models/users');
-const notifier = require('node-notifier');
+var alert = require('alert');
 
 util.ischangenickname = function(req, res, next){
     if(req.isAuthenticated()){
@@ -9,10 +9,7 @@ util.ischangenickname = function(req, res, next){
             if(loginuser.changenickname == 'Y'){
                 next();
             } else {
-                notifier.notify({
-                    title: 'Matstagram',
-                    message: '프로필을 완성해주세요!'
-                  });
+                alert('프로필을 완성해주세요!');
                 res.redirect("/matstagram/profile/" + loginuser.usernickname + "/edit")
             }
         })
