@@ -621,7 +621,7 @@ router.get('/explore', function(req, res, next){
           res.render('main/explore', {UserInfo: result, Posts: posts});
         });
       } else {
-        res.render('main/explore', {UserInfo: null, Posts: posts});
+        res.redirect('/matstagram/login');
       }
     } else {
       if(req.isAuthenticated()){
@@ -629,7 +629,7 @@ router.get('/explore', function(req, res, next){
           res.send({UserInfo: result, Posts: posts});
         });
       } else {
-        res.send({UserInfo: null, Posts: posts});
+        res.redirect('/matstagram/login');
       }
     }
   });
