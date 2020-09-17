@@ -71,19 +71,22 @@ $(document).ready(function () {
             type: 'POST',
             data:{contents:contents, postnum:postnum},
             success: function(result){
-                console.log(result);
-                $(".scroll_section").append(
-                    '<div class="user_container-detail">'
-                    +'<div class="user">'+'<img src="/userdata/profile/' + result.usernum + '.png" alt="user">'+'</div>'
-                    +'<div class="comment">'
+                if(result.err == "err"){
+                    return;
+                } else {
+                    $(".scroll_section").append(
+                        '<div class="user_container-detail">'
+                        +'<div class="user">'+'<img src="/userdata/profile/' + result.usernum + '.png" alt="user">'+'</div>'
+                        +'<div class="comment">'
                         +'<span class="user_id">'+ result.nickname +'</span>' + result.contents
                         +'<div class="time">1초 전<span class="try_comment">댓글 삭제</span>'+ '</div>'
-                    +'</div>'
-                );
-
-                $('.comment_contents').val('');
-            }, error: function(req, status, error){
-                console.log(error);
+                        +'</div>'
+                        );
+                        
+                        $('.comment_contents').val('');
+                    }
+                }, error: function(req, status, error){
+                    console.log(error);
             }
         })
     });

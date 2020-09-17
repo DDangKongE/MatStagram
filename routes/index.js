@@ -175,7 +175,7 @@ router.get('/profile/:nickname/edit', function(req, res, next) {
 router.post('/profile/:nickname/edit', function(req, res, next) {
   if (req.isAuthenticated()) {
     if(req.user){
-      if(sanitizeHtml(req.body.usernickname) == undefined || sanitizeHtml(req.body.username) == undefined){
+      if(sanitizeHtml(req.body.usernickname).trim() == "" || sanitizeHtml(req.body.username).trim() == "" || sanitizeHtml(req.body.usernickname).trim().length < 4 ){
         return res.redirect('/matstagram/profile/'+req.params.nickname+'/edit');
       }
       var sanitizedNickname = sanitizeHtml(req.body.usernickname);
@@ -209,7 +209,7 @@ router.post('/profile/:nickname/edit', function(req, res, next) {
 
 router.post('/profile/:nickname/edit/img', function(req, res, next) {
   if(req.user){
-    if(req.files.inputimg == undefined ){
+    if(req.files == null){
       return res.redirect('/matstagram/profile/'+req.params.nickname+'/edit');
     }
     let samplefile = req.files.inputimg;
@@ -255,6 +255,12 @@ router.get('/post/new', util.ischangenickname, function(req, res, next) {
 
 router.post('/post/create', util.ischangenickname, function(req, res, next) {
   if (req.isAuthenticated()) {
+
+    if(sanitizeHtml(req.body.content) == undefined || sanitizeHtml(req.body.content).length > 140 ||
+      samplefile == null || req.body.place_name == undefined || req.body.address_name == undefined || req.body.place_id == undefined ){
+      return res.redirect('/matstagram/post/new');
+    }
+
     var sanitizedContents = sanitizeHtml(req.body.content);
     let samplefile = req.files.photo;
     if(samplefile.mimetype != 'image/png' && samplefile.mimetype != 'image/jpg' && samplefile.mimetype != 'image/jpeg'){
@@ -316,6 +322,10 @@ router.get('/post/:postnum/edit', util.ischangenickname, function(req, res, next
 
 router.put('/post/:postnum', util.ischangenickname, function(req, res, next){
   if (req.isAuthenticated()) {
+    if(sanitizeHtml(req.body.content) == undefined || sanitizeHtml(req.body.content).length > 140 ||
+    samplefile == null || req.body.place_name == undefined || req.body.address_name == undefined || req.body.place_id == undefined ){
+    return res.redirect('/matstagram/post/' + req.params.postnum + '/edit');
+  }
     console.log(req.files);
     if(req.files != null){
       if(req.files.photo.mimetype != 'image/png' && req.files.photo.mimetype != 'image/jpg' && req.files.photo.mimetype != 'image/jpeg'){
@@ -601,12 +611,15 @@ router.post('/follow', util.ischangenickname, function(req, res, next){
 
 router.post('/post/comment', util.ischangenickname, function(req, res, next){
   if (req.isAuthenticated()) {
+    if(sanitizeHtml(req.body.contents) == undefined || sanitizeHtml(req.body.contents).length > 100){
+      return res.send({err:"err"})
+    }
     var sanitizedContents = sanitizeHtml(req.body.contents);
     Users.findOne({id:req.user.id}, function(err, user){
       Posts.updateOne({postnum:req.body.postnum}, {
         $push:{'comments':{'usernum' : user.usernum, 'nickname' : user.usernickname, 'contents' : sanitizedContents}}
       }, function(err, result){
-        res.send({usernum:user.usernum, nickname:user.usernickname, contents:sanitizedContents, uploadtime:Date.now()});
+        res.send({err:"success",usernum:user.usernum, nickname:user.usernickname, contents:sanitizedContents, uploadtime:Date.now()});
       })
     })
   } else {
