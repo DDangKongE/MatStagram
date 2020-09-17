@@ -609,9 +609,10 @@ router.post('/follow', util.ischangenickname, function(req, res, next){
   }
 })
 
+// 삭제 개발 필요
 router.post('/post/comment', util.ischangenickname, function(req, res, next){
   if (req.isAuthenticated()) {
-    if(sanitizeHtml(req.body.contents) == undefined || sanitizeHtml(req.body.contents).length > 100){
+    if(sanitizeHtml(req.body.contents) == "" || sanitizeHtml(req.body.contents).length > 100){
       return res.send({err:"err"})
     }
     var sanitizedContents = sanitizeHtml(req.body.contents);
@@ -619,7 +620,7 @@ router.post('/post/comment', util.ischangenickname, function(req, res, next){
       Posts.updateOne({postnum:req.body.postnum}, {
         $push:{'comments':{'usernum' : user.usernum, 'nickname' : user.usernickname, 'contents' : sanitizedContents}}
       }, function(err, result){
-        res.send({err:"success",usernum:user.usernum, nickname:user.usernickname, contents:sanitizedContents, uploadtime:Date.now()});
+        res.send({usernum:user.usernum, nickname:user.usernickname, contents:sanitizedContents, uploadtime:Date.now()});
       })
     })
   } else {

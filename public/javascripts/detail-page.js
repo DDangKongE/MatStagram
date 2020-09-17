@@ -62,7 +62,6 @@ $(document).ready(function () {
 
     // 코멘트 남기기
     $(document).on('click', '.upload_comment', function(e){
-        console.log('ee');
         var contents = $('.comment_contents').val();
         var postnum = $('.comment_contents').attr('postnum');
         

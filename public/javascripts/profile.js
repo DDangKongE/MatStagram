@@ -207,7 +207,6 @@ $(document).ready(function () {
 
     // 코멘트 남기기
     $(document).on('click', '.upload_comment', function(e){
-        console.log('ee');
         var contents = $('.comment_contents').val();
         var postnum = $('.comment_contents').attr('postnum');
         console.log(contents);
@@ -229,8 +228,8 @@ $(document).ready(function () {
                             +'<div class="time">'+ uploadcomments +'<span class="try_comment">댓글 삭제</span>'+ '</div>'
                         +'</div>'
                     );
+                    $('.comment_contents').val('');
                 }
-                $('.comment_contents').val('');
             }, error: function(req, status, error){
                 console.log(error);
             }
