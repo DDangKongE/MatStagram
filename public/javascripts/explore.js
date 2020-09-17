@@ -81,17 +81,19 @@ $(document).ready(function () {
             type: 'POST',
             data:{contents:contents, postnum:postnum},
             success: function(result){
-                console.log(result);
-                var uploadcomments = new Date(result.uploadtime).format("yyyy-MM-dd HH:mm:ss");
-                $(".scroll_section").append(
-                    '<div class="user_container-detail">'
-                    +'<div class="user">'+'<img src="/userdata/profile/' + result.usernum + '.png" alt="user">'+'</div>'
-                    +'<div class="comment">'
-                        +'<span class="user_id">'+ result.nickname +'</span>' + result.contents
-                        +'<div class="time">'+ uploadcomments +'<span class="try_comment">댓글 삭제</span>'+ '</div>'
-                    +'</div>'
-                );
-
+                if(result.err == "err"){
+                    return;
+                } else {
+                    var uploadcomments = new Date(result.uploadtime).format("yyyy-MM-dd HH:mm:ss");
+                    $(".scroll_section").append(
+                        '<div class="user_container-detail">'
+                        +'<div class="user">'+'<img src="/userdata/profile/' + result.usernum + '.png" alt="user">'+'</div>'
+                        +'<div class="comment">'
+                            +'<span class="user_id">'+ result.nickname +'</span>' + result.contents
+                            +'<div class="time">'+ uploadcomments +'<span class="try_comment">댓글 삭제</span>'+ '</div>'
+                        +'</div>'
+                    );
+                }
                 $('.comment_contents').val('');
             }, error: function(req, status, error){
                 console.log(error);

@@ -73,21 +73,25 @@ $(document).ready(function () {
                 type: 'POST',
                 data:{contents:contents, postnum:postnum},
                 success: function(result){
-                    if(result != ""){
-                        var comment_key = '.post' + postnum;
-                        console.log(comment_key);
-                        $(comment_key).append(
-                            '<div class="comment_container">'
-                            +'<div class="comment" id="comment-list-ajax-post37">'
-                            +'<div class="comment-detail">'
-                            +'<div class="nick_name m_text">' + result.nickname + '</div>'
-                            +'<div>' + result.contents + '</div>'
-                            +'</div>'
-                            +'</div>'                 
-                            +'</div>'
-                        );
-                        
-                        $(key).val('');
+                    if(result.err == "err"){
+                        return;
+                    } else {
+                        if(result != ""){
+                            var comment_key = '.post' + postnum;
+                            console.log(comment_key);
+                            $(comment_key).append(
+                                '<div class="comment_container">'
+                                +'<div class="comment" id="comment-list-ajax-post37">'
+                                +'<div class="comment-detail">'
+                                +'<div class="nick_name m_text">' + result.nickname + '</div>'
+                                +'<div>' + result.contents + '</div>'
+                                +'</div>'
+                                +'</div>'                 
+                                +'</div>'
+                            );
+                            
+                            $(key).val('');
+                        }
                     }
                 }, error: function(req, status, error){
                     console.log(error);
