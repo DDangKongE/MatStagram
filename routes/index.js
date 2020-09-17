@@ -175,6 +175,9 @@ router.get('/profile/:nickname/edit', function(req, res, next) {
 router.post('/profile/:nickname/edit', function(req, res, next) {
   if (req.isAuthenticated()) {
     if(req.user){
+      if(sanitizeHtml(req.body.usernickname) == undefined || sanitizeHtml(req.body.username) == undefined){
+        return res.redirect('/matstagram/profile/'+req.params.nickname+'/edit');
+      }
       var sanitizedNickname = sanitizeHtml(req.body.usernickname);
       var sanitizedUsername = sanitizeHtml(req.body.username);
       Users.findOne({id:req.user.id}, function(err, result){
@@ -206,6 +209,9 @@ router.post('/profile/:nickname/edit', function(req, res, next) {
 
 router.post('/profile/:nickname/edit/img', function(req, res, next) {
   if(req.user){
+    if(req.files.inputimg == undefined ){
+      return res.redirect('/matstagram/profile/'+req.params.nickname+'/edit');
+    }
     let samplefile = req.files.inputimg;
     if(samplefile.mimetype != 'image/png' && samplefile.mimetype != 'image/jpg' && samplefile.mimetype != 'image/jpeg'){
       alert("이미지 파일을 등록해주세요. \n이미지는 JPG, PNG 파일을 등록하실 수 있습니다.")
