@@ -70,7 +70,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.send('문제가 발생하였습니다. 뒤로 돌아가주세요.');
 });
 
 module.exports = app;
