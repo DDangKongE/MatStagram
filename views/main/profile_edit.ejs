@@ -88,11 +88,11 @@
                 } else {
                   
                   if(usernickname.length < 4){
-                    $('#id_check').text("닉네임 소문자와 숫자 4~16자리만 가능합니다");
+                    $('#id_check').text("닉네임 영문자와 숫자 4~16자리만 가능합니다");
                     $('#id_check').css('color', 'red');
                     $("#reg_submit").attr("disabled", true);
                   } else if( usernickname.length > 14){
-                    $('#id_check').text("닉네임 소문자와 숫자 4~16자리만 가능합니다");
+                    $('#id_check').text("닉네임 영문자와 숫자 4~16자리만 가능합니다");
                     $('#id_check').css('color', 'red');
                     $("#reg_submit").attr("disabled", true);
                   } else {
