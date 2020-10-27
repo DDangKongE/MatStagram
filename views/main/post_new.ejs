@@ -28,18 +28,18 @@
                                 </div>
                             </div>
                             <p>
-                                <input type="file" name="photo" id="id_photo" required="required" accept=".jpg, .png">
+                                <input type="file" name="photo" id="id_photo" required accept=".jpg, .png">
                             </p>
                             <p>
-                                <input type="text" id="place_name" name="place_name" placeholder="맛집명" style="width:80%;" required="required">
+                                <input type="text" id="place_name" name="place_name" placeholder="맛집명" style="width:80%;" required>
                                 <span id="LSearch" class="btn btn-info" onclick="">검색</span>
                             </p>
                             <p>
-                                <input type="text" name="address_name" placeholder="맛집 주소" required="required" onkeypress="return false;">
+                                <input type="text" name="address_name" placeholder="맛집 주소" required onkeypress="return false;">
                                 <input type="hidden" id="place_id" name="place_id" value="">
                             </p>
                             <p>
-                                <textarea name="content" id="text_field" cols="50" rows="5" required="required" placeholder="
+                                <textarea name="content" id="text_field" cols="50" rows="5" required placeholder="
     140자 까지 등록 가능합니다.
     #태그명 을 통해서 검색 태그를 등록할 수 있습니다.
     예시 : I #love #you !"></textarea>
@@ -68,15 +68,15 @@
                                 <input type="file" name="photo" id="id_photo" accept=".jpg, .png">
                             </p>
                             <p>
-                                <input type="text" id="place_name" name="place_name" placeholder="맛집명" style="width:80%;" required="required" value="<%=PostInfo.placename%>">
+                                <input type="text" id="place_name" name="place_name" placeholder="맛집명" style="width:80%;" required value="<%=PostInfo.placename%>">
                                 <span id="LSearch" class="btn btn-info" onclick="">검색</span>
                             </p>
                             <p>
-                                <input type="text" name="address_name" placeholder="맛집 주소" required="required" value="<%=PostInfo.addressname%>" onkeypress="return false;">
+                                <input type="text" name="address_name" placeholder="맛집 주소" required value="<%=PostInfo.addressname%>" onkeypress="return false;">
                                 <input type="hidden" id="place_id" name="place_id" value="<%=PostInfo.placeid%>">
                             </p>
                             <p>
-                                <textarea name="content" id="text_field" cols="50" rows="5" required="required" placeholder="
+                                <textarea name="content" id="text_field" cols="50" rows="5" required placeholder="
     140자 까지 등록 가능합니다.
     #태그명 을 통해서 검색 태그를 등록할 수 있습니다.
     예시 : I #love #you !"><%=PostInfo.contents%></textarea>

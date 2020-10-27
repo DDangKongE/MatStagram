@@ -5,9 +5,31 @@ const { session } = require('passport');
 
 /* GET home page. */
 router.get('/', function(req, res, next){
-    res.render('main/login');
-  })
+  res.render('main/login', {
+    loginError: req.flash('loginError'),
+  });
+})
 
+router.post('/local', (req, res, next) => {
+  passport.authenticate('local', (authError, user, info) => {
+      if(authError) {
+          console.error(authError);
+          return next(authError);
+      }
+      if(!user) {
+          req.flash('loginError', info.message);
+          return res.redirect('/matstagram/login');
+      }
+      return req.login(user, (loginError) => {
+          if (loginError) {
+              console.error(loginError);
+              return next(loginError);
+          }
+          return res.redirect('/matstagram');
+      });
+  })(req, res, next);
+});
+  
 // Login Logic
 // KAKAO 
 router.get('/auth/kakao', passport.authenticate('kakao'));

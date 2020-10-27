@@ -15,11 +15,30 @@
                 <div class="logo"></div>
                 <div class="login">
                     <a onclick="location.href='login/auth/kakao'"><img src="/images/login_button_kakao.png" class="loginBtn"></a>
-                    <!-- <a onclick="location.href='login/auth/facebook'"><img src="/images/login_button_facebook.png"></a> -->
-                    <a onclick="alert('지금은 해당 플랫폼의 가입이 불가능합니다. \n다른 플랫폼을 이용 부탁드립니다.')"><img src="/images/login_button_facebook.png"></a>
+                    <%# <a onclick="location.href='login/auth/facebook'"><img src="/images/login_button_facebook.png"></a> %>
+                    <%# <a onclick="flash('지금은 해당 플랫폼의 가입이 불가능합니다. \n다른 플랫폼을 이용 부탁드립니다.')"><img src="/images/login_button_facebook.png"></a> %>
                     <a onclick="location.href='login/auth/google'"><img src="/images/login_button_google.png"></a>
                     <a onclick="location.href='login/auth/naver'"><img src="/images/login_button_naver.png"></a>
+                    <br>
+                    <form action="/matstagram/login/local" method="POST">
+                        <p class="login_user_name">
+                            <label for="id">사용자명:</label>
+                            <input type="text" id="id" name="id" minlength="4" required>
+                        </p>
+    
+                        <p class="login_user_password">
+                            <label for="password">비밀번호:</label>
+                            <input type="password" id="password" name="password" minlength="4" required>
+                        </p>
+    
+                        <input type="submit" id="submit_btn" value="로그인" style="width: 100%;">
+                    </form>  
                 </div>
+            </div>
+            <div style="color: crimson; text-align: center; margin-bottom: 3px;">
+                <% if(loginError){ %>
+                    <%= loginError %>
+                <% } %>
             </div>
             <div class="join">
                 <span>소셜로그인을 통해 간편하게 가입해보세요!<br>회원가입 시 다시 한번 로그인을 눌러주세요!</span>

@@ -8,6 +8,7 @@ var passport = require('passport');
 const passportConfig = require('./config/passport');
 var session = require('express-session');
 var fileupload = require('express-fileupload');
+var flash = require('connect-flash');
 var methodOverride = require('method-override');
 var cookieSession = require('cookie-session');
 require('dotenv').config();
@@ -52,6 +53,7 @@ app.use(passport.session());
 passportConfig();
 app.use(fileupload());
 app.use(methodOverride('_method'))
+app.use(flash());
 
 // Route Setup
 app.use('/matstagram', indexRouter);

@@ -8,6 +8,7 @@ var follwersSchema = mongoose.Schema({ usernum: 'string' });
 //Schema
 var userSchema = mongoose.Schema({
     id:{type:String, unique : true , require:[true]},
+    password:{type:String},
     usernickname:{type:String, require:[true, 'Usernickname is required']},
     username:{type:String, require:[true, 'UserSubname is required']},
     provider:{type:String, require:[true]},
