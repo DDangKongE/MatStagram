@@ -13,7 +13,7 @@
                 <% for(var prop in Posts){ %>
                 <article class="contents">
                     <header class="top">
-                        <div class="user_container" style="cursor:pointer">
+                        <div class="user_container" style="cursor:pointer" onclick="location.href=`/matstagram/profile/<%=Posts[prop].nickname%>`">
                             <div class="profile_img">
                                 <img src="/userdata/profile/<%=Posts[prop].writernum%>.png" style="height: 32px;" alt="프로필이미지">
                             </div>
