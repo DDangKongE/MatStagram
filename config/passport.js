@@ -1,5 +1,6 @@
 const passport = require('passport');
 const alert = require('alert');
+const fs = require('fs');
 const KakaoStrategy = require('passport-kakao').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
@@ -17,19 +18,32 @@ module.exports = () => {
     done(null, obj);
   });
 
-  function createUser(profile, done, user, provider){
+  async function createUser(profile, done, user, provider){
+    try{
     Users.create({ 
       id:profile.id,
       usernickname: "User" + Math.floor(Math.random() * (9999999999 - 1) + 1),
       username:profile.displayName,
       provider: provider,
-      profileimg : '0.png',
       json: profile._json,
       changenickname: 'N'
-    }, function(err, post){
+      }, async function(err, user){
+        try{
       if(err) return console.log(err);
+          let usernum = user.usernum
+          await Users.updateOne({id:user.id}, {profileimg: usernum+'.png'})
+          fs.copyFileSync('public/userdata/profile/0.png', `public/userdata/profile/${usernum}.png`)
       return done(null, false, { message: '가입이 완료되었습니다!\n다시 한번 로그인 해주세요!' });
+        } catch(error2) {
+          console.error(error2);
+          done(error2);
+        }
     });
+    } catch(error){
+      console.error(error);
+      done(error);
+    }
+    
   }
       
   // LOCAL
@@ -56,9 +70,17 @@ module.exports = () => {
           provider: 'local',
           profileimg : '0.png',
           changenickname: 'N'
-        }, function(err, user){
+        }, async function(err, user){
+          try{
           if(err) return console.log(err);
+            let usernum = user.usernum
+            await Users.updateOne({id:user.id}, {profileimg: usernum+'.png'})
+            fs.copyFileSync('public/userdata/profile/0.png', `public/userdata/profile/${usernum}.png`)
           return done(null, false, { message: '가입이 완료되었습니다!\n다시 한번 로그인 해주세요!' });
+          } catch(error2) {
+            console.error(error2);
+            done(error2);
+          }
     });
 
         // done(null, false, { message: '가입되지 않은 회원입니다.' });
