@@ -255,18 +255,19 @@ router.get('/post/new', util.ischangenickname, function(req, res, next) {
 
 router.post('/post/create', util.ischangenickname, function(req, res, next) {
   if (req.isAuthenticated()) {
+    var sanitizedContents = sanitizeHtml(req.body.content);
+    let samplefile = req.files.photo;
 
     if(sanitizeHtml(req.body.content) == undefined || sanitizeHtml(req.body.content).length > 140 ||
       samplefile == null || req.body.place_name == undefined || req.body.address_name == undefined || req.body.place_id == undefined ){
       return res.redirect('/matstagram/post/new');
     }
 
-    var sanitizedContents = sanitizeHtml(req.body.content);
-    let samplefile = req.files.photo;
     if(samplefile.mimetype != 'image/png' && samplefile.mimetype != 'image/jpg' && samplefile.mimetype != 'image/jpeg'){
       alert("이미지 파일을 등록해주세요. \n이미지는 JPG, PNG 파일을 등록하실 수 있습니다.")
       return res.redirect('/matstagram/post/new');
     }
+
     const hashtags = sanitizedContents.match(/#([0-9a-zA-Z가-힣]*)/g)
     Users.findOne({id:req.user.id}, function(err, result){
       Posts.create({
@@ -322,18 +323,26 @@ router.get('/post/:postnum/edit', util.ischangenickname, function(req, res, next
 
 router.put('/post/:postnum', util.ischangenickname, function(req, res, next){
   if (req.isAuthenticated()) {
+    console.log(req.files);
+    var sanitizedContents = sanitizeHtml(req.body.content);
+    let samplefile = ''
+    if(req.files !== null){
+      samplefile = req.files.photo;
+    } else {
+      samplefile = fs.readFileSync(`public/userdata/posts/${req.params.postnum}.png`); 
+    }
+
     if(sanitizeHtml(req.body.content) == undefined || sanitizeHtml(req.body.content).length > 140 ||
     samplefile == null || req.body.place_name == undefined || req.body.address_name == undefined || req.body.place_id == undefined ){
     return res.redirect('/matstagram/post/' + req.params.postnum + '/edit');
   }
-    console.log(req.files);
     if(req.files != null){
       if(req.files.photo.mimetype != 'image/png' && req.files.photo.mimetype != 'image/jpg' && req.files.photo.mimetype != 'image/jpeg'){
         alert("이미지 파일을 등록해주세요. \n이미지는 JPG, PNG 파일을 등록하실 수 있습니다.")
         return res.redirect('/matstagram/post/new');
       }
     }
-    var sanitizedContents = sanitizeHtml(req.body.content);
+
     const hashtags = sanitizedContents.match(/#([0-9a-zA-Z가-힣]*)/g)
     Posts.findOne({postnum:req.params.postnum}, function(error, postdata){
       if(postdata.writerid == req.user.id){
@@ -347,7 +356,7 @@ router.put('/post/:postnum', util.ischangenickname, function(req, res, next){
         }, function(err){
           if(err) return console.log(err);
           if(req.files !== null){
-            let samplefile = req.files.photo;
+            // let samplefile = req.files.photo;
             samplefile.mv('./public/userdata/posts/' + postdata.postnum + '.png'), function(err){
               console.log(samplefile);
               if(err) return res.status(500).send(err);
